@@ -19,13 +19,15 @@ jobs:
         env:
           SSHPASS: ${{ secrets.SFTP_PASS }}
           SSH_SERVER: ${{ secrets.SSH_SERVER }}
-        run: mkdir ~/.ssh && sshpass -e ssh-keyscan -H "$SSH_SERVER" >> ~/.ssh/known_hosts
+        run: mkdir -p ~/.ssh && sshpass -e ssh-keyscan -H "$SSH_SERVER" >> ~/.ssh/known_hosts
 
       - name: Deploy via SFTP
         env:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
           SSHPASS: ${{ secrets.SFTP_PASS }}
           SSH_SERVER: ${{ secrets.SSH_SERVER }}
-        run: sshpass -e sftp "$SFTP_HOST@$SSH_SERVER" << 'EOF'
-        put -r . game/
-        EOF
+        run: |
+          sshpass -e sftp "$SFTP_HOST@$SSH_SERVER" << 'EOF'
+          mkdir game
+          put -r . game/
+          EOF
