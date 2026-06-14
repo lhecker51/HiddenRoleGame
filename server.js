@@ -17,6 +17,20 @@ io.on("connection", (socket) => {
     socket.emit("hello_back", { message: "server received you!" });
   });
 
+  socket.on("join_room", ({ name, code }) => {
+  if (!rooms[code]) {
+    rooms[code] = { players: [] };
+  }
+  rooms[code].players.push({ id: socket.id, name });
+  socket.join(code);
+  socket.data.code = code;
+
+  io.to(code).emit("room_update", { players: rooms[code].players });
+  console.log(`${name} joined room ${code}`);
+});
+
+const rooms = {};
+
   socket.on("disconnect", () => {
     console.log("player left:", socket.id);
   });

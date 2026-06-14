@@ -1,50 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hidden Role Game</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hidden Role Game</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<script src="/socket.io/socket.io.js"></script>
-<script src="client.js"></script>
 <body>
-    <section class="screen">
-            <h1>Hidden Role Game</h1>
-            <p><i>Enter your name and join a session.</i></p>
-            <input type="text" placeholder="Player name">
-            <input type="text" placeholder="Session code">
-            <button><b>Join session</b></button>
-    </section>
-    <script src="script.js"></script>
+  <section class="screen">
+    <h1>Hidden Role Game</h1>
+    <p><i>Enter your name and join a session.</i></p>
+    <input type="text" id="player-name" placeholder="Player name">
+    <input type="text" id="room-code" placeholder="Session code">
+    <button id="join-btn">Join session</button>
+    <p id="status"></p>
+  </section>
 
-    <h2>das ist ein test!!!</h2>
-    <p>wenn du das siehst hat es geklappt</p>
-    <p>das ist ein Test</p>
-    <p>test2</p>
-    
-    <p id="response-text">Test</p>
-
-    <script>
-        const ws = new WebSocket('wss://your-node-server.railway.app');
-
-        ws.onopen = () => {
-            ws.send(JSON.stringify({ type: 'join' }));
-        };
-
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'role') {
-                console.log('Your role is:', data.role);
-            }
-            if (data.type === 'action') {
-                console.log('Player action received:', data.payload);
-            }
-        };
-
-        function sendAction(payload) {
-            ws.send(JSON.stringify({ type: 'action', payload }));
-        }
-    </script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
 </body>
 </html>
