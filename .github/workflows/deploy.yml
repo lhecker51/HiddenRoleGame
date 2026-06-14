@@ -26,4 +26,6 @@ jobs:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
           SSHPASS: ${{ secrets.SFTP_PASS }}
           SSH_SERVER: ${{ secrets.SSH_SERVER }}
-        run: sshpass -e sftp "$SFTP_HOST@$SSH_SERVER" <<< $"put -r . ./"
+        run: sshpass -e sftp "$SFTP_HOST@$SSH_SERVER" << 'EOF'
+        put -r . game/
+        EOF
