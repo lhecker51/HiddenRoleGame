@@ -1,0 +1,29 @@
+name: Deploy to Strato
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup sshpass
+        run: sudo apt update && sudo apt install sshpass
+
+      - name: Add known host
+        env:
+          SSHPASS: ${{ secrets.SFTP_PASS }}
+          SSH_SERVER: ${{ secrets.SSH_SERVER }}
+        run: mkdir ~/.ssh && sshpass -e ssh-keyscan -H "$SSH_SERVER" >> ~/.ssh/known_hosts
+
+      - name: Deploy via SFTP
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SSHPASS: ${{ secrets.SFTP_PASS }}
+          SSH_SERVER: ${{ secrets.SSH_SERVER }}
+        run: sshpass -e sftp "$SFTP_HOST@$SSH_SERVER" <<< $"put -r . ./"
