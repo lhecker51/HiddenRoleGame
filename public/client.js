@@ -22,7 +22,7 @@ socket.on("room_update", (data) => {
 
 
   const list = document.getElementById("player-list");
-  list.innerHTML = data.players.map(p => `<li>${p.name}</li>`).join("");
+  list.innerHTML = data.players.map(p => `${p.name}`).join("");
 });
 
 socket.on("error", (data) => {
