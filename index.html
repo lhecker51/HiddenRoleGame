@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script>
+</head>
+<body>
+    <h2>das ist ein test!!!</h2>
+    <p>wenn du das siehst hat es geklappt</p>
+    <p>das ist ein Test</p>
+    <p id="response-text">Test</p>
+        <script>
     const ws = new WebSocket('wss://your-node-server.railway.app');
 
 ws.onopen = () => {
@@ -27,7 +33,7 @@ function sendAction(payload) {
   ws.send(JSON.stringify({ type: 'action', payload }));
 }
 </script>
-<script>
+    <script>
         function loadBackendData() {
             fetch('api.php')
                 .then(response => response.text())
@@ -40,11 +46,5 @@ function sendAction(payload) {
                 });
         }
     </script>
-</head>
-<body>
-    <h2>das ist ein test!!!</h2>
-    <p>wenn du das siehst hat es geklappt</p>
-    <p>das ist ein Test</p>
-    <p id="response-text">Test</p>
 </body>
 </html>
