@@ -7,6 +7,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: "*" }
 });
+
 const rooms = {};
 
 app.use(express.static("public"));
@@ -18,14 +19,36 @@ io.on("connection", (socket) => {
     if (!rooms[code]) {
       rooms[code] = { players: [] };
     }
-    rooms[code].players.push({ id: socket.id, name });
+
+    const room = rooms[code];
+
+    const nameTaken = room.players.some(p => p.name.toLowerCase() === name.toLowerCase());
+    if (nameTaken) {
+      socket.emit("error", { message: "Name already taken in this session." });
+      return;
+    }
+
+    room.players.push({ id: socket.id, name });
     socket.join(code);
     socket.data.code = code;
-    io.to(code).emit("room_update", { players: rooms[code].players });
+    socket.data.name = name;
+
+    io.to(code).emit("room_update", { players: room.players });
     console.log(`${name} joined room ${code}`);
   });
 
   socket.on("disconnect", () => {
+    const code = socket.data.code;
+    const room = rooms[code];
+    if (!room) return;
+
+    room.players = room.players.filter(p => p.id !== socket.id);
+    io.to(code).emit("room_update", { players: room.players });
+
+    if (room.players.length === 0) {
+      delete rooms[code];
+    }
+
     console.log("player left:", socket.id);
   });
 });

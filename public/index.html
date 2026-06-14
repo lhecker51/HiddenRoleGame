@@ -7,13 +7,23 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <section class="screen">
+
+  <!-- login screen -->
+  <section id="login-screen">
     <h1>Hidden Role Game</h1>
     <p><i>Enter your name and join a session.</i></p>
     <input type="text" id="player-name" placeholder="Player name">
     <input type="text" id="room-code" placeholder="Session code">
     <button id="join-btn">Join session</button>
     <p id="status"></p>
+  </section>
+
+
+  <!--hier kommen die spieler hin, die eingeloggt sind-->
+  <section id="game-screen" style="display:none">
+    <h2>Waiting for players...</h2>
+    <p>Players in session:</p>
+    <ul id="player-list"></ul>
   </section>
 
   <script src="/socket.io/socket.io.js"></script>

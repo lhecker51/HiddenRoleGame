@@ -17,10 +17,14 @@ document.getElementById("join-btn").addEventListener("click", () => {
 });
 
 socket.on("room_update", (data) => {
-  document.getElementById("status").textContent = 
-    "Joined! Players: " + data.players.map(p => p.name).join(", ");
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("game-screen").style.display = "block";
+
+
+  const list = document.getElementById("player-list");
+  list.innerHTML = data.players.map(p => `<li>${p.name}</li>`).join("");
 });
 
 socket.on("error", (data) => {
-  document.getElementById("status").textContent = "Error: " + data.message;
+  document.getElementById("status").textContent = data.message;
 });
