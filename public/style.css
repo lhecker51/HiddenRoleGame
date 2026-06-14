@@ -6,7 +6,7 @@ body {
     color: white;
     font-family: Arial, sans-serif;
 
-    background-image:
+    background-image: 
         linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5)),
         url("https://c4.wallpaperflare.com/wallpaper/852/618/332/the-witcher-the-witcher-3-wild-hunt-wallpaper-preview.jpg");
 
@@ -78,4 +78,22 @@ button {
 
 button:hover {
     background-color: #b8325f;
+}
+
+
+.container-player {
+    display: flex;
+    flex-direction: row;
+    background-color: #b8325f;
+    width: 80%;
+    margin: 50px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+
+#player-list {
+    font-size: 20px;
+    text-decoration: none;
+    padding: 10px;
 }
