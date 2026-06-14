@@ -9,21 +9,32 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="client.js"></script>
 <body>
-    <section class="screen">
+    <section id="join-screen" class="screen">
             <h1>Hidden Role Game</h1>
             <p><i>Enter your name and join a session.</i></p>
             <input type="text" placeholder="Player name">
             <input type="text" placeholder="Session code">
-            <button><b>Join session</b></button>
+            <button id="join-button"><b>Join session</b></button>
+    </section>
+    <section id="lobby-screen" class="screen hidden">
+        <h1>Lobby</h1>
+        <p><i>Session code</i>:
+            <b id="lobby-session-code"></b>
+        </p>
+        <p><i>Waiting for players...</i></p>
+        <ul id="player-list">
+
+        </ul>
+        <button id="start-button"><b>Start game</b></button>
     </section>
     <script src="script.js"></script>
 
-    <h2>das ist ein test!!!</h2>
-    <p>wenn du das siehst hat es geklappt</p>
-    <p>das ist ein Test</p>
-    <p>test2</p>
-    
-    <p id="response-text">Test</p>
+<!--    <h2>das ist ein test!!!</h2>-->
+<!--    <p>wenn du das siehst hat es geklappt</p>-->
+<!--    <p>das ist ein Test</p>-->
+<!--    <p>test2</p>-->
+<!--    -->
+<!--    <p id="response-text">Test</p>-->
 
     <script>
         const ws = new WebSocket('wss://your-node-server.railway.app');
