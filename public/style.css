@@ -103,6 +103,7 @@ button:hover {
 }
 
 #player-list li {
+    font-family: Georgia, serif;
     padding: 10px;
     margin-top: 8px;
     background-color: #242438;
