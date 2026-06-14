@@ -2,6 +2,7 @@
   box-sizing: border-box;
 }
 body {
+    min-height: 100vh;
     background-color: #080812;
     color: white;
     font-family: Arial, sans-serif;
