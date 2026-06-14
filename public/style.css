@@ -95,11 +95,6 @@ button:hover {
     padding: 0;
 }
 
-.container-player p {
-    margin: 10px;
-}
-
-
 #player-list {
     font-size: 20px;
     list-style: none;
