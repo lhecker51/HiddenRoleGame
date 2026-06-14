@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hidden Role Game</title>
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <script src="/socket.io/socket.io.js"></script>
 <script src="client.js"></script>
@@ -45,22 +45,6 @@
         function sendAction(payload) {
             ws.send(JSON.stringify({ type: 'action', payload }));
         }
-    </script>
-
-    <script>
-        function loadBackendData() {
-            fetch('api.php')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('response-text').innerText = data;
-                })
-                .catch(error => {
-                    console.error("Error fetching data:", error);
-                    document.getElementById('response-text').innerText = "Failed to load data.";
-                });
-        }
-
-        window.onload = loadBackendData;
     </script>
 </body>
 </html>
