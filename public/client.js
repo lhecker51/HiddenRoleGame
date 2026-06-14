@@ -15,7 +15,7 @@ document.getElementById("join-btn").addEventListener("click", () => {
     return;
   }
 
-  document.getElementById("session-code-p").setAttribute("text", code)
+  document.getElementById("session-code-p").innerText = "Players in session (" + code + "):";
 
   socket.emit("join_room", { name, code });
 });
