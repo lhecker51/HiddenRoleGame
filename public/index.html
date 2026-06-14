@@ -9,7 +9,7 @@
 <body>
 
   <!-- login screen -->
-  <section id="login-screen">
+  <section id="login-screen" class="screen">
     <h1>Hidden Role Game</h1>
     <p><i>Enter your name and join a session.</i></p>
     <input type="text" id="player-name" placeholder="Player name">
@@ -20,11 +20,11 @@
 
 
   <!--hier kommen die spieler hin, die eingeloggt sind-->
-  <section id="game-screen" style="display:none">
+  <section id="game-screen" class="screen hidden">
     <h2>Waiting for players...</h2>
     <p>Players in session:</p>
     <div class="container-player">
-        <p id="player-list"></p>
+      <ul id="player-list"></ul>
     </div>
   </section>
 

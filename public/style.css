@@ -83,14 +83,29 @@ button:hover {
     background-color: #b8325f;
 }
 
+.hidden {
+    display: none;
+}
 
 .container-player {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    background-color: #b8325f;
+    width: 80%;
+    margin: 50px;
+    padding: 10px;
 }
 
 
 #player-list {
-    font-size: 20px;
+    font-size: 20px;list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
+#player-list li {
+    padding: 10px;
+    margin-top: 8px;
+    background-color: #242438;
+    border-radius: 10px;
 }
