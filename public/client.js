@@ -4,9 +4,11 @@ socket.on("connect", () => {
   console.log("connected:", socket.id);
 });
 
+let code = "";
+
 document.getElementById("join-btn").addEventListener("click", () => {
   const name = document.getElementById("player-name").value.trim();
-  const code = document.getElementById("room-code").value.trim().toUpperCase();
+  code = document.getElementById("room-code").value.trim().toUpperCase();
 
   if (!name || !code) {
     document.getElementById("status").textContent = "Please enter your name and a session code.";
@@ -14,6 +16,10 @@ document.getElementById("join-btn").addEventListener("click", () => {
   }
 
   socket.emit("join_room", { name, code });
+});
+
+document.getElementById("start-btn").addEventListener("click", () => {
+  socket.emit("start_game", {code});
 });
 
 socket.on("room_update", (data) => {
