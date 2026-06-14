@@ -28,17 +28,23 @@ function sendAction(payload) {
 }
 </script>
 <script>
-fetch('api.php')
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById('response-text').innerText = data;
-    });
-</script>
+        function loadBackendData() {
+            fetch('api.php')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('response-text').innerText = data;
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                    document.getElementById('response-text').innerText = "Failed to load data.";
+                });
+        }
+    </script>
 </head>
 <body>
     <h2>das ist ein test!!!</h2>
     <p>wenn du das siehst hat es geklappt</p>
     <p>das ist ein Test</p>
-    <p id="response-text"></p>
+    <p id="response-text">Test</p>
 </body>
 </html>
