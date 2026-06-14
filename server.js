@@ -50,7 +50,14 @@ io.on("connection", (socket) => {
 
         const room = rooms[code];
 
+        // distribute_roles()
+
         room.round = 1;
+
+        let game_winner = null;
+        while (game_winner == null) {
+            // manage rounds
+        }
     });
 
     socket.on("disconnect", () => {

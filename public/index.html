@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hidden Role Game</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidden Role Game</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- login screen -->
-  <section id="login-screen" class="screen">
+<!-- login screen -->
+<section id="login-screen" class="screen">
     <h1>Hidden Role Game</h1>
     <p><i>Enter your name and join a session.</i></p>
     <input type="text" id="player-name" placeholder="Player name">
     <input type="text" id="room-code" placeholder="Session code">
     <button id="join-btn">Join session</button>
     <p id="status"></p>
-  </section>
+</section>
 
 
-  <!--hier kommen die spieler hin, die eingeloggt sind-->
-  <section id="game-screen" class="screen hidden">
+<!--hier kommen die spieler hin, die eingeloggt sind-->
+<section id="game-screen" class="screen hidden">
     <h2>Waiting for players...</h2>
     <p>Players in session:</p>
     <div class="container-player">
-      <ul id="player-list"></ul>
+        <ul id="player-list"></ul>
     </div>
-  </section>
+    <button id="start-btn">Start game</button>
+</section>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="client.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="client.js"></script>
 </body>
 </html>

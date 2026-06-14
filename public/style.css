@@ -3,6 +3,7 @@
 }
 body {
     min-height: 100vh;
+    overflow: hidden;
     background-color: #080812;
     color: white;
     font-family: Arial, sans-serif;
