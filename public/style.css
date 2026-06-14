@@ -86,7 +86,7 @@ button:hover {
 
 .container-player {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     background-color: #b8325f;
     width: 80%;
     margin: 50px;
