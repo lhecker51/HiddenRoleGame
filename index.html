@@ -3,36 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Strato Test Page</title>
 </head>
 <body>
     <h2>das ist ein test!!!</h2>
     <p>wenn du das siehst hat es geklappt</p>
     <p>das ist ein Test</p>
+    
     <p id="response-text">Test</p>
-        <script>
-    const ws = new WebSocket('wss://your-node-server.railway.app');
 
-ws.onopen = () => {
-  ws.send(JSON.stringify({ type: 'join' }));
-};
+    <script>
+        const ws = new WebSocket('wss://your-node-server.railway.app');
 
-ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
+        ws.onopen = () => {
+            ws.send(JSON.stringify({ type: 'join' }));
+        };
 
-  if (data.type === 'role') {
-    console.log('Your role is:', data.role);
-  }
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'role') {
+                console.log('Your role is:', data.role);
+            }
+            if (data.type === 'action') {
+                console.log('Player action received:', data.payload);
+            }
+        };
 
-  if (data.type === 'action') {
-    console.log('Player action received:', data.payload);
-  }
-};
+        function sendAction(payload) {
+            ws.send(JSON.stringify({ type: 'action', payload }));
+        }
+    </script>
 
-function sendAction(payload) {
-  ws.send(JSON.stringify({ type: 'action', payload }));
-}
-</script>
     <script>
         function loadBackendData() {
             fetch('api.php')
@@ -45,6 +46,8 @@ function sendAction(payload) {
                     document.getElementById('response-text').innerText = "Failed to load data.";
                 });
         }
+
+        window.onload = loadBackendData;
     </script>
 </body>
 </html>
