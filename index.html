@@ -4,6 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script>
+    const ws = new WebSocket('wss://your-node-server.railway.app');
+
+ws.onopen = () => {
+  ws.send(JSON.stringify({ type: 'join' }));
+};
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+
+  if (data.type === 'role') {
+    console.log('Your role is:', data.role);
+  }
+
+  if (data.type === 'action') {
+    console.log('Player action received:', data.payload);
+  }
+};
+
+function sendAction(payload) {
+  ws.send(JSON.stringify({ type: 'action', payload }));
+}
+</script>
+<script>
+fetch('api.php')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('response-text').innerText = data;
+    });
+</script>
 </head>
 <body>
     <h2>das ist ein test!!!</h2>
