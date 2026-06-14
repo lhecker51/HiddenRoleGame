@@ -13,6 +13,10 @@ app.use(express.static("public"));
 io.on("connection", (socket) => {
   console.log("player connected:", socket.id);
 
+  socket.on("hello", () => {
+    socket.emit("hello_back", { message: "server received you!" });
+  });
+
   socket.on("disconnect", () => {
     console.log("player left:", socket.id);
   });
@@ -21,3 +25,4 @@ io.on("connection", (socket) => {
 server.listen(process.env.PORT || 8080, () => {
   console.log("server running on port", process.env.PORT || 8080);
 });
+
