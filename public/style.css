@@ -94,6 +94,10 @@ button:hover {
     border-radius: 10px;
 }
 
+.container-player p {
+    margin: 10px;
+}
+
 
 #player-list {
     font-size: 20px;
