@@ -41,6 +41,8 @@ app.use(express.static("public"));
 
 io.on("connection", (socket) => {
     console.log("Player connected:", socket.id);
+    socket.emit("debug", "connected");
+    socket.emit("debug", "connected2");
 
     socket.on("join_session", ({player_name, session_code}) => {
         console.log("Join request received.");
