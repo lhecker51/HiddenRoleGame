@@ -13,7 +13,7 @@ const rooms = {};
 app.use(express.static("public"));
 
 io.on("connection", (socket) => {
-    console.log("player connected:", socket.id);
+    console.log("player connected: ", socket.id);
 
     socket.on("join_room", ({name, code}) => {
         if (!rooms[code]) {
