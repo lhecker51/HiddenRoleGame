@@ -8,15 +8,21 @@ const io = new Server(server, {
     cors: {origin: "*"}
 });
 
-enum Role {
-    Villager,
-    Werewolf
+class Role {
+    name: string;
+
+    constructor(name: string) {
+        this.name = name;
+    }
 }
+
+const villagerRole: Role = new Role("Villager");
+const werewolfRole: Role = new Role("Werewolf");
 
 class Player {
     socket: Socket;
     name: string;
-    role: Role = Role.Villager;
+    role: Role = villagerRole;
 
     constructor(socket: Socket, name: string) {
         this.socket = socket;
@@ -56,7 +62,7 @@ io.on("connection", (socket) => {
             return;
         }
 
-        // session.players.push(new Player(socket, player_name)); maybe broken?
+        session.players.push(new Player(socket, player_name));
         socket.join(session_code);
         socket.data.code = session_code;
         socket.data.name = player_name;
@@ -75,21 +81,19 @@ io.on("connection", (socket) => {
             return;
         }
 
-        /*
         let numberOfWerewolves = 0;
         while (numberOfWerewolves < Math.ceil(numberOfPlayers / 5.0)) {
             const randomIndex = Math.floor(Math.random() * numberOfPlayers);
             const player = session.players[randomIndex];
-            if (player.role === Role.Villager) {
-                player.role = Role.Werewolf;
+            if (player.role === villagerRole) {
+                player.role = werewolfRole;
                 numberOfWerewolves++;
             }
         }
 
         for (const player of session.players) {
-            player.socket.emit("role_update", {role: player.role.toString()});
+            player.socket.emit("role_update", {role: player.role.name});
         }
-        */
 
         session.round = 1;
         console.log("Game started.")
