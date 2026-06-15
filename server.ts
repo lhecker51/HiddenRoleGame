@@ -8,9 +8,9 @@ const io = new Server(server, {
     cors: {origin: "*"}
 });
 
-class Session {
-    players: Player[] = [];
-    round: int = 0;
+enum Role {
+    Villager,
+    Werewolf
 }
 
 class Player {
@@ -24,9 +24,9 @@ class Player {
     }
 }
 
-enum Role {
-    Villager,
-    Werewolf
+class Session {
+    players: Player[] = [];
+    round: int = 0;
 }
 
 const sessions: Set<Session> = {};
@@ -84,7 +84,7 @@ io.on("connection", (socket) => {
         }
 
         for (const player of session.players) {
-            player.socket.emit("role_update", {role: player.role.toString()});
+            //player.socket.emit("role_update", {role: player.role.toString()}); todo check this
         }
 
         session.round = 1;
