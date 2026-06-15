@@ -45,7 +45,7 @@ socket.on("player_left", (player_name) => {
 
 function update_player_list() {
     const list = document.getElementById("player-list");
-    list.innerHTML = players.map(p => `<li>${p.name}</li>`).join("");
+    list.innerHTML = players.map(name => `<li>${name}</li>`).join("");
 }
 
 socket.on("role_update", (received_role) => {

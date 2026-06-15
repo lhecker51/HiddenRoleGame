@@ -46,10 +46,7 @@ io.on("connection", (socket: Socket) => {
         console.log("Join request received.");
         if (!sessions[session_code]) {
             sessions[session_code] = new Session();
-            socket.emit("debug", "New session created.");
         }
-
-        socket.emit("debug", "test1");
 
         const session = sessions[session_code];
 
@@ -63,8 +60,6 @@ io.on("connection", (socket: Socket) => {
             socket.emit("error", {message: "Name already taken in this session."});
             return;
         }
-
-        socket.emit("debug", "test2");
 
         session.players.push(new Player(socket, player_name));
         socket.join(session_code);
@@ -96,7 +91,7 @@ io.on("connection", (socket: Socket) => {
         }
 
         for (const player of session.players) {
-            player.socket.emit("role_update", {role: player.role.name});
+            player.socket.emit("role_update", player.role.name);
         }
 
         session.round = 1;
