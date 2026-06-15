@@ -8,7 +8,16 @@ const io = new Server(server, {
     cors: {origin: "*"}
 });
 
-const sessions = {};
+class Player {
+    name: string;
+}
+
+class Session {
+    players: Player[] = [];
+    round: int = 0;
+}
+
+const sessions: Set<Session> = {};
 
 app.use(express.static("public"));
 
@@ -17,7 +26,7 @@ io.on("connection", (socket) => {
 
     socket.on("join_session", ({player_name, session_code}) => {
         if (!sessions[session_code]) {
-            sessions[session_code] = {players: [], round: 0};
+            sessions[session_code] = new Session();
         }
 
         const session = sessions[session_code];
@@ -38,7 +47,7 @@ io.on("connection", (socket) => {
         socket.data.code = session_code;
         socket.data.name = player_name;
 
-        io.to(session_code).emit("room_update", {players: session.players});
+        io.to(session_code).emit("session_update", {players: session.players});
         console.log(`${player_name} joined room ${session_code}`);
     });
 
@@ -67,7 +76,7 @@ io.on("connection", (socket) => {
         if (!session) return;
 
         session.players = session.players.filter(p => p.id !== socket.id);
-        io.to(session_code).emit("room_update", {players: session.players});
+        io.to(session_code).emit("session_update", {players: session.players});
 
         if (session.players.length < 1) {
             delete sessions[session_code];
