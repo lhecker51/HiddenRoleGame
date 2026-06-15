@@ -49,9 +49,7 @@ io.on("connection", (socket: Socket) => {
             socket.emit("debug", "New session created.");
         }
 
-        socket.emit("debug", "1, 2");
-        socket.emit("debug", "2, 2");
-        socket.emit("debug", sessions[session_code].round);
+        socket.emit("debug", "test1");
 
         const session = sessions[session_code];
 
@@ -60,23 +58,20 @@ io.on("connection", (socket: Socket) => {
             return;
         }
 
-        socket.emit("debug", session.round);
-
         const nameTaken = session.players.some(p => p.name.toLowerCase() == player_name.toLowerCase());
         if (nameTaken) {
             socket.emit("error", {message: "Name already taken in this session."});
             return;
         }
 
-        socket.emit("debug", "2");
+        socket.emit("debug", "test2");
 
         session.players.push(new Player(socket, player_name));
         socket.join(session_code);
         socket.data.code = session_code;
         socket.data.name = player_name;
 
-
-        io.to(session_code).emit("session_update", players);
+        io.to(session_code).emit("player_joined", player_name);
         console.log(`${player_name} joined room ${session_code}`);
     });
 
@@ -115,8 +110,13 @@ io.on("connection", (socket: Socket) => {
         const session = sessions[session_code];
         if (!session) return;
 
-        session.players = session.players.filter(p => p.socket.id !== socket.id);
-        io.to(session_code).emit("session_update", {players: session.players});
+        const remainingPlayers = session.players.filter(p => p.socket.id !== socket.id);
+        for (const player of session.players) {
+            if (!remainingPlayers.includes(player)) {
+                io.to(session_code).emit("player_left", player.name);
+            }
+        }
+        session.players = remainingPlayers;
 
         if (session.players.length < 1) {
             delete sessions[session_code];

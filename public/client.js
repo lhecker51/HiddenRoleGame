@@ -5,6 +5,7 @@ socket.on("connect", () => {
 });
 
 let session_code = "";
+const players = [];
 let role;
 
 document.getElementById("join-btn").addEventListener("click", () => {
@@ -19,6 +20,9 @@ document.getElementById("join-btn").addEventListener("click", () => {
 
     document.getElementById("session-code-p").innerText = "Session code: " + session_code;
 
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "block";
+
     socket.emit("join_session", {player_name, session_code});
 });
 
@@ -27,15 +31,22 @@ document.getElementById("start-btn").addEventListener("click", () => {
     socket.emit("start_game", {session_code});
 });
 
-socket.on("session_update", (players) => {
-    console.log("Session update received.");
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("game-screen").style.display = "block";
+socket.on("player_joined", (player_name) => {
+    console.log("Player joined.");
+    players.push(player_name);
+    update_player_list();
+});
 
+socket.on("player_left", (player_name) => {
+    console.log("Player left.");
+    players.remove(player_name);
+    update_player_list();
+});
 
+function update_player_list() {
     const list = document.getElementById("player-list");
     list.innerHTML = players.map(p => `<li>${p.name}</li>`).join("");
-});
+}
 
 socket.on("role_update", (received_role) => {
     console.log("Role update received:", received_role);
