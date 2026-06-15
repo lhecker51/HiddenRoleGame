@@ -24,6 +24,7 @@ class Player {
     }
 }
 
+
 class Session {
     players: Player[] = [];
     round: int = 0;
@@ -55,7 +56,7 @@ io.on("connection", (socket) => {
             return;
         }
 
-        session.players.push(new Player(socket, player_name));
+        // session.players.push(new Player(socket, player_name)); maybe broken?
         socket.join(session_code);
         socket.data.code = session_code;
         socket.data.name = player_name;
@@ -74,6 +75,7 @@ io.on("connection", (socket) => {
             return;
         }
 
+        /*
         let numberOfWerewolves = 0;
         while (numberOfWerewolves < Math.ceil(numberOfPlayers / 5.0)) {
             const randomIndex = Math.floor(Math.random() * numberOfPlayers);
@@ -87,6 +89,7 @@ io.on("connection", (socket) => {
         for (const player of session.players) {
             player.socket.emit("role_update", {role: player.role.toString()});
         }
+        */
 
         session.round = 1;
         console.log("Game started.")
