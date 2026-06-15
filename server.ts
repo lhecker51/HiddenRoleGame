@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
             sessions[session_code] = new Session();
         }
 
-        socket.emit("error", {message: "1"});
+        socket.emit("debug", "1");
 
         const session = sessions[session_code];
 
@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
             return;
         }
 
-        socket.emit("error", {message: "2"});
+        socket.emit("debug", session.round);
 
         const nameTaken = session.players.some(p => p.name.toLowerCase() == player_name.toLowerCase());
         if (nameTaken) {
@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
             return;
         }
 
-        socket.emit("error", {message: "3"});
+        socket.emit("debug", "2");
 
         session.players.push(new Player(socket, player_name));
         socket.join(session_code);

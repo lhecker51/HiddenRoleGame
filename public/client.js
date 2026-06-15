@@ -46,3 +46,7 @@ socket.on("error", (data) => {
     console.log("Error received:", data.message);
     document.getElementById("status").textContent = data.message;
 });
+
+socket.on("debug", (message) => {
+    console.log("Debug received:", message);
+})
