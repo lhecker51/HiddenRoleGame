@@ -57,21 +57,21 @@ io.on("connection", (socket) => {
             return;
         }
 
-        const nameTaken = session.players.some(p => p.name.toLowerCase() === player_name.toLowerCase());
+        socket.emit("error", {message: "2"});
+
+        const nameTaken = session.players.some(p => p.name.toLowerCase() == player_name.toLowerCase());
         if (nameTaken) {
             socket.emit("error", {message: "Name already taken in this session."});
             return;
         }
 
-        socket.emit("error", {message: "2"});
+        socket.emit("error", {message: "3"});
 
         session.players.push(new Player(socket, player_name));
-        socket.emit("error", {message: "3"});
         socket.join(session_code);
         socket.data.code = session_code;
         socket.data.name = player_name;
 
-        socket.emit("error", {message: "4"});
 
         io.to(session_code).emit("session_update", {players: session.players});
         console.log(`${player_name} joined room ${session_code}`);
