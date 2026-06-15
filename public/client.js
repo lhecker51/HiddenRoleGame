@@ -1,10 +1,11 @@
 const socket = io();
 
 socket.on("connect", () => {
-    console.log("connected:", socket.id);
+    console.log("Connected to socket with ID", socket.id);
 });
 
 let session_code = "";
+let role;
 
 document.getElementById("join-btn").addEventListener("click", () => {
     console.log("Join button clicked.");
@@ -36,7 +37,12 @@ socket.on("session_update", (data) => {
     list.innerHTML = data.players.map(p => `<li>${p.name}</li>`).join("");
 });
 
+socket.on("role_update", (received_role) => {
+    console.log("Role update received:", received_role);
+    role = received_role.toLowerCase();
+})
+
 socket.on("error", (data) => {
-    console.log("Error received.")
+    console.log("Error received:", data.message);
     document.getElementById("status").textContent = data.message;
 });

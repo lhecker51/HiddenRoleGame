@@ -8,13 +8,25 @@ const io = new Server(server, {
     cors: {origin: "*"}
 });
 
-class Player {
-    name: string;
-}
-
 class Session {
     players: Player[] = [];
     round: int = 0;
+}
+
+class Player {
+    socket: Socket;
+    name: string;
+    role: Role = Role.Villager;
+
+    constructor(socket: Socket, name: string) {
+        this.socket = socket;
+        this.name = name;
+    }
+}
+
+enum Role {
+    Villager,
+    Werewolf
 }
 
 const sessions: Set<Session> = {};
@@ -43,7 +55,7 @@ io.on("connection", (socket) => {
             return;
         }
 
-        session.players.push({id: socket.id, name: player_name});
+        session.players.push(new Player(socket, player_name));
         socket.join(session_code);
         socket.data.code = session_code;
         socket.data.name = player_name;
@@ -54,22 +66,31 @@ io.on("connection", (socket) => {
 
     socket.on("start_game", ({session_code}) => {
         console.log("Start request received.");
-        if (sessions[session_code].players.length < 3) {  // adjust minimum number of players as needed
+        const session = sessions[session_code];
+        const numberOfPlayers = session.players.length;
+
+        if (numberOfPlayers < 1) {  // adjust minimum number of players as needed
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
         }
 
-        const session = sessions[session_code];
+        let numberOfWerewolves = 0;
+        while (numberOfWerewolves < Math.ceil(numberOfPlayers / 5.0)) {
+            const randomIndex = Math.floor(Math.random() * numberOfPlayers);
+            const player = session.players[randomIndex];
+            if (player.role === Role.Villager) {
+                player.role = Role.Werewolf;
+            }
+        }
 
-        // distribute_roles()
+        for (const player of session.players) {
+            player.socket.emit("role_update", {role: player.role.toString()});
+        }
 
         session.round = 1;
         console.log("Game started.")
 
-        let game_winner = null;
-        while (game_winner == null) {
-            // manage rounds
-        }
+        // todo manage rounds here, start with day, other typescript file?
     });
 
     socket.on("disconnect", () => {
@@ -89,5 +110,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(process.env.PORT || 8080, () => {
-    console.log("Server running on port ", process.env.PORT || 8080);
+    console.log("Server running on port", process.env.PORT || 8080);
 });
