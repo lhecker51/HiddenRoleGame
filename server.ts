@@ -25,6 +25,7 @@ io.on("connection", (socket) => {
     console.log("player connected: ", socket.id);
 
     socket.on("join_session", ({player_name, session_code}) => {
+        console.log("Join request received.");
         if (!sessions[session_code]) {
             sessions[session_code] = new Session();
         }
@@ -52,6 +53,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("start_game", ({session_code}) => {
+        console.log("Start request received.");
         if (sessions[session_code].players.length < 3) {  // adjust minimum number of players as needed
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
@@ -87,5 +89,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(process.env.PORT || 8080, () => {
-    console.log("server running on port", process.env.PORT || 8080);
+    console.log("Server running on port ", process.env.PORT || 8080);
 });

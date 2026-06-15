@@ -7,6 +7,7 @@ socket.on("connect", () => {
 let session_code = "";
 
 document.getElementById("join-btn").addEventListener("click", () => {
+    console.log("Join button clicked.");
     const player_name = document.getElementById("player-name").value.trim();
     session_code = document.getElementById("session-code").value.trim().toUpperCase();
 
@@ -21,10 +22,12 @@ document.getElementById("join-btn").addEventListener("click", () => {
 });
 
 document.getElementById("start-btn").addEventListener("click", () => {
+    console.log("Start button clicked.");
     socket.emit("start_game", {session_code});
 });
 
 socket.on("session_update", (data) => {
+    console.log("Session update received.");
     document.getElementById("login-screen").style.display = "none";
     document.getElementById("game-screen").style.display = "block";
 
@@ -34,5 +37,6 @@ socket.on("session_update", (data) => {
 });
 
 socket.on("error", (data) => {
+    console.log("Error received.")
     document.getElementById("status").textContent = data.message;
 });
