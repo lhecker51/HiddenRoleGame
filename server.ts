@@ -61,6 +61,10 @@ io.on("connection", (socket) => {
             return;
         }
 
+        for (const player of session.players) {
+            socket.emit("player_joined", player.name);
+        }
+
         session.players.push(new Player(socket, player_name));
         socket.join(session_code);
         socket.data.code = session_code;
