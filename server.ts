@@ -80,11 +80,12 @@ io.on("connection", (socket) => {
             const player = session.players[randomIndex];
             if (player.role === Role.Villager) {
                 player.role = Role.Werewolf;
+                numberOfWerewolves++;
             }
         }
 
         for (const player of session.players) {
-            //player.socket.emit("role_update", {role: player.role.toString()}); todo check this
+            player.socket.emit("role_update", {role: player.role.toString()});
         }
 
         session.round = 1;
