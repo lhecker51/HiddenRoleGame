@@ -40,7 +40,7 @@ socket.on("session_update", (data) => {
 socket.on("role_update", (received_role) => {
     console.log("Role update received:", received_role);
     role = received_role.toLowerCase();
-})
+});
 
 socket.on("error", (data) => {
     console.log("Error received:", data.message);
@@ -49,4 +49,4 @@ socket.on("error", (data) => {
 
 socket.on("debug", (message) => {
     console.log("Debug received:", message);
-})
+});

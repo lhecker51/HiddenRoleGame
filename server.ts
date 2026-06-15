@@ -49,6 +49,7 @@ io.on("connection", (socket) => {
         }
 
         socket.emit("debug", "1");
+        socket.emit("debug", "2");
         socket.emit("debug", sessions[session_code]);
 
         const session = sessions[session_code];
