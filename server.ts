@@ -48,10 +48,11 @@ io.on("connection", (socket) => {
         console.log("Join request received.");
         if (!sessions[session_code]) {
             sessions[session_code] = new Session();
+            socket.emit("debug", "New session created.");
         }
 
-        socket.emit("debug", "1");
-        socket.emit("debug", "2");
+        socket.emit("debug", "1, 2");
+        socket.emit("debug", "2, 2");
         socket.emit("debug", sessions[session_code]);
 
         const session = sessions[session_code];
