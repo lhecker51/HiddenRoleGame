@@ -39,7 +39,10 @@ socket.on("player_joined", (player_name) => {
 
 socket.on("player_left", (player_name) => {
     console.log("Player left.");
-    players.remove(player_name);
+    const index = players.indexOf(player_name);
+    if (index > -1) {
+        players.splice(index, 1);
+    }
     update_player_list();
 });
 

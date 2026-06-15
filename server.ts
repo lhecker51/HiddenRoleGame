@@ -20,7 +20,7 @@ const villagerRole: Role = new Role("Villager");
 const werewolfRole: Role = new Role("Werewolf");
 
 class Player {
-    socket: Socket;
+    socket;  // todo type Socket?
     name: string;
     role: Role = villagerRole;
 
@@ -39,7 +39,7 @@ const sessions: Record<string, Session> = {};
 
 app.use(express.static("public"));
 
-io.on("connection", (socket: Socket) => {
+io.on("connection", (socket) => {
     console.log("Player connected:", socket.id);
 
     socket.on("join_session", ({player_name, session_code}) => {
