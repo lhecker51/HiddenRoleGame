@@ -30,7 +30,6 @@ class Player {
     }
 }
 
-
 class Session {
     players: Player[] = [];
     round: int = 0;
@@ -41,13 +40,15 @@ const sessions: Set<Session> = {};
 app.use(express.static("public"));
 
 io.on("connection", (socket) => {
-    console.log("player connected: ", socket.id);
+    console.log("Player connected:", socket.id);
 
     socket.on("join_session", ({player_name, session_code}) => {
         console.log("Join request received.");
         if (!sessions[session_code]) {
             sessions[session_code] = new Session();
         }
+
+        socket.emit("error", {message: "1"});
 
         const session = sessions[session_code];
 
@@ -62,10 +63,15 @@ io.on("connection", (socket) => {
             return;
         }
 
+        socket.emit("error", {message: "2"});
+
         session.players.push(new Player(socket, player_name));
+        socket.emit("error", {message: "3"});
         socket.join(session_code);
         socket.data.code = session_code;
         socket.data.name = player_name;
+
+        socket.emit("error", {message: "4"});
 
         io.to(session_code).emit("session_update", {players: session.players});
         console.log(`${player_name} joined room ${session_code}`);
