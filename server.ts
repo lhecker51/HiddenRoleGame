@@ -8,51 +8,52 @@ const io = new Server(server, {
     cors: {origin: "*"}
 });
 
-const rooms = {};
+const sessions = {};
 
 app.use(express.static("public"));
 
 io.on("connection", (socket) => {
     console.log("player connected: ", socket.id);
 
-    socket.on("join_room", ({name, code}) => {
-        if (!rooms[code]) {
-            rooms[code] = {players: [], round: 0};
+    socket.on("join_session", ({player_name, session_code}) => {
+        if (!sessions[session_code]) {
+            sessions[session_code] = {players: [], round: 0};
         }
 
-        const room = rooms[code];
+        const session = sessions[session_code];
 
-        if (room.round > 0) {
+        if (session.round > 0) {
             socket.emit("error", {message: "Game already started."});
             return;
         }
 
-        const nameTaken = room.players.some(p => p.name.toLowerCase() === name.toLowerCase());
+        const nameTaken = session.players.some(p => p.name.toLowerCase() === player_name.toLowerCase());
         if (nameTaken) {
             socket.emit("error", {message: "Name already taken in this session."});
             return;
         }
 
-        room.players.push({id: socket.id, name});
-        socket.join(code);
-        socket.data.code = code;
-        socket.data.name = name;
+        session.players.push({id: socket.id, name: player_name});
+        socket.join(session_code);
+        socket.data.code = session_code;
+        socket.data.name = player_name;
 
-        io.to(code).emit("room_update", {players: room.players});
-        console.log(`${name} joined room ${code}`);
+        io.to(session_code).emit("room_update", {players: session.players});
+        console.log(`${player_name} joined room ${session_code}`);
     });
 
-    socket.on("start_game", ({code}) => {
-        if (rooms[code].players.length < 3) {  // adjust minimum number of players as needed
+    socket.on("start_game", ({session_code}) => {
+        if (sessions[session_code].players.length < 3) {  // adjust minimum number of players as needed
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
         }
 
-        const room = rooms[code];
+        const session = sessions[session_code];
 
         // distribute_roles()
 
-        room.round = 1;
+        session.round = 1;
+        console.log("Game started.")
 
         let game_winner = null;
         while (game_winner == null) {
@@ -61,15 +62,15 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
-        const code = socket.data.code;
-        const room = rooms[code];
-        if (!room) return;
+        const session_code = socket.data.code;
+        const session = sessions[session_code];
+        if (!session) return;
 
-        room.players = room.players.filter(p => p.id !== socket.id);
-        io.to(code).emit("room_update", {players: room.players});
+        session.players = session.players.filter(p => p.id !== socket.id);
+        io.to(session_code).emit("room_update", {players: session.players});
 
-        if (room.players.length === 0) {
-            delete rooms[code];
+        if (session.players.length < 1) {
+            delete sessions[session_code];
         }
 
         console.log("player left:", socket.id);

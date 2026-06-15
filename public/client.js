@@ -4,27 +4,27 @@ socket.on("connect", () => {
   console.log("connected:", socket.id);
 });
 
-let code = "";
+let session_code = "";
 
 document.getElementById("join-btn").addEventListener("click", () => {
-  const name = document.getElementById("player-name").value.trim();
-  code = document.getElementById("room-code").value.trim().toUpperCase();
+  const player_name = document.getElementById("player-name").value.trim();
+  session_code = document.getElementById("session-code").value.trim().toUpperCase();
 
-  if (!name || !code) {
+  if (!player_name || !session_code) {
     document.getElementById("status").textContent = "Please enter your name and a session code.";
     return;
   }
 
-  document.getElementById("session-code-p").innerText = "Session code: " + code;
+  document.getElementById("session-code-p").innerText = "Session code: " + session_code;
 
-  socket.emit("join_room", { name, code });
+  socket.emit("join_session", { player_name, session_code });
 });
 
 document.getElementById("start-btn").addEventListener("click", () => {
-  socket.emit("start_game", {code});
+  socket.emit("start_game", {session_code});
 });
 
-socket.on("room_update", (data) => {
+socket.on("session_update", (data) => {
   document.getElementById("login-screen").style.display = "none";
   document.getElementById("game-screen").style.display = "block";
 
