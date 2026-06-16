@@ -65,13 +65,6 @@ socket.on("role_update", (received_role) => {
     role = received_role;
     document.getElementById("game-screen").classList.add("hidden");
     document.getElementById("role-name").innerHTML = role;
-    document.getElementById("role-screen").classList.remove("role-villager", "role-werewolf");
-    if (role == "Villager") {
-        document.getElementById("role-screen").classList.add("role-villager");
-    }
-    else if (role == "Werewolf") {
-        document.getElementById("role-screen").classList.add("role-werewolf");
-    }
     console.log("Role update received:", received_role);
     document.getElementById("role-screen").classList.remove("hidden");
 });
@@ -101,7 +94,7 @@ socket.on("start_night", (number) => {
         document.getElementById("night-werewolf-screen").classList.remove("hidden");
         console.log("werewolf screen worked");
         start_werewolf_voting();
-        const selected_value = get_werewolf_result();
+        setup_werewolf_submit();
         
     }
 });
@@ -118,12 +111,6 @@ function start_werewolf_voting() {
         radioButton.value = value;
         radioButton.id = radioId;
 
-        radioButton.addEventListener('change', () => {
-            const current_vote = get_werewolf_result();
-            console.log("Werewolf changed vote to:", current_vote);
-            socket.emit("werewolf_vote", current_vote);
-        });
-
         const label = document.createElement('label');
         label.htmlFor = radioId;
         label.textContent = value;
@@ -134,6 +121,31 @@ function start_werewolf_voting() {
         victim_container.appendChild(label);
         victim_container.appendChild(br);
     })
+}
+
+function setup_werewolf_submit() {
+
+    const submitBtn = document.getElementById("werewolf-victim-btn");
+    const clone = submitBtn.cloneNode(true);
+    submitBtn.parentNode.replaceChild(clone, submitBtn);
+
+    submitBtn.addEventListener("click", () => {
+        const selected_value = get_werewolf_result();
+
+        if (!selected_value) {
+            alert("You must choose a victim before submitting!");
+            return;
+        }
+
+        console.log("You locked in vote for:", selected_value);
+
+        socket.emit("werewolf_vote", { target: selected_value });
+
+        clone.disabled = true;
+        clone.textContent = "Vote submitted...";
+    })
+
+    
 }
 
 function get_werewolf_result() {
