@@ -8,6 +8,7 @@ let session_code = "";
 const players = [];
 const werewolves = [];
 let role;
+let countdownInterval = null;
 
 
 //lobby and join
@@ -60,9 +61,37 @@ socket.on("start_success", () => {
     console.log("Game start successful!");
 })
 
+
 socket.on("timer", (timeMilliseconds) => {
+    const totalSeconds = timeMilliseconds / 1000;
     console.log(`Started timer for ${timeMilliseconds / 1000} seconds...`);
+
+
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+    }
+
+    const timerDisplay = document.getElementById("timer-display");
+    const timerSeconds = document.getElementById("timer-seconds");
+
+    timerSeconds.textContent = secondsLeft;
+    timerDisplay.classList.remove("hidden");
+
+    countdownInterval = setInterval(() => {
+        secondsLeft--;
+
+        if (secondsLeft <= 0) {
+            clearInterval(countdownInterval);
+            timerSeconds.textContent = "0";
+            timerDisplay.classList.add("hidden");
+            console.log("Client-Timer abgelaufen.");
+        } else {
+            timerSeconds.textContent = secondsLeft;
+        }
+    }, 1000);
 });
+
+
 
 socket.on("role_update", (received_role) => {
     role = received_role;
