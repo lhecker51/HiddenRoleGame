@@ -41,7 +41,7 @@ class Session {
         this.code = code;
     }
 
-    broadcast(code: string, data: any) {
+    broadcast(code: string, data?: any) {
         return io.to(this.code).emit(code, data);
     }
 }
