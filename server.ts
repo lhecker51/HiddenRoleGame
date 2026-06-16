@@ -88,7 +88,7 @@ io.on("connection", (socket: Socket) => {
         sessionSocket.emit("player_joined", player_name);
     });
 
-    socket.on("start_game", () => {
+    socket.on("start_game", async () => {
         const numberOfPlayers = session.players.length;
         if (session.round > 0) {
             socket.emit("error", {message: "Game has already started."});
@@ -127,10 +127,10 @@ io.on("connection", (socket: Socket) => {
         const timeoutMilliseconds: number = 10000;
         sessionSocket.emit("timer", timeoutMilliseconds);
         await sleep(timeoutMilliseconds);
-        handleNight();
+        await handleNight();
     });
 
-    function handleNight() {
+    async function handleNight() {
         for (const player of session.players) {
             player.socket.emit("start_night", session.round);
             if (player.role === werewolfRole && player.isAlive) {
@@ -143,7 +143,7 @@ io.on("connection", (socket: Socket) => {
         sessionSocket.emit("timer", timeoutMilliseconds);
         await sleep(timeoutMilliseconds);
         concludeVoting();
-        proceedUnlessEnded(handleDay);
+        await proceedUnlessEnded(handleDay);
     }
 
     socket.on("select_werewolf", (victim) => {
@@ -162,7 +162,7 @@ io.on("connection", (socket: Socket) => {
         }
     });
 
-    function handleDay() {
+    async function handleDay() {
         session.round++;
         for (const player of session.players) {
             player.socket.emit("start_day", session.round);
@@ -174,7 +174,7 @@ io.on("connection", (socket: Socket) => {
         sessionSocket.emit("timer", timeoutMilliseconds);
         await sleep(timeoutMilliseconds);
         concludeVoting();
-        proceedUnlessEnded(handleNight)
+        await proceedUnlessEnded(handleNight)
     }
 
     function concludeVoting() {
@@ -196,7 +196,7 @@ io.on("connection", (socket: Socket) => {
         sessionSocket.emit("death", mostVotedPlayer.name);
     }
 
-    function proceedUnlessEnded(func: Function) {
+    async function proceedUnlessEnded(func: Function) {
         let numberOfWerewolvesAlive = 0;
         let numberOfVillagersAlive = 0;
         for (const player of session.players) {
@@ -218,7 +218,7 @@ io.on("connection", (socket: Socket) => {
             return;
         }
 
-        func.call();
+        await func();
     }
 
     socket.on("disconnect", () => {
