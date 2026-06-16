@@ -29,7 +29,7 @@ document.getElementById("join-btn").addEventListener("click", () => {
 
 document.getElementById("start-btn").addEventListener("click", () => {
     console.log("Start button clicked.");
-    socket.emit("start_game", {session_code});
+    socket.emit("start_game", session_code);
     //log fuer role
     document.getElementById("role-screen").style.display = "block";
 });

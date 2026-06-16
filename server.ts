@@ -79,7 +79,7 @@ io.on("connection", (socket) => {
         console.log(`${player_name} joined room ${session_code}`);
     });
 
-    socket.on("start_game", ({session_code}) => {
+    socket.on("start_game", (session_code) => {
         console.log("Start request received.");
         const session = sessions[session_code];
         const numberOfPlayers = session.players.length;
