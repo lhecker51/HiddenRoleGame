@@ -20,11 +20,11 @@ const villagerRole: Role = new Role("Villager");
 const werewolfRole: Role = new Role("Werewolf");
 
 class Player {
-    socket: Socket;
+    socket: typeof Socket;
     name: string;
     role: Role = villagerRole;
 
-    constructor(socket: Socket, name: string) {
+    constructor(socket: typeof Socket, name: string) {
         this.socket = socket;
         this.name = name;
     }
@@ -39,7 +39,7 @@ const sessions: Record<string, Session> = {};
 
 app.use(express.static("public"));
 
-io.on("connection", (socket: Socket) => {
+io.on("connection", (socket: typeof Socket) => {
     console.log("Player connected:", socket.id);
 
     socket.on("join_session", ({player_name, session_code}) => {
@@ -65,8 +65,6 @@ io.on("connection", (socket: Socket) => {
             socket.emit("error", {message: "Name is too long."});
             return;
         }
-
-        socket.emit("join_success");
 
         for (const player of session.players) {
             socket.emit("player_joined", player.name);
@@ -95,8 +93,6 @@ io.on("connection", (socket: Socket) => {
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
         }
-
-        socket.emit("start_successful");
 
         session.round = 1;
 
