@@ -192,8 +192,11 @@ io.on("connection", (socket: Socket) => {
             }
             player.votes = 0;
         }
-        mostVotedPlayer.isAlive = false;
-        sessionSocket.emit("death", mostVotedPlayer.name);
+        if (mostVotes > 0 && !tie) {
+            mostVotedPlayer.isAlive = false;
+            mostVotedPlayer.socket.emit("you_died");
+            sessionSocket.emit("death", mostVotedPlayer.name);
+        }
     }
 
     async function proceedUnlessEnded(func: Function) {

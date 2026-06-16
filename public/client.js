@@ -226,6 +226,10 @@ socket.on("death", (player_name) => {
     }
 });
 
+socket.on("you_died", () => {
+    console.log("You died...");
+});
+
 socket.on("start_day", (number) => {
     console.log("It is day", number);
     document.getElementById("day-screen").classList.remove("Hidden");
