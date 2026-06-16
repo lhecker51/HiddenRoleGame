@@ -6,6 +6,7 @@ socket.on("connect", () => {
 
 let session_code = "";
 const players = [];
+const werewolves = [];
 let role;
 
 document.getElementById("join-btn").addEventListener("click", () => {
@@ -51,14 +52,25 @@ function update_player_list() {
     list.innerHTML = players.map(name => `<li>${name}</li>`).join("");
 }
 
-socket.on("day", (number) => {
-    console.log("It is day", number);
+socket.on("role_screen", () => {
+    console.log("Displaying role screen.");
 })
 
 socket.on("role_update", (received_role) => {
     console.log("Role update received:", received_role);
     role = received_role.toLowerCase();
 });
+
+socket.on("werewolf_list", (werewolf_list) => {
+    for (const werewolf of werewolf_list) {
+        werewolves.push(werewolf);
+    }
+    console.log("Werewolves are:", werewolves);
+})
+
+socket.on("day", (number) => {
+    console.log("It is day", number);
+})
 
 socket.on("error", (data) => {
     console.log("Error received:", data.message);
