@@ -123,8 +123,20 @@ io.on("connection", (socket: Socket) => {
             }
         }
 
-        // todo manage rounds here, start with day, other typescript file?
+        handleNight(session);
     });
+
+    function handleNight(session: Session) {
+        for (const player of session.players) {
+            player.socket.emit("start night", session.round);
+            if (player.role === werewolfRole) {
+                player.socket.emit("start_werewolf_vote");
+            }
+        }
+    }
+
+    function handleDay(session: Session) {
+    }
 
     socket.on("disconnect", () => {
         const session_code = socket.data.code;
