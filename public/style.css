@@ -74,7 +74,7 @@ button, input, select, textarea {
 }
 .character {
     position: absolute;
-    bottom: 12%;
+    bottom: 35%;
     width: 90px;
 
     image-rendering: pixelated;
