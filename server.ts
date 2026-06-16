@@ -85,10 +85,17 @@ io.on("connection", (socket) => {
         const session = sessions[session_code];
         const numberOfPlayers = session.players.length;
 
+        if (session.round > 0) {
+            socket.emit("error", {message: "Game has already started."});
+            return;
+        }
+
         if (numberOfPlayers < 1) {  // adjust minimum number of players as needed
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
         }
+
+        session.round = 1;
 
         let numberOfWerewolves = 0;
         while (numberOfWerewolves < Math.ceil(numberOfPlayers / 5.0)) {
@@ -100,14 +107,13 @@ io.on("connection", (socket) => {
             }
         }
 
-        session.round = 1;
         console.log("Game started.")
 
         for (const player of session.players) {
             player.socket.emit("role_update", player.role.name);
         }
 
-        const werewolfList = session.players.filter(p => p.role === werewolfRole);
+        const werewolfList: Player[] = session.players.filter(p => p.role === werewolfRole);
         for (const player of session.players) {
             if (werewolfList.includes(player)) {
                 player.socket.emit("werewolf_list", werewolfList.map(p => p.name));
