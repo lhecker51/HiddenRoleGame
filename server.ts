@@ -127,6 +127,14 @@ io.on("connection", (socket: typeof Socket) => {
         }
     }
 
+    socket.on("select_werewolf", (victim) => {
+        for (const player of session.players) {
+            if (player.role === werewolfRole) {
+                player.socket.emit("selected_werewolf", victim);
+            }
+        }
+    });
+
     function handleDay(session: Session) {
     }
 
