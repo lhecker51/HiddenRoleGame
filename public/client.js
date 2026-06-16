@@ -58,13 +58,13 @@ document.getElementById("start-btn").addEventListener("click", () => {
 
 socket.on("start_success", () => {
     console.log("Game start successful!");
-    //game screen hiden
-    //role screen displayen
-    document.getElementById("game-screen").classList.add("hidden");
 })
 
 socket.on("role_update", (received_role) => {
     role = received_role;
+    //game screen hiden
+    //role screen displayen
+    document.getElementById("game-screen").classList.add("hidden");
     document.getElementById("role-name").innerHTML = role;
     console.log("Role update received:", received_role);
     document.getElementById("role-screen").classList.remove("hidden");
