@@ -71,16 +71,16 @@ socket.on("role_update", (received_role) => {
 });
 
 socket.on("werewolf_list", (werewolf_list) => {
+    document.getElementById("werewolf-team").classList.remove("hidden");
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
-        update_werewolf_list();
+        update_werewolf_list(werewolf);
     }
 
-    document.getElementById("werewolf-team").classList.remove("hidden");
     console.log("Werewolves are:", werewolves);
 });
 
-function update_werewolf_list() {
+function update_werewolf_list(werewolf) {
     const list = document.getElementById("werewolf-team-list");
     list.innerHTML = players.map(name => `<li>${werewolf}</li>`).join("");
 }
