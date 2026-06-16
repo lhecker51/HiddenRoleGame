@@ -72,12 +72,11 @@ socket.on("timer", (timeMilliseconds) => {
 
     let secondsLeft = timeMilliseconds / 1000;
 
-    timerSeconds.textContent = secondsLeft;
+    timerSeconds.textContent = secondsLeft.toString();
     timerDisplay.classList.remove("hidden");
 
     countdownInterval = setInterval(() => {
         secondsLeft--;
-        console.log("Seconds left:", secondsLeft);
 
         if (secondsLeft <= 0) {
             clearInterval(countdownInterval);
@@ -85,7 +84,7 @@ socket.on("timer", (timeMilliseconds) => {
             timerDisplay.classList.add("hidden");
             console.log("Client-Timer abgelaufen.");
         } else {
-            timerSeconds.textContent = secondsLeft;
+            timerSeconds.textContent = secondsLeft.toString();
         }
     }, 1000);
 });
