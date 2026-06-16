@@ -54,7 +54,7 @@ function update_player_list() {
 
 socket.on("role_update", (received_role) => {
     role = received_role;
-    document.getElementById("role-info").innerHTML = role;
+    document.getElementById("role-name").innerHTML = role;
     console.log("Role update received:", received_role);
 });
 

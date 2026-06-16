@@ -9,37 +9,41 @@
 <body>
 
 <!-- login screen -->
-<section id="login-screen" class="screen">
-    <h1>Hidden Role Game</h1>
-    <p><i>Enter your name and join a session.</i></p>
-    <input type="text" id="player-name" placeholder="Player name">
-    <input type="text" id="session-code" placeholder="Session code">
-    <button id="join-btn">Join session</button>
-    <p id="status"></p>
+<section id="login-screen" class="screen lg-bg">
+    <div class="box">
+        <h1>Hidden Role Game</h1>
+        <p><i>Enter your name and join a session.</i></p>
+        <input type="text" id="player-name" placeholder="Player name">
+        <input type="text" id="session-code" placeholder="Session code">
+        <button id="join-btn">Join session</button>
+        <p id="status"></p>
+    </div>
 </section>
 
 
 <!--hier kommen die spieler hin, die eingeloggt sind-->
-<section id="game-screen" class="screen hidden">
-    <h2>Waiting for players...</h2>
-    <p id="session-code-p"></p>
-    <p>Players in session:</p>
-    <div class="container-player">
-        <ul id="player-list"></ul>
+<section id="game-screen" class="screen hidden game-bg">
+    <div class="box">
+        <h2>Waiting for players...</h2>
+        <p id="session-code-p"></p>
+        <p>Players in session:</p>
+        <div class="container-player">
+            <ul id="player-list"></ul>
+        </div>
+        <button id="start-btn">Start game</button>
     </div>
-    <button id="start-btn">Start game</button>
 </section>
 
-<section id="role-screen" class="screen hidden">
+<section id="role-screen" class="screen hidden role-bg">
     <h1>Your role is: </h1>
-    <h2 id="role name">Villager</h2>
+    <h2 id="role-name"></h2>
     <div id="werewolf team" class="hidden">
         <p>Werewolf team:</p>
         <ul id="werewolf-team-list"></ul>
     </div>
 </section>
 
-<section id="night-villager-screen" class="screen hidden">
+<section id="night-villager-screen" class="screen hidden night-villager-bg">
     <h1 id="villager-night">
         Night: <span id="villager-night-count">1</span>
     </h1>
@@ -47,7 +51,7 @@
     <p>Wait until werewolves choose a victim</p>
 </section>
 
-<section id="night-werewolf-screen" class="screen hidden">
+<section id="night-werewolf-screen" class="screen hidden night-werewolf-bg">
     <h1 id="werewolf-night">
         Night: <span id="werewolf-night-count">1</span>
     </h1>
@@ -56,7 +60,7 @@
     <button id="werewolf-victim-btn">Submit kill vote</button>
 </section>
 
-<section id="day-screen" class="screen hidden">
+<section id="day-screen" class="screen hidden day-bg">
     <h1 id="day">
         Day: <span id="day-count">1</span>
     </h1>
@@ -66,7 +70,7 @@
     <button id="werewolf-vote-btn">Vote for werewolf</button>
 </section>
 
-<section id="win-villager-screen" class="screen hidden">
+<section id="win-villager-screen" class="screen hidden win-villager-bg">
     <h1 id="villager-win">Villager wins!</h1>
     <h2>Game over!</h2>
     <p>The werewolves were killed by the villagers</p>
@@ -75,7 +79,7 @@
     <button id="restart-villager-btn">Restart game</button>
 </section>
 
-<section id="win-werewolf-screen" class="screen hidden">
+<section id="win-werewolf-screen" class="screen hidden win-werewolf-bg">
     <h1 id="werewolf-win">Werewolf wins!</h1>
     <h2>Game over!</h2>
     <p>The villagers were killed by the werewolves</p>
