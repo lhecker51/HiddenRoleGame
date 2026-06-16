@@ -9,6 +9,8 @@ const players = [];
 const werewolves = [];
 let role;
 
+
+//lobby and join
 document.getElementById("join-btn").addEventListener("click", () => {
     console.log("Join button clicked.");
     const player_name = document.getElementById("player-name").value.trim();
@@ -25,8 +27,8 @@ document.getElementById("join-btn").addEventListener("click", () => {
 socket.on("join_success", () => {
     console.log("Joined successfully!");
     document.getElementById("session-code-p").innerText = "Session code: " + session_code;
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("game-screen").style.display = "block";
+    document.getElementById("login-screen").classList.add("hidden");
+    document.getElementById("game-screen").classList.remove("hidden");
 });
 
 socket.on("player_joined", (player_name) => {
@@ -58,13 +60,14 @@ socket.on("start_success", () => {
     console.log("Game start successful!");
     //game screen hiden
     //role screen displayen
-    document.getElementById("role-screen").style.display = "block";
+    document.getElementById("game-screen").classList.add("hidden");
 })
 
 socket.on("role_update", (received_role) => {
     role = received_role;
     document.getElementById("role-name").innerHTML = role;
     console.log("Role update received:", received_role);
+    document.getElementById("role-screen").classList.remove("hidden");
 });
 
 socket.on("werewolf_list", (werewolf_list) => {
@@ -102,6 +105,9 @@ socket.on("start_day", (number) => {
     console.log("It is day", number);
 });
 
+<<<<<<< HEAD
+
+=======
 socket.on("start_day_vote", () => {
     console.log("Day vote started!");
 });
@@ -113,6 +119,7 @@ socket.on("village_won", () => {
 socket.on("werewolves_won", () => {
     console.log("The werewolves won the game!");
 });
+>>>>>>> a15c83dd6df5153396ab22c782a4a45becfd4730
 
 socket.on("error", (data) => {
     console.log("Error received:", data.message);
