@@ -54,29 +54,17 @@ function update_player_list() {
 
 document.getElementById("start-btn").addEventListener("click", () => {
     console.log("Start button clicked.");
-    socket.emit("start_game");
+    socket.emit("start_game", session_code);
 });
 
 socket.on("start_success", () => {
     console.log("Game start successful!");
 })
 
-socket.on("timer", (timeMilliseconds) => {
-    console.log(`Timer started for ${timeMilliseconds / 1000} seconds.`)
-});
-
 socket.on("role_update", (received_role) => {
     role = received_role;
     document.getElementById("game-screen").classList.add("hidden");
     document.getElementById("role-name").innerHTML = role;
-    //Ich brauche es für role-screen
-    document.getElementById("role-screen").classList.remove("role-villager", "role-werewolf");
-    if (role == "Villager") {
-        document.getElementById("role-screen").classList.add("role-villager");
-    }
-    else if (role == "Werewolf") {
-        document.getElementById("role-screen").classList.add("role-werewolf");
-    }
     console.log("Role update received:", received_role);
     document.getElementById("role-screen").classList.remove("hidden");
 });
@@ -105,9 +93,6 @@ socket.on("start_night", (number) => {
     } else if (role == "Werewolf") {
         document.getElementById("night-werewolf-screen").classList.remove("hidden");
         console.log("werewolf screen worked");
-        start_werewolf_voting();
-        setup_werewolf_submit();
-        
     }
 });
 
@@ -115,13 +100,22 @@ function start_werewolf_voting() {
     const victim_container = document.getElementById("night-voting-list");
     victim_container.innerHTML = "";
     const victim_list = get_victims();
-    victim_list.forEach((value, index) =>{
+    
+    victim_list.forEach((value, index) => {
         const radioId = `option-${index}`;
+        
         const radioButton = document.createElement('input');
         radioButton.type = 'radio';
         radioButton.name = 'werewolf-voting';
         radioButton.value = value;
         radioButton.id = radioId;
+
+        radioButton.addEventListener("change", (e) => {
+            const current_selection = e.target.value;
+            console.log("Auswahl geändert auf:", current_selection);
+
+            socket.emit("werewolf_selecting", { target: current_selection, session_code: session_code });
+        });
 
         const label = document.createElement('label');
         label.htmlFor = radioId;
@@ -132,16 +126,16 @@ function start_werewolf_voting() {
         victim_container.appendChild(radioButton);
         victim_container.appendChild(label);
         victim_container.appendChild(br);
-    })
+    });
 }
 
 function setup_werewolf_submit() {
-
     const submitBtn = document.getElementById("werewolf-victim-btn");
+    
     const clone = submitBtn.cloneNode(true);
     submitBtn.parentNode.replaceChild(clone, submitBtn);
 
-    submitBtn.addEventListener("click", () => {
+    clone.addEventListener("click", () => {
         const selected_value = get_werewolf_result();
 
         if (!selected_value) {
@@ -151,13 +145,13 @@ function setup_werewolf_submit() {
 
         console.log("You locked in vote for:", selected_value);
 
-        socket.emit("vote_werewolf", selected_value);
+        socket.emit("werewolf_vote", { target: selected_value, session_code: session_code });
 
         clone.disabled = true;
         clone.textContent = "Vote submitted...";
-    })
-
-    
+        
+        document.querySelectorAll('input[name="werewolf-voting"]').forEach(radio => radio.disabled = true);
+    });
 }
 
 function get_werewolf_result() {
@@ -171,14 +165,15 @@ function get_victims() {
 }
 socket.on("start_werewolf_vote", () => {
     console.log("Werewolf vote started...");
+
+    start_werewolf_voting();
+    setup_werewolf_submit();
 });
 
+
+//schickt mir info ueber alle selected victims von den woelfen
 socket.on("selected_werewolf", (victim) => {
     console.log(victim, "was selected for killing...");
-});
-
-socket.on("you_died", () => {
-    console.log("You died :(");
 });
 
 socket.on("death", (player_name) => {
