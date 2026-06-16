@@ -77,11 +77,49 @@ socket.on("werewolf_list", (werewolf_list) => {
     console.log("Werewolves are:", werewolves);
 });
 
-socket.on("day", (number) => {
+socket.on("start_night", (number) => {
+    console.log("It is night", number);
+});
+
+socket.on("start_werewolf_vote", () => {
+    console.log("Werewolf vote started...");
+});
+
+socket.on("selected_werewolf", (werewolf, victim) => {
+    console.log(`${werewolf} selected ${victim} for killing...`);
+});
+
+socket.on("death", (player_name) => {
+    console.log(player_name, "has died!");
+    const player_index = players.indexOf(player_name);
+    if (player_index > -1) {
+        players.splice(player_index, 1);
+    }
+    const werewolf_index = werewolves.indexOf(player_name);
+    if (werewolf_index > -1) {
+        players.splice(werewolf_index, 1);
+    }
+});
+
+socket.on("start_day", (number) => {
     console.log("It is day", number);
 });
 
+<<<<<<< HEAD
 
+=======
+socket.on("start_day_vote", () => {
+    console.log("Day vote started!");
+});
+
+socket.on("village_won", () => {
+    console.log("The villagers won the game!");
+});
+
+socket.on("werewolves_won", () => {
+    console.log("The werewolves won the game!");
+});
+>>>>>>> a15c83dd6df5153396ab22c782a4a45becfd4730
 
 socket.on("error", (data) => {
     console.log("Error received:", data.message);
