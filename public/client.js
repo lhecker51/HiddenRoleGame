@@ -10,7 +10,6 @@ const werewolves = [];
 let role;
 
 
-
 //lobby and join
 document.getElementById("join-btn").addEventListener("click", () => {
     console.log("Join button clicked.");
@@ -73,8 +72,7 @@ socket.on("role_update", (received_role) => {
     document.getElementById("role-screen").classList.remove("role-villager", "role-werewolf");
     if (role == "Villager") {
         document.getElementById("role-screen").classList.add("role-villager");
-    }
-    else if (role == "Werewolf") {
+    } else if (role == "Werewolf") {
         document.getElementById("role-screen").classList.add("role-werewolf");
     }
     console.log("Role update received:", received_role);
@@ -107,7 +105,7 @@ socket.on("start_night", (number) => {
         console.log("werewolf screen worked");
         start_werewolf_voting();
         setup_werewolf_submit();
-        
+
     }
 });
 
@@ -115,7 +113,7 @@ function start_werewolf_voting() {
     const victim_container = document.getElementById("night-voting-list");
     victim_container.innerHTML = "";
     const victim_list = get_victims();
-    victim_list.forEach((value, index) =>{
+    victim_list.forEach((value, index) => {
         const radioId = `option-${index}`;
         const radioButton = document.createElement('input');
         radioButton.type = 'radio';
@@ -132,11 +130,10 @@ function start_werewolf_voting() {
         victim_container.appendChild(radioButton);
         victim_container.appendChild(label);
         victim_container.appendChild(br);
-    })
+    });
 }
 
 function setup_werewolf_submit() {
-
     const submitBtn = document.getElementById("werewolf-victim-btn");
     const clone = submitBtn.cloneNode(true);
     submitBtn.parentNode.replaceChild(clone, submitBtn);
@@ -151,13 +148,11 @@ function setup_werewolf_submit() {
 
         console.log("You locked in vote for:", selected_value);
 
-        socket.emit("werewolf_vote", { target: selected_value });
+        socket.emit("werewolf_vote", {target: selected_value});
 
         clone.disabled = true;
         clone.textContent = "Vote submitted...";
-    })
-
-    
+    });
 }
 
 function get_werewolf_result() {
@@ -166,9 +161,9 @@ function get_werewolf_result() {
 
 
 function get_victims() {
-    const victim_list = players.filter(victim => !werewolves.includes(victim));
-    return victim_list;
+    return players.filter(victim => !werewolves.includes(victim));
 }
+
 socket.on("start_werewolf_vote", () => {
     console.log("Werewolf vote started...");
 });
