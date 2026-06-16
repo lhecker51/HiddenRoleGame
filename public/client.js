@@ -105,9 +105,6 @@ socket.on("start_day", (number) => {
     console.log("It is day", number);
 });
 
-<<<<<<< HEAD
-
-=======
 socket.on("start_day_vote", () => {
     console.log("Day vote started!");
 });
@@ -119,7 +116,6 @@ socket.on("village_won", () => {
 socket.on("werewolves_won", () => {
     console.log("The werewolves won the game!");
 });
->>>>>>> a15c83dd6df5153396ab22c782a4a45becfd4730
 
 socket.on("error", (data) => {
     console.log("Error received:", data.message);
