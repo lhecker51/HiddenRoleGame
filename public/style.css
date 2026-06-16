@@ -132,7 +132,7 @@ button, input, select, textarea {
 }
 .character {
     position: absolute;
-    bottom: 0;
+    bottom: 28px;
     width: 90px;
 
     z-index: 1;
@@ -144,12 +144,6 @@ button, input, select, textarea {
 .girl {
     left: 39%;
 }
-
-.farmer {
-    left: 47%;
-    animation-delay: 0.15s;
-}
-
 .wolf {
     left: 55%;
     width: 100px;
@@ -165,17 +159,17 @@ button, input, select, textarea {
     }
 }
 
-@keyframes moveBackground {
-    from {
-        background-size: cover, 105%;
-        background-position: center, 40% center;
-    }
+/*@keyframes moveBackground {*/
+/*    from {*/
+/*        background-size: cover, 105%;*/
+/*        background-position: center, 40% center;*/
+/*    }*/
 
-    to {
-        background-size: cover, 125%;
-        background-position: center, 60% center;
-    }
-}
+/*    to {*/
+/*        background-size: cover, 125%;*/
+/*        background-position: center, 60% center;*/
+/*    }*/
+/*}*/
 
 @keyframes villageOrWerewolfMove {
     0%, 100% {
