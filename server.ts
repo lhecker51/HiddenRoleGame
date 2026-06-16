@@ -101,7 +101,6 @@ io.on("connection", (socket) => {
 
         session.round = 1;
         console.log("Game started.")
-        socket.emit("role_screen");
 
         for (const player of session.players) {
             player.socket.emit("role_update", player.role.name);
