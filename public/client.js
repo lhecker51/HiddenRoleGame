@@ -10,7 +10,6 @@ const werewolves = [];
 let role;
 
 
-
 //lobby and join
 document.getElementById("join-btn").addEventListener("click", () => {
     console.log("Join button clicked.");
@@ -65,6 +64,13 @@ socket.on("role_update", (received_role) => {
     role = received_role;
     document.getElementById("game-screen").classList.add("hidden");
     document.getElementById("role-name").innerHTML = role;
+    //Ich brauche es für role-screen
+    document.getElementById("role-screen").classList.remove("role-villager", "role-werewolf");
+    if (role == "Villager") {
+        document.getElementById("role-screen").classList.add("role-villager");
+    } else if (role == "Werewolf") {
+        document.getElementById("role-screen").classList.add("role-werewolf");
+    }
     console.log("Role update received:", received_role);
     document.getElementById("role-screen").classList.remove("hidden");
 });
@@ -114,7 +120,7 @@ function start_werewolf_voting() {
             const current_selection = e.target.value;
             console.log("Auswahl geändert auf:", current_selection);
 
-            socket.emit("werewolf_selecting", { target: current_selection, session_code: session_code });
+            socket.emit("select_werewolf", current_selection);
         });
 
         const label = document.createElement('label');
@@ -128,7 +134,6 @@ function start_werewolf_voting() {
         victim_container.appendChild(br);
     });
 }
-
 function setup_werewolf_submit() {
     const submitBtn = document.getElementById("werewolf-victim-btn");
     
@@ -145,7 +150,7 @@ function setup_werewolf_submit() {
 
         console.log("You locked in vote for:", selected_value);
 
-        socket.emit("werewolf_vote", { target: selected_value, session_code: session_code });
+        socket.emit("vote_werewolf", selected_value);
 
         clone.disabled = true;
         clone.textContent = "Vote submitted...";
@@ -160,9 +165,9 @@ function get_werewolf_result() {
 
 
 function get_victims() {
-    const victim_list = players.filter(victim => !werewolves.includes(victim));
-    return victim_list;
+    return players.filter(victim => !werewolves.includes(victim));
 }
+
 socket.on("start_werewolf_vote", () => {
     console.log("Werewolf vote started...");
 
@@ -190,7 +195,7 @@ socket.on("death", (player_name) => {
 
 socket.on("start_day", (number) => {
     console.log("It is day", number);
-    document.getElementByID("day-screen").classList.remove("Hidden");
+    document.getElementById("day-screen").classList.remove("Hidden");
 });
 
 socket.on("start_day_vote", () => {
