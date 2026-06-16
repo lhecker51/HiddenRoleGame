@@ -163,120 +163,6 @@ button, input, select, textarea {
     animation-delay: 0.3s;
 }
 
-.vote-list {
-    width: 100%;
-    max-width: 520px;
-    margin-top: 20px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.vote-card {
-    width: 100%;
-    padding: 14px 18px;
-
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    background-color: rgba(25, 25, 40, 0.9);
-    color: white;
-
-    border: 4px solid #111;
-    border-radius: 0;
-
-    cursor: pointer;
-
-    text-shadow: 2px 2px 0 #000;
-
-    box-shadow:
-            inset 4px 4px 0 #44445c,
-            inset -4px -4px 0 #15151f,
-            0 5px 0 #070204;
-
-    transition:
-            transform 0.08s ease,
-            box-shadow 0.08s ease,
-            background-color 0.15s ease;
-}
-
-.vote-card:hover {
-    background-color: rgba(70, 20, 38, 0.95);
-
-    box-shadow:
-            inset 4px 4px 0 #8a2b4d,
-            inset -4px -4px 0 #2a0815,
-            0 5px 0 #070204;
-}
-
-.vote-card.selected {
-    background-color: rgba(90, 23, 48, 0.98);
-
-    box-shadow:
-            inset 4px 4px 0 #a83a63,
-            inset -4px -4px 0 #2a0815,
-            0 0 0 4px rgba(255, 255, 255, 0.2),
-            0 5px 0 #070204;
-}
-
-.vote-card input[type="radio"] {
-    display: none;
-}
-
-.vote-icon {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background-color: #2b2b3d;
-    border: 3px solid #111;
-
-    font-size: 24px;
-
-    box-shadow:
-            inset 3px 3px 0 #44445c,
-            inset -3px -3px 0 #15151f;
-}
-
-.vote-name {
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.vote-card input {
-    display: none;
-}
-
-.vote-icon {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background-color: #2b2b3d;
-    border: 3px solid #111;
-
-    font-size: 24px;
-
-    box-shadow:
-            inset 3px 3px 0 #44445c,
-            inset -3px -3px 0 #15151f;
-}
-
-.vote-name {
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
 button:disabled {
     opacity: 0.45;
     cursor: not-allowed;
@@ -436,6 +322,108 @@ button:active {
     padding: 10px;
     margin-top: 8px;
     background-color: #242438;
+}
+
+#night-voting-list {
+    width: 100%;
+    max-width: 620px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.vote-card {
+    width: 100%;
+    min-height: 70px;
+
+    padding: 14px 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    background-color: rgba(25, 25, 40, 0.92);
+    color: white;
+
+    border: 4px solid #111;
+    cursor: pointer;
+
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1px;
+
+    text-shadow: 2px 2px 0 #000;
+
+    box-shadow:
+            inset 4px 4px 0 #44445c,
+            inset -4px -4px 0 #15151f,
+            0 5px 0 #070204;
+
+    transition:
+            transform 0.08s ease,
+            background-color 0.15s ease,
+            box-shadow 0.08s ease;
+}
+
+.vote-card:hover {
+    background-color: rgba(70, 20, 38, 0.96);
+
+    box-shadow:
+            inset 4px 4px 0 #8a2b4d,
+            inset -4px -4px 0 #2a0815,
+            0 5px 0 #070204;
+}
+
+.vote-card.selected {
+    background-color: rgba(100, 24, 52, 0.98);
+
+    box-shadow:
+            inset 4px 4px 0 #a83a63,
+            inset -4px -4px 0 #2a0815,
+            0 0 0 4px rgba(255, 255, 255, 0.25),
+            0 5px 0 #070204;
+}
+
+/* ВАЖНО: полностью убираем radio, чтобы его не ломал input CSS */
+#night-voting-list input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+
+    width: 0;
+    height: 0;
+
+    margin: 0;
+    padding: 0;
+
+    border: none;
+    box-shadow: none;
+}
+
+.vote-icon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #2b2b3d;
+    border: 3px solid #111;
+
+    font-size: 26px;
+
+    box-shadow:
+            inset 3px 3px 0 #44445c,
+            inset -3px -3px 0 #15151f;
+}
+
+.vote-name {
+    font-size: 28px;
 }
 
 @media screen and (max-width: 768px) {
