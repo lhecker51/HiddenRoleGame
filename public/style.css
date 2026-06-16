@@ -61,7 +61,7 @@ button, input, select, textarea {
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
-.game-bg {
+.game-bg, .day-bg {
     background-image:
             linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
             url("images/village.jpg");
@@ -72,18 +72,69 @@ button, input, select, textarea {
 
     image-rendering: pixelated;;
 }
+.role-bg {
+    background-image:
+            linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+            url("images/village.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.role-bg::before {
+    content: "";
+    position: absolute;
+
+    bottom: 4%;
+    left: 50%;
+
+    width: 170px;
+    height: 220px;
+    transform: translateX(-50%);
+    z-index: 1;
+    pointer-events: none;
+    animation: villageOrWerewolfMove 0.8s steps(2) infinite;
+}
+.role-bg.role-villager::before {
+    width: 260px;
+    height: 220px;
+
+    background-image:
+            url("images/villager_girl.png"),
+            url("images/villager_farmer.png");
+
+    background-size:
+            120px auto,
+            120px auto;
+
+    background-position:
+            left bottom,
+            right bottom;
+}
+.role-bg.role-werewolf::before {
+    width: 260px;
+    height: 220px;
+
+    background-image:
+            url("images/werewolf_without_mask.png");
+
+    background-size:
+            120px auto,
+            120px auto;
+
+    background-position:
+            left bottom,
+            right bottom;
+}
 .character {
     position: absolute;
     bottom: 0;
     width: 90px;
 
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-
     z-index: 1;
     pointer-events: none;
 
-    animation: pixelBob 0.8s steps(2) infinite;
+    animation: villageWerewolfMove 0.8s steps(2) infinite;
 }
 
 .girl {
@@ -100,7 +151,7 @@ button, input, select, textarea {
     width: 100px;
     animation-delay: 0.3s;
 }
-@keyframes pixelBob {
+@keyframes villageWerewolfMove {
     0%, 100% {
         transform: translateY(0);
     }
@@ -122,10 +173,15 @@ button, input, select, textarea {
     }
 }
 
-.role-bg {
+@keyframes villageOrWerewolfMove {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
 
+    50% {
+        transform: translateX(-50%) translateY(-8px);
+    }
 }
-
 h1 {
     color: white;
 }
@@ -230,14 +286,14 @@ button:active {
     padding: 0;
 }
 
-#player-list {
+.list {
     font-size: 20px;
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-#player-list li {
+.list li {
     font-family: Georgia, serif;
     padding: 10px;
     margin-top: 8px;
