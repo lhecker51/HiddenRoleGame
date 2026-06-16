@@ -19,17 +19,14 @@ document.getElementById("join-btn").addEventListener("click", () => {
         return;
     }
 
-    document.getElementById("session-code-p").innerText = "Session code: " + session_code;
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("game-screen").style.display = "block";
-
     socket.emit("join_session", {player_name, session_code});
 });
 
-document.getElementById("start-btn").addEventListener("click", () => {
-    console.log("Start button clicked.");
-    socket.emit("start_game", session_code);
-    document.getElementById("role-screen").style.display = "block";
+socket.on("join_success", () => {
+    console.log("Joined successfully!");
+    document.getElementById("session-code-p").innerText = "Session code: " + session_code;
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "block";
 });
 
 socket.on("player_joined", (player_name) => {
@@ -51,6 +48,17 @@ function update_player_list() {
     const list = document.getElementById("player-list");
     list.innerHTML = players.map(name => `<li>${name}</li>`).join("");
 }
+
+document.getElementById("start-btn").addEventListener("click", () => {
+    console.log("Start button clicked.");
+    socket.emit("start_game", session_code);
+});
+
+socket.on("start_successful", () => {
+    console.log("Game start successful!");
+    // todo lisa: hier äh dings reinmachen
+    document.getElementById("role-screen").style.display = "block";
+})
 
 socket.on("role_update", (received_role) => {
     role = received_role;

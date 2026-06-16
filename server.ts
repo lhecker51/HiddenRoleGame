@@ -67,6 +67,8 @@ io.on("connection", (socket: Socket) => {
             return;
         }
 
+        socket.emit("join_success");
+
         for (const player of session.players) {
             socket.emit("player_joined", player.name);
         }
@@ -94,6 +96,8 @@ io.on("connection", (socket: Socket) => {
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
         }
+
+        socket.emit("start_successful");
 
         session.round = 1;
 
