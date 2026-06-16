@@ -10,6 +10,7 @@ const werewolves = [];
 let role;
 
 
+
 //lobby and join
 document.getElementById("join-btn").addEventListener("click", () => {
     console.log("Join button clicked.");
@@ -88,13 +89,55 @@ socket.on("start_night", (number) => {
     if (role == "Villager") {
         document.getElementById("night-villager-screen").classList.remove("hidden");
         console.log("villager screen worked");
+
     } else if (role == "Werewolf") {
         document.getElementById("night-werewolf-screen").classList.remove("hidden");
         console.log("werewolf screen worked");
+        start_werewolf_voting();
+        const selected_value = get_werewolf_result();
+        
     }
 });
 
+function start_werewolf_voting() {
+    const victim_container = document.getElementById("night-voting-list");
+    victim_container.innerHTML = "";
+    const victim_list = get_victims();
+    victim_list.forEach((value, index) =>{
+        const radioId = `option-${index}`;
+        const radioButton = document.createElement('input');
+        radioButton.type = 'radio';
+        radioButton.name = 'werewolf-voting';
+        radioButton.value = value;
+        radioButton.id = radioId;
 
+        radioButton.addEventListener('change', () => {
+            const current_vote = get_werewolf_result();
+            console.log("Werewolf changed vote to:", current_vote);
+            socket.emit("werewolf_vote", current_vote);
+        });
+
+        const label = document.createElement('label');
+        label.htmlFor = radioId;
+        label.textContent = value;
+
+        const br = document.createElement('br');
+
+        victim_container.appendChild(radioButton);
+        victim_container.appendChild(label);
+        victim_container.appendChild(br);
+    })
+}
+
+function get_werewolf_result() {
+    return document.querySelector('input[name="werewolf-voting"]:checked')?.value;
+}
+
+
+function get_victims() {
+    const victim_list = players.filter(victim => !werewolves.includes(victim));
+    return victim_list;
+}
 socket.on("start_werewolf_vote", () => {
     console.log("Werewolf vote started...");
 });
