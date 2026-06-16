@@ -185,6 +185,7 @@ socket.on("selected_werewolf", (victim) => {
 
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
+    document.getElementById("night-result").innerHTML += player_name;
     const player_index = players.indexOf(player_name);
     if (player_index > -1) {
         players.splice(player_index, 1);
