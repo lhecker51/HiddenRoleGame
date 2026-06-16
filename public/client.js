@@ -58,10 +58,9 @@ socket.on("day", (number) => {
 })
 
 socket.on("role_update", (received_role) => {
-    const role = document.getElementById("role-info").innerHTML = received_role;
-
+    role = received_role;
+    document.getElementById("role-info").innerHTML = role;
     console.log("Role update received:", received_role);
-    role = received_role.toLowerCase();
 });
 
 socket.on("error", (data) => {
