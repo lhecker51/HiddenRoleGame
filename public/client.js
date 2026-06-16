@@ -33,13 +33,13 @@ socket.on("join_success", () => {
 });
 
 socket.on("player_joined", (player_name) => {
-    console.log("Player joined.");
+    console.log("Player joined:", player_name);
     players.push(player_name);
     update_player_list();
 });
 
 socket.on("player_left", (player_name) => {
-    console.log("Player left.");
+    console.log("Player left:", player_name);
     const index = players.indexOf(player_name);
     if (index > -1) {
         players.splice(index, 1);
@@ -63,7 +63,6 @@ socket.on("start_success", () => {
 
 
 socket.on("timer", (timeMilliseconds) => {
-    const totalSeconds = timeMilliseconds / 1000;
     console.log(`Started timer for ${timeMilliseconds / 1000} seconds...`);
 
 
@@ -74,7 +73,7 @@ socket.on("timer", (timeMilliseconds) => {
     const timerDisplay = document.getElementById("timer-display");
     const timerSeconds = document.getElementById("timer-seconds");
 
-    let secondsLeft;
+    let secondsLeft = timeMilliseconds / 1000;
 
     timerSeconds.textContent = secondsLeft;
     timerDisplay.classList.remove("hidden");
@@ -94,8 +93,8 @@ socket.on("timer", (timeMilliseconds) => {
 });
 
 
-
 socket.on("role_update", (received_role) => {
+    console.log("Role update received:", received_role);
     role = received_role;
     document.getElementById("game-screen").classList.add("hidden");
     document.getElementById("role-name").innerHTML = role;
@@ -106,7 +105,6 @@ socket.on("role_update", (received_role) => {
     } else if (role == "Werewolf") {
         document.getElementById("role-screen").classList.add("role-werewolf");
     }
-    console.log("Role update received:", received_role);
     document.getElementById("role-screen").classList.remove("hidden");
 });
 
@@ -129,17 +127,16 @@ socket.on("start_night", (number) => {
     document.getElementById("role-screen").classList.add("hidden");
     if (role == "Villager") {
         document.getElementById("night-villager-screen").classList.remove("hidden");
-        console.log("villager screen worked");
+        console.log("Showing villager night screen.");
 
     } else if (role == "Werewolf") {
         document.getElementById("night-werewolf-screen").classList.remove("hidden");
-        console.log("werewolf screen worked");
+        console.log("Showing werewolf night screen.");
         start_werewolf_voting();
     }
 });
 
 function start_werewolf_voting() {
-    console.log("Started radiobutton creation");
     const victim_container = document.getElementById("night-voting-list");
     victim_container.innerHTML = "";
     const victim_list = get_victims();
@@ -155,7 +152,7 @@ function start_werewolf_voting() {
 
         radioButton.addEventListener("change", (e) => {
             const current_selection = e.target.value;
-            console.log("Auswahl geändert auf:", current_selection);
+            console.log("Selected victim:", current_selection);
 
             socket.emit("select_werewolf", current_selection);
         });
@@ -184,7 +181,7 @@ function setup_werewolf_submit() {
             return;
         }
 
-        console.log("You locked in vote for:", selected_value);
+        console.log("Voted to kill victim:", selected_value);
 
         socket.emit("vote_werewolf", selected_value);
 
@@ -201,7 +198,7 @@ function get_werewolf_result() {
 
 
 function get_victims() {
-    console.log("Victim Berechnung wurde geladen.");
+    console.log("Calculating possible victims...");
     return players.filter(victim => !werewolves.includes(victim));
 
 }
