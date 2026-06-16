@@ -136,9 +136,10 @@ io.on("connection", (socket: typeof Socket) => {
                 player.socket.emit("start_werewolf_vote");
             }
         }
-        const timeoutMilliseconds: number = 30000;
+        const timeoutMilliseconds: number = 20000;
         sessionSocket.emit("timer", timeoutMilliseconds);
         startTimeout(concludeVoting, timeoutMilliseconds);
+        proceedUnlessEnded(handleDay);
     }
 
     socket.on("select_werewolf", (victim) => {
@@ -150,7 +151,11 @@ io.on("connection", (socket: typeof Socket) => {
     });
 
     socket.on("vote_werewolf", (victim) => {
-
+        for (const player of session.players) {
+            if (player.name == victim.name) {
+                player.votes++;
+            }
+        }
     });
 
     function handleDay() {
@@ -161,9 +166,32 @@ io.on("connection", (socket: typeof Socket) => {
                 player.socket.emit("start_day_vote");
             }
         }
+        const timeoutMilliseconds: number = 40000;
+        sessionSocket.emit("timer", timeoutMilliseconds);
+        startTimeout(concludeVoting, timeoutMilliseconds);
+        proceedUnlessEnded(handleNight)
     }
 
     function concludeVoting() {
+        let mostVotedPlayer: Player;
+        let mostVotes: number = 0;
+        let tie: boolean = true;
+        for (const player of session.players) {
+            if (player.votes > mostVotes) {
+                mostVotedPlayer = player;
+                mostVotes = player.votes;
+                tie = false;
+            }
+            if (player.votes == mostVotes) {
+                tie = true;
+            }
+            player.votes = 0;
+        }
+        mostVotedPlayer.isAlive = false;
+        sessionSocket.emit("death", mostVotedPlayer.name);
+    }
+
+    function proceedUnlessEnded(func) {
 
     }
 

@@ -107,6 +107,10 @@ socket.on("selected_werewolf", (victim) => {
     console.log(victim, "was selected for killing...");
 });
 
+socket.on("you_died", () => {
+    console.log("You died :(");
+});
+
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
     const player_index = players.indexOf(player_name);
