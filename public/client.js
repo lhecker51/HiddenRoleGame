@@ -125,11 +125,9 @@ socket.on("start_night", (number) => {
     if (role == "Villager") {
         document.getElementById("night-villager-screen").classList.remove("hidden");
         console.log("Showing villager night screen.");
-
     } else if (role == "Werewolf") {
         document.getElementById("night-werewolf-screen").classList.remove("hidden");
         console.log("Showing werewolf night screen.");
-        start_werewolf_voting();
     }
 });
 
@@ -203,6 +201,10 @@ function get_victims() {
 socket.on("start_werewolf_vote", () => {
     console.log("Werewolf vote started...");
 
+    const submitBtn = document.getElementById("werewolf-victim-btn");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Vote";
+
     start_werewolf_voting();
     setup_werewolf_submit();
 });
@@ -222,7 +224,8 @@ socket.on("death", (player_name) => {
     }
     const werewolf_index = werewolves.indexOf(player_name);
     if (werewolf_index > -1) {
-        players.splice(werewolf_index, 1);
+        werewolves.splice(werewolf_index, 1);
+        update_werewolf_list();
     }
 });
 
@@ -232,7 +235,7 @@ socket.on("you_died", () => {
 
 socket.on("start_day", (number) => {
     console.log("It is day", number);
-    document.getElementById("day-screen").classList.remove("Hidden");
+    document.getElementById("day-screen").classList.remove("hidden");
 });
 
 socket.on("start_day_vote", () => {
