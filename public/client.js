@@ -76,7 +76,6 @@ socket.on("werewolf_list", (werewolf_list) => {
         werewolves.push(werewolf);
         update_werewolf_list(werewolf);
     }
-
     console.log("Werewolves are:", werewolves);
 });
 
