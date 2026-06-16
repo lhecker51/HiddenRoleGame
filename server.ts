@@ -191,8 +191,29 @@ io.on("connection", (socket: typeof Socket) => {
         sessionSocket.emit("death", mostVotedPlayer.name);
     }
 
-    function proceedUnlessEnded(func) {
+    function proceedUnlessEnded(func: Function) {
+        let numberOfWerewolvesAlive = 0;
+        let numberOfVillagersAlive = 0;
+        for (const player of session.players) {
+            if (!player.isAlive) continue;
+            if (player.role === werewolfRole) {
+                numberOfWerewolvesAlive++;
+            } else {
+                numberOfVillagersAlive++;
+            }
+        }
 
+        if (numberOfWerewolvesAlive === 0) {
+            sessionSocket.emit("village_won");
+            return;
+        }
+
+        if (numberOfWerewolvesAlive > numberOfVillagersAlive) {
+            sessionSocket.emit("werewolves_won");
+            return;
+        }
+
+        func.call();
     }
 
     socket.on("disconnect", () => {
