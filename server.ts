@@ -61,6 +61,11 @@ io.on("connection", (socket) => {
             return;
         }
 
+        if (player_name.length > 20) {
+            socket.emit("error", {message: "Name is too long."});
+            return;
+        }
+
         for (const player of session.players) {
             socket.emit("player_joined", player.name);
         }
@@ -96,7 +101,6 @@ io.on("connection", (socket) => {
 
         session.round = 1;
         console.log("Game started.")
-        socket.emit("role_screen");
 
         for (const player of session.players) {
             player.socket.emit("role_update", player.role.name);

@@ -54,10 +54,6 @@ function update_player_list() {
     list.innerHTML = players.map(name => `<li>${name}</li>`).join("");
 }
 
-socket.on("role_screen", () => {
-    console.log("Displaying role screen.");
-})
-
 socket.on("role_update", (received_role) => {
     role = received_role;
     document.getElementById("role-info").innerHTML = role;
