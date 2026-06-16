@@ -91,6 +91,11 @@ io.on("connection", (socket: Socket) => {
     });
 
     socket.on("start_game", async () => {
+        if (!session) {
+            socket.emit("error", {message: "You are not in an active game session."});
+            return;
+        }
+
         const numberOfPlayers = session.players.length;
         if (session.round > 0) {
             socket.emit("error", {message: "Game has already started."});
@@ -149,6 +154,10 @@ io.on("connection", (socket: Socket) => {
     });
 
     socket.on("disconnect", () => {
+        const sessionCode = socket.data.code;
+        if (!sessionCode || !sessions[sessionCode]) return;
+
+        const session = sessions[sessionCode];
         const remainingPlayers = session.players.filter(p => p.socket.id !== socket.id);
         for (const player of session.players) {
             if (!remainingPlayers.includes(player)) {
@@ -166,8 +175,8 @@ io.on("connection", (socket: Socket) => {
 async function handleNight(session: Session) {
     for (const player of session.players) {
         player.socket.emit("start_night", session.round);
+        await sleep(2000);
         if (player.role === werewolfRole && player.isAlive) {
-            await sleep(2000);
             player.socket.emit("start_werewolf_vote");
         }
     }
@@ -209,11 +218,12 @@ function concludeVoting(session: Session) {
         }
         player.votes = 0;
     }
-    if (mostVotes > 0 && !tie) {
-        mostVotedPlayer.isAlive = false;
-        mostVotedPlayer.socket.emit("you_died");
-        session.broadcast("death", mostVotedPlayer.name);
-    }
+
+    if (!mostVotedPlayer || tie) return;
+
+    mostVotedPlayer.isAlive = false;
+    mostVotedPlayer.socket.emit("you_died");
+    session.broadcast("death", mostVotedPlayer.name);
 }
 
 async function proceedUnlessEnded(session: Session, func: Function) {
