@@ -74,6 +74,8 @@ socket.on("timer", (timeMilliseconds) => {
     const timerDisplay = document.getElementById("timer-display");
     const timerSeconds = document.getElementById("timer-seconds");
 
+    let secondsLeft;
+
     timerSeconds.textContent = secondsLeft;
     timerDisplay.classList.remove("hidden");
 
@@ -212,7 +214,7 @@ socket.on("start_werewolf_vote", () => {
 });
 
 
-//schickt mir info ueber alle selected victims von den woelfen
+// schickt mir info über alle selected victims von den wölfen
 socket.on("selected_werewolf", (victim) => {
     console.log(victim, "was selected for killing...");
 });
