@@ -40,6 +40,10 @@ class Session {
     constructor(code: string) {
         this.code = code;
     }
+
+    broadcast(code: string, data: any) {
+        return io.to(this.code).emit(code, data);
+    }
 }
 
 const sessions: Record<string, Session> = {};
@@ -48,7 +52,6 @@ app.use(express.static("public"));
 
 io.on("connection", (socket: Socket) => {
     let session: Session;
-    let sessionSocket;
 
     socket.on("join_session", ({player_name, session_code}) => {
         if (!sessions[session_code]) {
@@ -56,7 +59,6 @@ io.on("connection", (socket: Socket) => {
         }
 
         session = sessions[session_code];
-        sessionSocket = io.to(session.code);
 
         if (session.round > 0) {
             socket.emit("error", {message: "Ooops! Too late. The Game already started."});
@@ -85,7 +87,7 @@ io.on("connection", (socket: Socket) => {
         socket.data.code = session_code;
         socket.data.name = player_name;
 
-        sessionSocket.emit("player_joined", player_name);
+        session.broadcast("player_joined", player_name);
     });
 
     socket.on("start_game", async () => {
@@ -125,26 +127,10 @@ io.on("connection", (socket: Socket) => {
         }
 
         const timeoutMilliseconds: number = 10000;
-        sessionSocket.emit("timer", timeoutMilliseconds);
+        session.broadcast("timer", timeoutMilliseconds);
         await sleep(timeoutMilliseconds);
-        await handleNight();
+        await handleNight(session);
     });
-
-    async function handleNight() {
-        for (const player of session.players) {
-            player.socket.emit("start_night", session.round);
-            if (player.role === werewolfRole && player.isAlive) {
-                await sleep(2000);
-                player.socket.emit("start_werewolf_vote");
-            }
-        }
-
-        const timeoutMilliseconds: number = 20000;
-        sessionSocket.emit("timer", timeoutMilliseconds);
-        await sleep(timeoutMilliseconds);
-        concludeVoting();
-        await proceedUnlessEnded(handleDay);
-    }
 
     socket.on("select_werewolf", (victim) => {
         for (const player of session.players) {
@@ -162,73 +148,11 @@ io.on("connection", (socket: Socket) => {
         }
     });
 
-    async function handleDay() {
-        session.round++;
-        for (const player of session.players) {
-            player.socket.emit("start_day", session.round);
-            if (player.isAlive) {
-                player.socket.emit("start_day_vote");
-            }
-        }
-        const timeoutMilliseconds: number = 40000;
-        sessionSocket.emit("timer", timeoutMilliseconds);
-        await sleep(timeoutMilliseconds);
-        concludeVoting();
-        await proceedUnlessEnded(handleNight)
-    }
-
-    function concludeVoting() {
-        let mostVotedPlayer: Player;
-        let mostVotes: number = 0;
-        let tie: boolean = true;
-        for (const player of session.players) {
-            if (player.votes > mostVotes) {
-                mostVotedPlayer = player;
-                mostVotes = player.votes;
-                tie = false;
-            }
-            if (player.votes == mostVotes) {
-                tie = true;
-            }
-            player.votes = 0;
-        }
-        if (mostVotes > 0 && !tie) {
-            mostVotedPlayer.isAlive = false;
-            mostVotedPlayer.socket.emit("you_died");
-            sessionSocket.emit("death", mostVotedPlayer.name);
-        }
-    }
-
-    async function proceedUnlessEnded(func: Function) {
-        let numberOfWerewolvesAlive = 0;
-        let numberOfVillagersAlive = 0;
-        for (const player of session.players) {
-            if (!player.isAlive) continue;
-            if (player.role === werewolfRole) {
-                numberOfWerewolvesAlive++;
-            } else {
-                numberOfVillagersAlive++;
-            }
-        }
-
-        if (numberOfWerewolvesAlive === 0) {
-            sessionSocket.emit("village_won");
-            return;
-        }
-
-        if (numberOfWerewolvesAlive > numberOfVillagersAlive) {
-            sessionSocket.emit("werewolves_won");
-            return;
-        }
-
-        await func();
-    }
-
     socket.on("disconnect", () => {
         const remainingPlayers = session.players.filter(p => p.socket.id !== socket.id);
         for (const player of session.players) {
             if (!remainingPlayers.includes(player)) {
-                sessionSocket.emit("player_left", player.name);
+                session.broadcast("player_left", player.name);
             }
         }
         session.players = remainingPlayers;
@@ -239,6 +163,83 @@ io.on("connection", (socket: Socket) => {
     });
 });
 
+async function handleNight(session: Session) {
+    for (const player of session.players) {
+        player.socket.emit("start_night", session.round);
+        if (player.role === werewolfRole && player.isAlive) {
+            await sleep(2000);
+            player.socket.emit("start_werewolf_vote");
+        }
+    }
+
+    const timeoutMilliseconds: number = 20000;
+    session.broadcast("timer", timeoutMilliseconds);
+    await sleep(timeoutMilliseconds);
+    concludeVoting(session);
+    await proceedUnlessEnded(session, () => handleDay(session));
+}
+
+async function handleDay(session: Session) {
+    session.round++;
+    for (const player of session.players) {
+        player.socket.emit("start_day", session.round);
+        if (player.isAlive) {
+            player.socket.emit("start_day_vote");
+        }
+    }
+    const timeoutMilliseconds: number = 40000;
+    session.broadcast("timer", timeoutMilliseconds);
+    await sleep(timeoutMilliseconds);
+    concludeVoting(session);
+    await proceedUnlessEnded(session, () => handleNight(session));
+}
+
+function concludeVoting(session: Session) {
+    let mostVotedPlayer: Player;
+    let mostVotes: number = 0;
+    let tie: boolean = true;
+    for (const player of session.players) {
+        if (player.votes > mostVotes) {
+            mostVotedPlayer = player;
+            mostVotes = player.votes;
+            tie = false;
+        }
+        if (player.votes == mostVotes) {
+            tie = true;
+        }
+        player.votes = 0;
+    }
+    if (mostVotes > 0 && !tie) {
+        mostVotedPlayer.isAlive = false;
+        mostVotedPlayer.socket.emit("you_died");
+        session.broadcast("death", mostVotedPlayer.name);
+    }
+}
+
+async function proceedUnlessEnded(session: Session, func: Function) {
+    let numberOfWerewolvesAlive = 0;
+    let numberOfVillagersAlive = 0;
+    for (const player of session.players) {
+        if (!player.isAlive) continue;
+        if (player.role === werewolfRole) {
+            numberOfWerewolvesAlive++;
+        } else {
+            numberOfVillagersAlive++;
+        }
+    }
+
+    if (numberOfWerewolvesAlive === 0) {
+        session.broadcast("village_won");
+        return;
+    }
+
+    if (numberOfWerewolvesAlive > numberOfVillagersAlive) {
+        session.broadcast("werewolves_won");
+        return;
+    }
+
+    await func();
+}
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
