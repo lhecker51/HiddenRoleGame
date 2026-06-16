@@ -151,7 +151,7 @@ function setup_werewolf_submit() {
 
         console.log("You locked in vote for:", selected_value);
 
-        socket.emit("werewolf_vote", { target: selected_value });
+        socket.emit("vote_werewolf", selected_value);
 
         clone.disabled = true;
         clone.textContent = "Vote submitted...";
