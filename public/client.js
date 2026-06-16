@@ -62,8 +62,6 @@ socket.on("start_success", () => {
 
 socket.on("role_update", (received_role) => {
     role = received_role;
-    //game screen hiden
-    //role screen displayen
     document.getElementById("game-screen").classList.add("hidden");
     document.getElementById("role-name").innerHTML = role;
     console.log("Role update received:", received_role);
@@ -86,7 +84,16 @@ function update_werewolf_list() {
 
 socket.on("start_night", (number) => {
     console.log("It is night", number);
+    document.getElementById("role-screen").classList.add("hidden");
+    if (role == "Villager") {
+        document.getElementById("night-villager-screen").classList.remove("hidden");
+        console.log("villager screen worked");
+    } else if (role == "Werewolf") {
+        document.getElementById("night-werewolf-screen").classList.remove("hidden");
+        console.log("werewolf screen worked");
+    }
 });
+
 
 socket.on("start_werewolf_vote", () => {
     console.log("Werewolf vote started...");
@@ -111,7 +118,6 @@ socket.on("death", (player_name) => {
 socket.on("start_day", (number) => {
     console.log("It is day", number);
     document.getElementByID("day-screen").classList.remove("Hidden");
-
 });
 
 socket.on("start_day_vote", () => {
