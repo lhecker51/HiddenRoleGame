@@ -38,14 +38,16 @@ button, input, select, textarea {
     background-size: cover;
     background-position: center;
 }
-/*.card {*/
-/*    width: 400px;*/
-/*    max-width: 100%;*/
-/*    !*margin: 50px auto;*!*/
-/*    padding: 32px;*/
-/*    background-color: #171728;*/
-/*    border-radius: 17px;*/
-/*}*/
+.box {
+    position: relative;
+    z-index: 3;
+
+    width: min(90vw, 820px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .lg-bg {
     background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5)),
     url("https://c4.wallpaperflare.com/wallpaper/852/618/332/the-witcher-the-witcher-3-wild-hunt-wallpaper-preview.jpg");
@@ -72,8 +74,8 @@ button, input, select, textarea {
 }
 .character {
     position: absolute;
-    bottom: 24%;
-    width: 85px;
+    bottom: 12%;
+    width: 90px;
 
     image-rendering: pixelated;
     image-rendering: crisp-edges;
@@ -85,20 +87,19 @@ button, input, select, textarea {
 }
 
 .girl {
-    left: 42%;
+    left: 39%;
 }
 
 .farmer {
-    left: 49%;
+    left: 47%;
     animation-delay: 0.15s;
 }
 
 .wolf {
-    left: 56%;
-    width: 95px;
+    left: 55%;
+    width: 100px;
     animation-delay: 0.3s;
 }
-
 @keyframes pixelBob {
     0%, 100% {
         transform: translateY(0);
