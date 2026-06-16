@@ -56,7 +56,8 @@ document.getElementById("start-btn").addEventListener("click", () => {
 
 socket.on("start_successful", () => {
     console.log("Game start successful!");
-    // todo lisa: hier äh dings reinmachen
+    //game screen hiden
+    //role screen displayen
     document.getElementById("role-screen").style.display = "block";
 })
 
