@@ -51,6 +51,10 @@ function update_player_list() {
     list.innerHTML = players.map(name => `<li>${name}</li>`).join("");
 }
 
+socket.on("day", (number) => {
+    console.log("It is day", number);
+})
+
 socket.on("role_update", (received_role) => {
     console.log("Role update received:", received_role);
     role = received_role.toLowerCase();

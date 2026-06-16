@@ -94,12 +94,13 @@ io.on("connection", (socket) => {
             }
         }
 
+        session.round = 1;
+        console.log("Game started.")
+        socket.emit("day", session.round);
+
         for (const player of session.players) {
             player.socket.emit("role_update", player.role.name);
         }
-
-        session.round = 1;
-        console.log("Game started.")
 
         // todo manage rounds here, start with day, other typescript file?
     });
