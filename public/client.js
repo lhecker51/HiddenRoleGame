@@ -60,6 +60,10 @@ socket.on("start_success", () => {
     console.log("Game start successful!");
 })
 
+socket.on("timer", (timeMilliseconds) => {
+    console.log(`Timer started for ${timeMilliseconds / 1000} seconds.`)
+});
+
 socket.on("role_update", (received_role) => {
     role = received_role;
     document.getElementById("game-screen").classList.add("hidden");

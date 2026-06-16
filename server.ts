@@ -23,6 +23,8 @@ class Player {
     socket: typeof Socket;
     name: string;
     role: Role = villagerRole;
+    isAlive: boolean = true;
+    votes: number = 0;
 
     constructor(socket: typeof Socket, name: string) {
         this.socket = socket;
@@ -31,8 +33,13 @@ class Player {
 }
 
 class Session {
+    code;
     players: Player[] = [];
     round: number = 0;
+
+    constructor(code) {
+        this.code = code;
+    }
 }
 
 const sessions: Record<string, Session> = {};
@@ -41,13 +48,15 @@ app.use(express.static("public"));
 
 io.on("connection", (socket: typeof Socket) => {
     let session: Session;
+    let sessionSocket;
 
     socket.on("join_session", ({player_name, session_code}) => {
         if (!sessions[session_code]) {
-            sessions[session_code] = new Session();
+            sessions[session_code] = new Session(session_code);
         }
 
         session = sessions[session_code];
+        sessionSocket = io.to(session.code);
 
         if (session.round > 0) {
             socket.emit("error", {message: "Ooops! Too late. The Game already started."});
@@ -76,7 +85,7 @@ io.on("connection", (socket: typeof Socket) => {
         socket.data.code = session_code;
         socket.data.name = player_name;
 
-        io.to(session_code).emit("player_joined", player_name);
+        sessionSocket.emit("player_joined", player_name);
     });
 
     socket.on("start_game", () => {
@@ -115,19 +124,21 @@ io.on("connection", (socket: typeof Socket) => {
             }
         }
 
-        socket.emit("debug", "Starting timeout...");
-        setTimeout(() => {
-            handleNight(session)
-        }, 10000);  // 10 seconds
+        const timeoutMilliseconds: number = 10000;
+        sessionSocket.emit("timer", timeoutMilliseconds);
+        setTimeout(handleNight, timeoutMilliseconds);
     });
 
-    function handleNight(session: Session) {
+    function handleNight() {
         for (const player of session.players) {
             player.socket.emit("start_night", session.round);
-            if (player.role === werewolfRole) {
+            if (player.role === werewolfRole && player.isAlive) {
                 player.socket.emit("start_werewolf_vote");
             }
         }
+        const timeoutMilliseconds: number = 30000;
+        sessionSocket.emit("timer", timeoutMilliseconds);
+        startTimeout(concludeVoting, timeoutMilliseconds);
     }
 
     socket.on("select_werewolf", (victim) => {
@@ -138,20 +149,35 @@ io.on("connection", (socket: typeof Socket) => {
         }
     });
 
-    function handleDay(session: Session) {
+    socket.on("vote_werewolf", (victim) => {
+
+    });
+
+    function handleDay() {
+        session.round++;
+        for (const player of session.players) {
+            player.socket.emit("start_day", session.round);
+            if (player.isAlive) {
+                player.socket.emit("start_day_vote");
+            }
+        }
+    }
+
+    function concludeVoting() {
+
     }
 
     socket.on("disconnect", () => {
         const remainingPlayers = session.players.filter(p => p.socket.id !== socket.id);
         for (const player of session.players) {
             if (!remainingPlayers.includes(player)) {
-                io.to(session_code).emit("player_left", player.name);
+                sessionSocket.emit("player_left", player.name);
             }
         }
         session.players = remainingPlayers;
 
         if (session.players.length < 1) {
-            delete sessions[session_code];
+            delete sessions[session.code];
         }
     });
 });
