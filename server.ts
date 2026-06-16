@@ -115,12 +115,15 @@ io.on("connection", (socket: typeof Socket) => {
             }
         }
 
-        handleNight(session);
+        socket.emit("debug", "Starting timeout...");
+        setTimeout(() => {
+            handleNight(session)
+        }, 10000);  // 10 seconds
     });
 
     function handleNight(session: Session) {
         for (const player of session.players) {
-            player.socket.emit("start night", session.round);
+            player.socket.emit("start_night", session.round);
             if (player.role === werewolfRole) {
                 player.socket.emit("start_werewolf_vote");
             }
