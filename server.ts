@@ -66,6 +66,8 @@ io.on("connection", (socket: typeof Socket) => {
             return;
         }
 
+        socket.emit("join_success");
+
         for (const player of session.players) {
             socket.emit("player_joined", player.name);
         }
