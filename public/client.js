@@ -84,14 +84,14 @@ function update_werewolf_list() {
 
 socket.on("start_night", (number) => {
     console.log("It is night", number);
-    document.getElementById("role-screen").classList.add("Hidden");
+    document.getElementById("role-screen").classList.add("hidden");
     if (role == "Villager") {
-        document.getElementById("night-villager-screen").classList.remove("Hidden");
-
+        document.getElementById("night-villager-screen").classList.remove("hidden");
+        console.log("villager screen worked");
     } else if (role == "Werewolf") {
-        document.getElementById("night-werewolf-screen").classList.remove("Hidden");
+        document.getElementById("night-werewolf-screen").classList.remove("hidden");
+        console.log("werewolf screen worked");
     }
-    document.getElementById("")
 });
 
 
