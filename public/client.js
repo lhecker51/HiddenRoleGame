@@ -99,6 +99,7 @@ socket.on("start_night", (number) => {
     } else if (role == "Werewolf") {
         document.getElementById("night-werewolf-screen").classList.remove("hidden");
         console.log("werewolf screen worked");
+        start_werewolf_voting();
     }
 });
 
@@ -166,7 +167,9 @@ function get_werewolf_result() {
 
 
 function get_victims() {
+    console.log("Victim Berechnung wurde geladen.");
     return players.filter(victim => !werewolves.includes(victim));
+
 }
 
 socket.on("start_werewolf_vote", () => {
