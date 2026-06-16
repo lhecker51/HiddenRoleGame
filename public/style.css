@@ -130,6 +130,19 @@ button, input, select, textarea {
     background-position: center bottom;
     background-repeat: no-repeat;
 }
+.night-villager-bg,
+.night-werewolf-bg {
+    background-image:
+            linear-gradient(
+                    rgba(0, 0, 0, 0.45),
+                    rgba(0, 0, 0, 0.45)
+            ),
+            url("images/village_night.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 .character {
     position: absolute;
     bottom: 120px;
