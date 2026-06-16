@@ -48,18 +48,26 @@ button, input, select, textarea {
     flex-direction: column;
     align-items: center;
 }
-.lg-bg {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5)),
-    url("https://c4.wallpaperflare.com/wallpaper/852/618/332/the-witcher-the-witcher-3-wild-hunt-wallpaper-preview.jpg");
+/*.lg-bg {*/
+/*    background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5)),*/
+/*    url("https://c4.wallpaperflare.com/wallpaper/852/618/332/the-witcher-the-witcher-3-wild-hunt-wallpaper-preview.jpg");*/
 
-    background-size: 105%;
-    background-position: 40% center;
+/*    background-size: 105%;*/
+/*    background-position: 40% center;*/
 
-    animation-name: moveBackground;
-    animation-duration: 10s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+/*    animation-name: moveBackground;*/
+/*    animation-duration: 10s;*/
+/*    animation-timing-function: ease-in-out;*/
+/*    animation-iteration-count: infinite;*/
+/*    animation-direction: alternate;*/
+/*}*/
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
 }
 .game-bg, .day-bg {
     background-image:
