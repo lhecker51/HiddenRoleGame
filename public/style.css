@@ -24,6 +24,7 @@ button, input, select, textarea {
 }
 
 .screen {
+    position: relative;
     width: 100vw;
     min-height: 100vh;
     /*margin: 50px auto;*/
@@ -37,14 +38,14 @@ button, input, select, textarea {
     background-size: cover;
     background-position: center;
 }
-.card {
-    width: 400px;
-    max-width: 100%;
-    /*margin: 50px auto;*/
-    padding: 32px;
-    background-color: #171728;
-    border-radius: 17px;
-}
+/*.card {*/
+/*    width: 400px;*/
+/*    max-width: 100%;*/
+/*    !*margin: 50px auto;*!*/
+/*    padding: 32px;*/
+/*    background-color: #171728;*/
+/*    border-radius: 17px;*/
+/*}*/
 .lg-bg {
     background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5)),
     url("https://c4.wallpaperflare.com/wallpaper/852/618/332/the-witcher-the-witcher-3-wild-hunt-wallpaper-preview.jpg");
@@ -58,9 +59,56 @@ button, input, select, textarea {
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
-.role-bg {
+.game-bg {
+    background-image:
+            linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+            url("images/village.jpg");
 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    image-rendering: pixelated;;
 }
+.character {
+    position: absolute;
+    bottom: 24%;
+    width: 85px;
+
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+
+    z-index: 1;
+    pointer-events: none;
+
+    animation: pixelBob 0.8s steps(2) infinite;
+}
+
+.girl {
+    left: 42%;
+}
+
+.farmer {
+    left: 49%;
+    animation-delay: 0.15s;
+}
+
+.wolf {
+    left: 56%;
+    width: 95px;
+    animation-delay: 0.3s;
+}
+
+@keyframes pixelBob {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
 @keyframes moveBackground {
     from {
         background-size: cover, 105%;
@@ -71,6 +119,10 @@ button, input, select, textarea {
         background-size: cover, 125%;
         background-position: center, 60% center;
     }
+}
+
+.role-bg {
+
 }
 
 h1 {
