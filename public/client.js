@@ -69,6 +69,14 @@ socket.on("role_update", (received_role) => {
     role = received_role;
     document.getElementById("game-screen").classList.add("hidden");
     document.getElementById("role-name").innerHTML = role;
+    //Ich brauche es für role-screen
+    document.getElementById("role-screen").classList.remove("role-villager", "role-werewolf");
+    if (role == "Villager") {
+        document.getElementById("role-screen").classList.add("role-villager");
+    }
+    else if (role == "Werewolf") {
+        document.getElementById("role-screen").classList.add("role-werewolf");
+    }
     console.log("Role update received:", received_role);
     document.getElementById("role-screen").classList.remove("hidden");
 });
