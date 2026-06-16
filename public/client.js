@@ -73,10 +73,10 @@ socket.on("role_update", (received_role) => {
 socket.on("werewolf_list", (werewolf_list) => {
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
+        update_werewolf_list();
     }
 
     document.getElementById("werewolf-team").classList.remove("hidden");
-    update_werewolf_list();
     console.log("Werewolves are:", werewolves);
 });
 
