@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io("");
 
 socket.on("connect", () => {
     console.log("Connected to socket with ID", socket.id);
@@ -20,7 +20,6 @@ document.getElementById("join-btn").addEventListener("click", () => {
     }
 
     document.getElementById("session-code-p").innerText = "Session code: " + session_code;
-
     document.getElementById("login-screen").style.display = "none";
     document.getElementById("game-screen").style.display = "block";
 
