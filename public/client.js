@@ -29,6 +29,8 @@ document.getElementById("join-btn").addEventListener("click", () => {
 document.getElementById("start-btn").addEventListener("click", () => {
     console.log("Start button clicked.");
     socket.emit("start_game", {session_code});
+    //log fuer role
+    document.getElementById("role-screen").style.display = "block";
 });
 
 socket.on("player_joined", (player_name) => {
@@ -56,6 +58,8 @@ socket.on("day", (number) => {
 })
 
 socket.on("role_update", (received_role) => {
+    const role = document.getElementById("role-info").innerHTML = received_role;
+
     console.log("Role update received:", received_role);
     role = received_role.toLowerCase();
 });
