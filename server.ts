@@ -97,6 +97,7 @@ io.on("connection", (socket: typeof Socket) => {
         }
 
         session.round = 1;
+        socket.emit("start_success")
 
         let numberOfWerewolves = 0;
         while (numberOfWerewolves < Math.ceil(numberOfPlayers / 5.0)) {
