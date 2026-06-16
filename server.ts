@@ -126,19 +126,23 @@ io.on("connection", (socket: typeof Socket) => {
 
         const timeoutMilliseconds: number = 10000;
         sessionSocket.emit("timer", timeoutMilliseconds);
-        setTimeout(handleNight, timeoutMilliseconds);
+        sleep(timeoutMilliseconds).then(handleNight);
     });
 
     function handleNight() {
         for (const player of session.players) {
             player.socket.emit("start_night", session.round);
             if (player.role === werewolfRole && player.isAlive) {
-                player.socket.emit("start_werewolf_vote");
+                sleep(2000).then(() => {
+                    player.socket.emit("start_werewolf_vote")
+                });
             }
         }
+
+
         const timeoutMilliseconds: number = 20000;
         sessionSocket.emit("timer", timeoutMilliseconds);
-        startTimeout(concludeVoting, timeoutMilliseconds);
+        sleep(timeoutMilliseconds).then(concludeVoting);
         proceedUnlessEnded(handleDay);
     }
 
@@ -152,7 +156,7 @@ io.on("connection", (socket: typeof Socket) => {
 
     socket.on("vote_werewolf", (victim) => {
         for (const player of session.players) {
-            if (player.name == victim.name) {
+            if (player.name == victim) {
                 player.votes++;
             }
         }
@@ -168,7 +172,7 @@ io.on("connection", (socket: typeof Socket) => {
         }
         const timeoutMilliseconds: number = 40000;
         sessionSocket.emit("timer", timeoutMilliseconds);
-        startTimeout(concludeVoting, timeoutMilliseconds);
+        sleep(timeoutMilliseconds).then(concludeVoting);
         proceedUnlessEnded(handleNight)
     }
 
@@ -230,6 +234,11 @@ io.on("connection", (socket: typeof Socket) => {
         }
     });
 });
+
+
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 server.listen(process.env.PORT || 8080, () => {
     console.log("Server running on port", process.env.PORT || 8080);
