@@ -103,6 +103,7 @@ socket.on("start_night", (number) => {
 });
 
 function start_werewolf_voting() {
+    console.log("Started radiobutton creation");
     const victim_container = document.getElementById("night-voting-list");
     victim_container.innerHTML = "";
     const victim_list = get_victims();
