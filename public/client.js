@@ -120,6 +120,10 @@ function update_werewolf_list() {
 
 socket.on("start_night", (number) => {
     console.log("It is night", number);
+
+    document.getElementById("villager-night-count").innerHTML = number.toString();
+    document.getElementById("werewolf-night-count").innerHTML = number.toString();
+
     document.getElementById("role-screen").classList.add("hidden");
     if (role == "Villager") {
         document.getElementById("night-villager-screen").classList.remove("hidden");
