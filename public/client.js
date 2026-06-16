@@ -190,7 +190,7 @@ socket.on("death", (player_name) => {
 
 socket.on("start_day", (number) => {
     console.log("It is day", number);
-    document.getElementByID("day-screen").classList.remove("Hidden");
+    document.getElementById("day-screen").classList.remove("Hidden");
 });
 
 socket.on("start_day_vote", () => {
