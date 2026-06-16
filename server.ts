@@ -40,12 +40,14 @@ const sessions: Record<string, Session> = {};
 app.use(express.static("public"));
 
 io.on("connection", (socket: typeof Socket) => {
+    let session: Session;
+
     socket.on("join_session", ({player_name, session_code}) => {
         if (!sessions[session_code]) {
             sessions[session_code] = new Session();
         }
 
-        const session = sessions[session_code];
+        session = sessions[session_code];
 
         if (session.round > 0) {
             socket.emit("error", {message: "Ooops! Too late. The Game already started."});
@@ -77,23 +79,17 @@ io.on("connection", (socket: typeof Socket) => {
         io.to(session_code).emit("player_joined", player_name);
     });
 
-    socket.on("start_game", (session_code) => {
-        socket.emit("debug", "debug1");
-        const session = sessions[session_code];
+    socket.on("start_game", () => {
         const numberOfPlayers = session.players.length;
-        socket.emit("debug", "debug2");
         if (session.round > 0) {
             socket.emit("error", {message: "Game has already started."});
             return;
         }
 
-        socket.emit("debug", "debug3");
-
         if (numberOfPlayers < 1) {  // adjust minimum number of players as needed
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
         }
-        socket.emit("debug", "debug4");
 
         session.round = 1;
         socket.emit("start_success")
@@ -146,10 +142,6 @@ io.on("connection", (socket: typeof Socket) => {
     }
 
     socket.on("disconnect", () => {
-        const session_code = socket.data.code;
-        const session = sessions[session_code];
-        if (!session) return;
-
         const remainingPlayers = session.players.filter(p => p.socket.id !== socket.id);
         for (const player of session.players) {
             if (!remainingPlayers.includes(player)) {

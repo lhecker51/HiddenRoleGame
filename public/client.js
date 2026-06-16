@@ -53,7 +53,7 @@ function update_player_list() {
 
 document.getElementById("start-btn").addEventListener("click", () => {
     console.log("Start button clicked.");
-    socket.emit("start_game", session_code);
+    socket.emit("start_game");
 });
 
 socket.on("start_success", () => {
