@@ -54,7 +54,7 @@ document.getElementById("start-btn").addEventListener("click", () => {
     socket.emit("start_game", session_code);
 });
 
-socket.on("start_successful", () => {
+socket.on("start_success", () => {
     console.log("Game start successful!");
     //game screen hiden
     //role screen displayen
