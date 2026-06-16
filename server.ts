@@ -1,6 +1,6 @@
 import express from "express";
 import http from "http";
-import { Server, Socket } from "socket.io";
+import {Server, Socket} from "socket.io";
 
 const app = express();
 const server = http.createServer(app);
@@ -20,24 +20,24 @@ const villagerRole: Role = new Role("Villager");
 const werewolfRole: Role = new Role("Werewolf");
 
 class Player {
-    socket: typeof Socket;
+    socket: Socket;
     name: string;
     role: Role = villagerRole;
     isAlive: boolean = true;
     votes: number = 0;
 
-    constructor(socket: typeof Socket, name: string) {
+    constructor(socket: Socket, name: string) {
         this.socket = socket;
         this.name = name;
     }
 }
 
 class Session {
-    code;
+    code: string;
     players: Player[] = [];
     round: number = 0;
 
-    constructor(code) {
+    constructor(code: string) {
         this.code = code;
     }
 }
@@ -46,7 +46,7 @@ const sessions: Record<string, Session> = {};
 
 app.use(express.static("public"));
 
-io.on("connection", (socket: typeof Socket) => {
+io.on("connection", (socket: Socket) => {
     let session: Session;
     let sessionSocket;
 
@@ -126,23 +126,23 @@ io.on("connection", (socket: typeof Socket) => {
 
         const timeoutMilliseconds: number = 10000;
         sessionSocket.emit("timer", timeoutMilliseconds);
-        sleep(timeoutMilliseconds).then(handleNight);
+        await sleep(timeoutMilliseconds);
+        handleNight();
     });
 
     function handleNight() {
         for (const player of session.players) {
             player.socket.emit("start_night", session.round);
             if (player.role === werewolfRole && player.isAlive) {
-                sleep(2000).then(() => {
-                    player.socket.emit("start_werewolf_vote")
-                });
+                await sleep(2000);
+                player.socket.emit("start_werewolf_vote");
             }
         }
 
-
         const timeoutMilliseconds: number = 20000;
         sessionSocket.emit("timer", timeoutMilliseconds);
-        sleep(timeoutMilliseconds).then(concludeVoting);
+        await sleep(timeoutMilliseconds);
+        concludeVoting();
         proceedUnlessEnded(handleDay);
     }
 
@@ -172,7 +172,8 @@ io.on("connection", (socket: typeof Socket) => {
         }
         const timeoutMilliseconds: number = 40000;
         sessionSocket.emit("timer", timeoutMilliseconds);
-        sleep(timeoutMilliseconds).then(concludeVoting);
+        await sleep(timeoutMilliseconds);
+        concludeVoting();
         proceedUnlessEnded(handleNight)
     }
 
