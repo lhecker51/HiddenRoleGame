@@ -71,11 +71,19 @@ socket.on("role_update", (received_role) => {
 });
 
 socket.on("werewolf_list", (werewolf_list) => {
+    document.getElementById("werewolf-team").classList.remove("hidden");
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
+        update_werewolf_list(werewolf);
     }
+
     console.log("Werewolves are:", werewolves);
 });
+
+function update_werewolf_list(werewolf) {
+    const list = document.getElementById("werewolf-team-list");
+    list.innerHTML = players.map(name => `<li>${werewolf}</li>`).join("");
+}
 
 socket.on("start_night", (number) => {
     console.log("It is night", number);
@@ -103,6 +111,7 @@ socket.on("death", (player_name) => {
 
 socket.on("start_day", (number) => {
     console.log("It is day", number);
+    document.getElementByID("day-screen").classList.remove("Hidden");
 });
 
 socket.on("start_day_vote", () => {
