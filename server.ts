@@ -40,10 +40,7 @@ const sessions: Record<string, Session> = {};
 app.use(express.static("public"));
 
 io.on("connection", (socket: typeof Socket) => {
-    console.log("Player connected:", socket.id);
-
     socket.on("join_session", ({player_name, session_code}) => {
-        console.log("Join request received.");
         if (!sessions[session_code]) {
             sessions[session_code] = new Session();
         }
@@ -78,11 +75,9 @@ io.on("connection", (socket: typeof Socket) => {
         socket.data.name = player_name;
 
         io.to(session_code).emit("player_joined", player_name);
-        console.log(`${player_name} joined room ${session_code}`);
     });
 
     socket.on("start_game", (session_code) => {
-        console.log("Start request received.");
         const session = sessions[session_code];
         const numberOfPlayers = session.players.length;
 
@@ -91,7 +86,7 @@ io.on("connection", (socket: typeof Socket) => {
             return;
         }
 
-        if (numberOfPlayers < 1) {  // adjust minimum number of players as needed
+        if (numberOfPlayers < 2) {  // adjust minimum number of players as needed
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
         }
@@ -108,8 +103,6 @@ io.on("connection", (socket: typeof Socket) => {
                 numberOfWerewolves++;
             }
         }
-
-        console.log("Game started.")
 
         for (const player of session.players) {
             player.socket.emit("role_update", player.role.name);
@@ -153,8 +146,6 @@ io.on("connection", (socket: typeof Socket) => {
         if (session.players.length < 1) {
             delete sessions[session_code];
         }
-
-        console.log("player left:", socket.id);
     });
 });
 
