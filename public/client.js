@@ -74,7 +74,6 @@ socket.on("werewolf_list", (werewolf_list) => {
         werewolves.push(werewolf);
         update_werewolf_list();
     }
-
     console.log("Werewolves are:", werewolves);
 });
 
@@ -100,8 +99,8 @@ socket.on("start_werewolf_vote", () => {
     console.log("Werewolf vote started...");
 });
 
-socket.on("selected_werewolf", (werewolf, victim) => {
-    console.log(`${werewolf} selected ${victim} for killing...`);
+socket.on("selected_werewolf", (victim) => {
+    console.log(victim, "was selected for killing...");
 });
 
 socket.on("death", (player_name) => {
