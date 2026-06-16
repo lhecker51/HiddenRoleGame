@@ -108,8 +108,7 @@ button, input, select, textarea {
     height: 220px;
 
     background-image:
-            url("images/villager_girl.png"),
-            url("images/villager_farmer.png");
+            url("images/villager_girl.png");
 
     background-size:
             120px auto,
