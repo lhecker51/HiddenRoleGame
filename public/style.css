@@ -4,18 +4,40 @@
 
 body {
     margin: 0;
-    min-height: 100vh;
     overflow: hidden;
     background-color: #080812;
     color: white;
     font-family: Arial, sans-serif;
+}
 
+.screen {
+    width: 100vw;
+    min-height: 100vh;
+    /*margin: 50px auto;*/
+    padding: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #171728;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.card {
+    width: 400px;
+    max-width: 100%;
+    /*margin: 50px auto;*/
+    padding: 32px;
+    background-color: #171728;
+    border-radius: 17px;
+}
+.lg-bg {
     background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5)),
     url("https://c4.wallpaperflare.com/wallpaper/852/618/332/the-witcher-the-witcher-3-wild-hunt-wallpaper-preview.jpg");
 
-    background-repeat: no-repeat;
-    background-size: cover, 105%;
-    background-position: center, 40% center;
+    background-size: 105%;
+    background-position: 40% center;
 
     animation-name: moveBackground;
     animation-duration: 10s;
@@ -34,15 +56,6 @@ body {
         background-size: cover, 125%;
         background-position: center, 60% center;
     }
-}
-
-.screen {
-    width: 400px;
-    margin: 50px auto;
-    padding: 22px;
-
-    background-color: #171728;
-    border-radius: 17px;
 }
 
 h1 {
@@ -108,4 +121,19 @@ button:hover {
     padding: 10px;
     margin-top: 8px;
     background-color: #242438;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .header {
+        display: none;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
 }
