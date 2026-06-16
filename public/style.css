@@ -132,7 +132,7 @@ button, input, select, textarea {
 }
 .character {
     position: absolute;
-    bottom: 50px;
+    bottom: 80px;
     width: 90px;
 
     z-index: 1;
