@@ -1,3 +1,5 @@
+import {debug} from "node:util";
+
 const express = require("express");
 const http = require("http");
 const {Server, Socket} = require("socket.io");
@@ -78,18 +80,22 @@ io.on("connection", (socket: typeof Socket) => {
     });
 
     socket.on("start_game", (session_code) => {
+        socket.emit("debug", "debug1");
         const session = sessions[session_code];
         const numberOfPlayers = session.players.length;
-
+        socket.emit("debug", "debug2");
         if (session.round > 0) {
             socket.emit("error", {message: "Game has already started."});
             return;
         }
 
-        if (numberOfPlayers < 2) {  // adjust minimum number of players as needed
+        socket.emit("debug", "debug3");
+
+        if (numberOfPlayers < 1) {  // adjust minimum number of players as needed
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
         }
+        socket.emit("debug", "debug4");
 
         session.round = 1;
         socket.emit("start_success")
