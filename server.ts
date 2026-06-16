@@ -96,10 +96,17 @@ io.on("connection", (socket) => {
 
         session.round = 1;
         console.log("Game started.")
-        socket.emit("day", session.round);
+        socket.emit("role_screen");
 
         for (const player of session.players) {
             player.socket.emit("role_update", player.role.name);
+        }
+
+        const werewolfList = session.players.filter(p => p.role === werewolfRole);
+        for (const player of session.players) {
+            if (werewolfList.includes(player)) {
+                player.socket.emit("werewolf_list", werewolfList.map(p => p.name));
+            }
         }
 
         // todo manage rounds here, start with day, other typescript file?
