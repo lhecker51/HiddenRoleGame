@@ -30,8 +30,58 @@
     <button id="start-btn">Start game</button>
 </section>
 
-<section id="role-screen">
-  <p id="role-info">Rolle</p>
+<section id="role-screen" class="screen hidden">
+    <h1>Your role is: </h1>
+    <h2 id="role name">Villager</h2>
+    <div id="werewolf team" class="hidden">
+        <p>Werewolf team:</p>
+        <ul id="werewolf-team-list"></ul>
+    </div>
+</section>
+
+<section id="night-villager-screen" class="screen hidden">
+    <h1 id="villager-night">
+        Night: <span id="villager-night-count">1</span>
+    </h1>
+    <p>You are sleeping</p>
+    <p>Wait until werewolves choose a victim</p>
+</section>
+
+<section id="night-werewolf-screen" class="screen hidden">
+    <h1 id="werewolf-night">
+        Night: <span id="werewolf-night-count">1</span>
+    </h1>
+    <h2>Choose a victim: </h2>
+    <div id="night-voting-list"></div>
+    <button id="werewolf-victim-btn">Submit kill vote</button>
+</section>
+
+<section id="day-screen" class="screen hidden">
+    <h1 id="day">
+        Day: <span id="day-count">1</span>
+    </h1>
+    <p id="night-result">Someone was killed during the night</p>
+    <p>You can discuss and vote for a werewolf: </p>
+    <div id="day-voting-list"></div>
+    <button id="werewolf-vote-btn">Vote for werewolf</button>
+</section>
+
+<section id="win-villager-screen" class="screen hidden">
+    <h1 id="villager-win">Villager wins!</h1>
+    <h2>Game over!</h2>
+    <p>The werewolves were killed by the villagers</p>
+    <p>The werewolves were: </p>
+    <div id="werewolf-villager-list"></div>
+    <button id="restart-villager-btn">Restart game</button>
+</section>
+
+<section id="win-werewolf-screen" class="screen hidden">
+    <h1 id="werewolf-win">Werewolf wins!</h1>
+    <h2>Game over!</h2>
+    <p>The villagers were killed by the werewolves</p>
+    <p>The werewolves were: </p>
+    <div id="werewolf-list"></div>
+    <button id="restart-werewolf-btn">Restart game</button>
 </section>
 
 <script src="/socket.io/socket.io.js"></script>
