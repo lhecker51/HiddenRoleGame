@@ -129,11 +129,9 @@ function start_werewolf_voting() {
         label.htmlFor = radioId;
         label.textContent = value;
 
-        const br = document.createElement('br');
 
         victim_container.appendChild(radioButton);
         victim_container.appendChild(label);
-        victim_container.appendChild(br);
     });
 }
 function setup_werewolf_submit() {
