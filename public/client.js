@@ -60,6 +60,10 @@ socket.on("start_success", () => {
     console.log("Game start successful!");
 })
 
+socket.on("timer", (timeMilliseconds) => {
+    console.log(`Started timer for ${timeMilliseconds / 1000} seconds...`);
+});
+
 socket.on("role_update", (received_role) => {
     role = received_role;
     document.getElementById("game-screen").classList.add("hidden");
@@ -108,10 +112,10 @@ function start_werewolf_voting() {
     const victim_container = document.getElementById("night-voting-list");
     victim_container.innerHTML = "";
     const victim_list = get_victims();
-    
+
     victim_list.forEach((value, index) => {
         const radioId = `option-${index}`;
-        
+
         const radioButton = document.createElement('input');
         radioButton.type = 'radio';
         radioButton.name = 'werewolf-voting';
@@ -134,9 +138,10 @@ function start_werewolf_voting() {
         victim_container.appendChild(label);
     });
 }
+
 function setup_werewolf_submit() {
     const submitBtn = document.getElementById("werewolf-victim-btn");
-    
+
     const clone = submitBtn.cloneNode(true);
     submitBtn.parentNode.replaceChild(clone, submitBtn);
 
@@ -154,7 +159,7 @@ function setup_werewolf_submit() {
 
         clone.disabled = true;
         clone.textContent = "Vote submitted...";
-        
+
         document.querySelectorAll('input[name="werewolf-voting"]').forEach(radio => radio.disabled = true);
     });
 }
