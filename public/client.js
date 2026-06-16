@@ -74,8 +74,16 @@ socket.on("werewolf_list", (werewolf_list) => {
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
     }
+
+    document.getElementById("werewolf-team").classList.remove("hidden");
+    update_werewolf_list();
     console.log("Werewolves are:", werewolves);
 });
+
+function update_werewolf_list() {
+    const list = document.getElementById("werewolf-team-list");
+    list.innerHTML = players.map(name => `<li>${werewolf}</li>`).join("");
+}
 
 socket.on("start_night", (number) => {
     console.log("It is night", number);
@@ -105,9 +113,6 @@ socket.on("start_day", (number) => {
     console.log("It is day", number);
 });
 
-<<<<<<< HEAD
-
-=======
 socket.on("start_day_vote", () => {
     console.log("Day vote started!");
 });
@@ -119,7 +124,6 @@ socket.on("village_won", () => {
 socket.on("werewolves_won", () => {
     console.log("The werewolves won the game!");
 });
->>>>>>> a15c83dd6df5153396ab22c782a4a45becfd4730
 
 socket.on("error", (data) => {
     console.log("Error received:", data.message);

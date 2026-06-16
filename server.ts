@@ -51,7 +51,7 @@ io.on("connection", (socket: typeof Socket) => {
         const session = sessions[session_code];
 
         if (session.round > 0) {
-            socket.emit("error", {message: "Game already started."});
+            socket.emit("error", {message: "Ooops! Too late. The Game already started."});
             return;
         }
 
