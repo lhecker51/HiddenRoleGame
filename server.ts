@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 const express = require("express");
 const http = require("http");
-const {Server} = require("socket.io");
+const {Server, Socket} = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
@@ -21,7 +21,7 @@ const villagerRole: Role = new Role("Villager");
 const werewolfRole: Role = new Role("Werewolf");
 
 class Player {
-    socket;  // todo type Socket?
+    socket: Socket;
     name: string;
     role: Role = villagerRole;
 
@@ -40,7 +40,7 @@ const sessions: Record<string, Session> = {};
 
 app.use(express.static("public"));
 
-io.on("connection", (socket) => {
+io.on("connection", (socket: Socket) => {
     console.log("Player connected:", socket.id);
 
     socket.on("join_session", ({player_name, session_code}) => {
