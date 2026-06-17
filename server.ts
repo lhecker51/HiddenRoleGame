@@ -265,13 +265,20 @@ async function proceedUnlessEnded(session: Session, func: Function) {
         }
     }
 
+    const werewolfList: Player[] = [];
+    for (const player of session.players) {
+        if (player.role === werewolfRole) {
+            werewolfList.push(player);
+        }
+    }
+
     if (numberOfWerewolvesAlive === 0) {
-        session.broadcast("village_won");
+        session.broadcast("village_won", werewolfList);
         return;
     }
 
     if (numberOfWerewolvesAlive > numberOfVillagersAlive) {
-        session.broadcast("werewolves_won");
+        session.broadcast("werewolves_won", werewolfList);
         return;
     }
 
