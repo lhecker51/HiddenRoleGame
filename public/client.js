@@ -83,7 +83,15 @@ socket.on("timer", ({name, time}) => {
         timerSeconds = document.getElementById("day-timer-seconds");
     }
 
-    let secondsLeft = time / 1000;
+    printTimer(timerSeconds, timerDisplay, time);
+
+});
+
+//parameter: html tags
+function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
+    console.log('Reached Print Timer');
+
+    let secondsLeft = timeMilliseconds / 1000;
 
     timerSeconds.textContent = secondsLeft.toString();
     timerDisplay.classList.remove("hidden");
@@ -100,7 +108,7 @@ socket.on("timer", ({name, time}) => {
             timerSeconds.textContent = secondsLeft.toString();
         }
     }, 1000);
-});
+}
 
 socket.on("role_update", (received_role) => {
     console.log("Role update received:", received_role);
