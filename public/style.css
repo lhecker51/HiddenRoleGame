@@ -50,7 +50,6 @@ textarea {
     background-size: cover;
     background-position: center;
 }
-
 /* Die Box enthält den sichtbaren Inhalt: Titel, Text, Buttons, Listen */
 .box {
     position: relative;
@@ -147,7 +146,7 @@ textarea {
 .win-villager-bg {
     background-image:
             linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
-            url("images/village_with_character.png");
+            url("images/village.png");
 
     background-size: cover;
     background-position: center;
@@ -180,7 +179,7 @@ textarea {
     animation-delay: 0.3s;
 }
 
-.role-bg::before {
+.win-villager-bg::before {
     content: "";
     position: absolute;
 
@@ -198,7 +197,7 @@ textarea {
 }
 
 /* Bild für Villager-Rolle */
-.role-bg.role-villager::before {
+.win-villager-bg.role-villager::before {
     width: 260px;
     height: 220px;
 
