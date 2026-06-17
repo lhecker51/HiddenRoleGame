@@ -526,6 +526,10 @@ function setup_seer_vote_submit() {
     const submitBtn = document.getElementById("seer-submit-btn");
 
     const clone = submitBtn.cloneNode(true);
+    
+    clone.disabled = false;
+    clone.textContent = "Reveal Role";
+
     submitBtn.parentNode.replaceChild(clone, submitBtn);
 
     clone.addEventListener("click", () => {
