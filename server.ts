@@ -170,7 +170,7 @@ function distributeRoles(players: Player[]) {
         }
     }
 
-    if (players.length > 4) return;
+    if (players.length < 4) return;
 
     let numberOfSeers = 0;
     while (numberOfSeers < Math.ceil(players.length / 8.0)) {
