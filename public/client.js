@@ -85,10 +85,9 @@ socket.on("timer", ({name, time}) => {
     }
 
     printTimer(timerSeconds, timerDisplay, time);
-
 });
 
-//parameter: html tags
+// parameter: html tags
 function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
     let secondsLeft = timeMilliseconds / 1000;
 
@@ -125,7 +124,7 @@ socket.on("role_update", (received_role) => {
     }
     document.getElementById("role-screen").classList.remove("hidden");
 
-    // Play among us role reveal sound
+    // play among us role reveal sound
     const amongUsRoleRevealSound = new Audio("./among-us-role-reveal.mp3");
     amongUsRoleRevealSound.play();
 });
@@ -375,7 +374,7 @@ socket.on("village_won", () => {
         socket.emit("restart_game", session_code);
 
         resetClientState();
-    }, { once: true});
+    }, {once: true});
 });
 
 function resetClientState() {
@@ -384,17 +383,17 @@ function resetClientState() {
         countdownInterval = null;
     }
 
-    werewolves.length = 0; 
+    werewolves.length = 0;
     role = null;
 
     document.getElementById("status").textContent = "";
     document.getElementById("night-result").innerHTML = "";
-    
+
     const screensToHide = [
-        "role-screen", 
-        "night-villager-screen", 
-        "night-werewolf-screen", 
-        "day-screen", 
+        "role-screen",
+        "night-villager-screen",
+        "night-werewolf-screen",
+        "day-screen",
         "win-villager-screen",
         "werewolf-team"
     ];
@@ -407,7 +406,7 @@ function resetClientState() {
     if (deathScreen) deathScreen.classList.add("hidden");
 
     document.getElementById("game-screen").classList.remove("hidden");
-    
+
     update_player_list();
     update_werewolf_list("werewolf-team-list");
 }
@@ -429,7 +428,7 @@ socket.on("werewolves_won", () => {
         socket.emit("restart_game", session_code);
 
         resetClientState();
-    }, { once: true});
+    }, {once: true});
 });
 
 socket.on("error", (data) => {
