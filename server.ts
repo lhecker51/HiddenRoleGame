@@ -120,7 +120,7 @@ io.on("connection", (socket: Socket) => {
         await handleNight(session);
     });
 
-    socket.on("werewolf_vote_changed", ({ victim }) => {
+    socket.on("werewolf_vote_changed", ({victim}) => {
         if (!session) return;
 
         const currentPlayer = session.players.find(p => p.socket.id === socket.id);
@@ -136,7 +136,7 @@ io.on("connection", (socket: Socket) => {
 
         for (const player of session.players) {
             if (player.role === werewolfRole) {
-                player.socket.emit("werewolf_votes_update", { votes: votesMap });
+                player.socket.emit("werewolf_votes_update", {votes: votesMap});
             }
         }
     });
@@ -150,8 +150,14 @@ io.on("connection", (socket: Socket) => {
     });
 
     socket.on("restart_game", () => {
-        //TO DO: hier alles resetten!!!
-        console.log("The game was restarted. Reached server.");
+        socket.emit("debug", "Restarting game...");
+        session.round = 0;
+        for (const player of session.players) {
+            player.role = villagerRole;
+            player.isAlive = true;
+            player.votes = 0;
+            player.currentSelection = null;
+        }
     });
 
     socket.on("disconnect", () => {

@@ -160,6 +160,8 @@ function update_werewolf_list(html_tag = "werewolf-team-list") {
 socket.on("start_night", (number) => {
     console.log("It is night", number);
 
+    hideAllGameScreens();
+
     document.getElementById("villager-night-count").innerHTML = number.toString();
     document.getElementById("werewolf-night-count").innerHTML = number.toString();
 
@@ -511,7 +513,7 @@ socket.on("werewolves_won", (werewolf_list) => {
         }
     } else if (role === "Villager" || role === "Seer") {
         if (amIDead) {
-            fateDisplay.textContent = "You were killed by the werewolves... and your friends all had a same fate.";
+            fateDisplay.textContent = "You were killed by the werewolves... and your friends all suffered the same fate.";
         } else {
             fateDisplay.textContent = "You survived the night, but the werewolves have now overrun the village...";
         }
@@ -592,7 +594,6 @@ function hideAllGameScreens() {
     });
 }
 function showDeadPlayerState() {
-
     hideAllGameScreens();
 
     document.getElementById("day-screen").classList.remove("hidden");
