@@ -550,6 +550,9 @@ function setup_seer_vote_submit() {
 }
 
 socket.on("seer_role_reveal", (role) => {
+    if (amIDead) {
+        return;
+    }
     console.log("Revealing role:", role);
     document.getElementById("seer-result").innerHTML = role;
 });
@@ -562,9 +565,9 @@ socket.on("village_won", (werewolf_list) => {
     document.getElementById('win-villager-screen').classList.remove("hidden");
 
     if (role === 'Werewolf') {
-        document.getElementByClass("game-end-info").classList.remove("hidden");
+        document.getElementsByClassName("game-end-info").classList.remove("hidden");
     } else {
-        document.getElementByClass("game-end-info").innerHTML = "Victory!";
+        document.getElementsByClassName("game-end-info").innerHTML = "Victory!";
     }
 
     const fateDisplay = document.getElementById("villager-win-fate");
@@ -607,9 +610,9 @@ socket.on("werewolves_won", (werewolf_list) => {
     document.getElementById('win-werewolf-screen').classList.remove("hidden");
 
     if (role === 'Werewolf') {
-        document.getElementByClass("game-end-info").innerHTML = 'Victory!'
+        document.getElementsByClassName("game-end-info").innerHTML = 'Victory!'
     } else {
-        document.getElementByClass("game-end-info").classList.remove("hidden");
+        document.getElementsByClassName("game-end-info").classList.remove("hidden");
     }
 
     const fateDisplay = document.getElementById("werewolf-win-fate");
@@ -722,7 +725,14 @@ function showDeadPlayerState() {
     hideAllGameScreens();
 
     document.getElementById("day-screen").classList.remove("hidden");
-
+    const day = document.getElementById("day");
+    if (day) {
+        day.classList.add("hidden");
+    }
+    const day_timer = document.getElementById("day-timer-display");
+    if (day_timer) {
+        day_timer.classList.add("hidden");
+    }
     const deathText = document.getElementById("own-death-bool");
     if (deathText) {
         deathText.classList.remove("hidden");
