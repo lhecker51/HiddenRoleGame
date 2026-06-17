@@ -343,6 +343,10 @@ socket.on("death", (player_name) => {
     update_player_list();
 });
 
+socket.on("no_death", () => {
+    console.log("No-one died.");
+    someoneDiedThisNight = false;
+});
 
 socket.on("you_died", () => {
     console.log("You died...");
