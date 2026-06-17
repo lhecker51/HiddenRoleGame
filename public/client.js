@@ -336,7 +336,7 @@ socket.on("selected_werewolf", (victim) => {
 
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
-    document.getElementById("night-result").innerHTML = `<b>${player_name}</b> wurde heute Nacht umgebracht!`;
+    document.getElementById("night-result").innerHTML = `<b>${player_name}</b> was killed last night!`;
     const player_index = players.indexOf(player_name);
     if (player_index > -1) {
         players.splice(player_index, 1);
@@ -363,8 +363,8 @@ socket.on("start_day", (number) => {
     document.getElementById("day-count").innerHTML = number.toString();
 
     const resultElement = document.getElementById("night-result");
-    if (!resultElement.innerHTML.includes("wurde heute Nacht umgebracht")) {
-        resultElement.innerHTML = "Die Nacht verlief ruhig. Niemand ist gestorben!";
+    if (!resultElement.innerHTML.includes("was killed last night")) {
+        resultElement.innerHTML = "The night went by calmly. No-one died.";
     }
 
     document.getElementById("day-screen").classList.remove("hidden");
@@ -464,18 +464,18 @@ socket.on("village_won", (werewolf_list) => {
 
     if (role === "Villager") {
         if (amIDead) {
-            fateDisplay.textContent = "☠️ Du wurdest von den Werwölfen gefressen... aber dein Dorf hat überlebt und gewonnen!";
+            fateDisplay.textContent = "You were mauled by the werewolves... but your friends fought back and won!";
         } else {
-            fateDisplay.textContent = "🎉 Du hast überlebt und die Werwölfe erfolgreich vertrieben! Das Dorf ist sicher.";
+            fateDisplay.textContent = "You survived and banished the werewolves! The village is safe now.";
         }
     } else if (role === "Seer") {
         if (amIDead) {
-            fateDisplay.textContent = "☠️ Die Werwölfe haben dich erwischt, weil du zu viel wusstest... aber deine Visionen haben dem Dorf zum Sieg verholfen!";
+            fateDisplay.textContent = "The werewolves killed you because you knew too much... But your friends in the village avenged you!";
         } else {
-            fateDisplay.textContent = "🔮 Deine Seherkräfte haben das Dorf gerettet! Du hast überlebt und die Werwölfe besiegt.";
+            fateDisplay.textContent = "Your seeing powers saved the village! You stand victorious over the werewolves.";
         }
     } else if (role === "Werewolf") {
-        fateDisplay.textContent = "💀 Du wurdest vom Dorf enttarnt und gehängt. Dein Rudel hat verloren!";
+        fateDisplay.textContent = "You were discovered and hanged by the villagers... Your killing spree has ended!";
     }
 
     werewolves.length = 0;
@@ -503,15 +503,15 @@ socket.on("werewolves_won", (werewolf_list) => {
 
     if (role === "Werewolf") {
         if (amIDead) {
-            fateDisplay.textContent = "☠️ Du wurdest tagsüber vom Dorf gelyncht... aber dein Rudel hat das Dorf am Ende trotzdem überrannt! Sieg!";
+            fateDisplay.textContent = "You were lynched by those pesky villagers... But your fellow wolves avenged your death!";
         } else {
-            fateDisplay.textContent = "🐺 Heul! Du hast überlebt und das Dorf komplett ausgelöscht. Der Wald gehört euch!";
+            fateDisplay.textContent = "You survived and decimated the village! The woods belong to you now...";
         }
     } else if (role === "Villager" || role === "Seer") {
         if (amIDead) {
-            fateDisplay.textContent = "💀 Du bist in der Nacht gestorben... und das restliche Dorf wurde ebenfalls vernichtet.";
+            fateDisplay.textContent = "You were killed by the werewolves... and your friends all had a same fate.";
         } else {
-            fateDisplay.textContent = "😰 Du hast zwar die Nächte überlebt, aber die Werwölfe haben die Übermacht erlangt. Du wurdest überrannt!";
+            fateDisplay.textContent = "You survived the night, but the werewolves have now overrun the village...";
         }
     }
 
