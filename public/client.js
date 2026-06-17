@@ -363,11 +363,17 @@ socket.on("start_day", (number) => {
     document.getElementById("day-count").innerHTML = number.toString();
 
     const resultElement = document.getElementById("night-result");
-    if (!resultElement.innerHTML.includes("was killed last night")) {
+    if (!resultElement.innerHTML.includes("was killed!")) {
         resultElement.innerHTML = "The night went by calmly. No-one died.";
     }
 
     document.getElementById("day-screen").classList.remove("hidden");
+    if (!amIDead) {
+        document.getElementById("voting-info-day").classList.remove("hidden");
+    } else {
+        document.getElementById("voting-info-day").innerHTML = "You are ghosting around..."
+    }
+
 });
 
 socket.on("start_day_vote", () => {
