@@ -1,43 +1,58 @@
+/* Padding und Border zählen zur Gesamtgröße des Elements.
+   Dadurch werden Buttons und Inputs nicht plötzlich breiter als erwartet. */
 * {
     box-sizing: border-box;
 }
 
+/* Allgemeiner Stil für die ganze Seite */
 body {
     margin: 0;
     overflow: hidden;
+
     background-color: #080812;
     color: white;
+
     font-family: 'Courier New', Courier, monospace;
     font-size: 32px;
-    text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000;
-    /*font-family: 'Pixelify Sans', cursive; !* или 'Press Start 2P' *!*/
-    /*font-size: 24px;*/
-    /*font-family: Arial, sans-serif;*/
+
+    /* Schwarzer Schatten um den Text, damit er auf dem Hintergrund besser lesbar ist */
+    text-shadow:
+            2px 0 0 #000,
+            -2px 0 0 #000,
+            0 2px 0 #000,
+            0 -2px 0 #000;
 }
 
-button, input, select, textarea {
+/* Buttons und Eingabefelder nehmen den gleichen Font wie body.
+   Ohne inherit benutzen Browser oft ihren eigenen Standard-Font. */
+button,
+input,
+select,
+textarea {
     font-family: inherit;
-    font-size: 20px;
-
-    -webkit-font-smoothing: none;
-    -moz-osx-font-smoothing: grayscale;
 }
 
+/* Jeder Screen nimmt die ganze Bildschirmgröße ein.
+   Mit flex wird der Inhalt in die Mitte gesetzt. */
 .screen {
     position: relative;
+
     width: 100vw;
     min-height: 100vh;
-    /*margin: 50px auto;*/
     padding: 22px;
+
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+
     background-color: #171728;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
 }
+
+/* Die Box enthält den sichtbaren Inhalt: Titel, Text, Buttons, Listen */
 .box {
     position: relative;
     z-index: 3;
@@ -48,104 +63,108 @@ button, input, select, textarea {
     flex-direction: column;
     align-items: center;
 }
-/*.lg-bg {*/
-/*    background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5)),*/
-/*    url("https://c4.wallpaperflare.com/wallpaper/852/618/332/the-witcher-the-witcher-3-wild-hunt-wallpaper-preview.jpg");*/
 
-/*    background-size: 105%;*/
-/*    background-position: 40% center;*/
+/* Sichtbare Box nur auf dem Lobby-Screen */
+#game-screen .box {
+    padding: 28px 32px;
 
-/*    animation-name: moveBackground;*/
-/*    animation-duration: 10s;*/
-/*    animation-timing-function: ease-in-out;*/
-/*    animation-iteration-count: infinite;*/
-/*    animation-direction: alternate;*/
-/*}*/
+    background-color: rgba(10, 10, 22, 0.58);
+    border: 4px solid rgba(0, 0, 0, 0.75);
+
+    box-shadow:
+            inset 4px 4px 0 rgba(255, 255, 255, 0.08),
+            inset -4px -4px 0 rgba(0, 0, 0, 0.55),
+            0 10px 0 rgba(0, 0, 0, 0.55);
+}
+
+/* Damit kann ein Screen oder ein Element komplett versteckt werden */
+.hidden {
+    display: none;
+}
+
+/* Video als Hintergrund auf dem Login-Screen */
 .bg-video {
     position: absolute;
     inset: 0;
+
     width: 100%;
     height: 100%;
+
     object-fit: cover;
     z-index: 0;
 }
-.game-bg, .day-bg {
-    background-image:
-            linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-            url("images/village.jpg");
 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    image-rendering: pixelated;;
+/* Video im Role-Screen ist standardmäßig aus.
+   Es wird nur für Werewolf angezeigt. */
+#role-screen .role-video {
+    display: none;
 }
+
+/* Hintergrund für Lobby, Tag und Rollen-Screen */
+.game-bg,
+.day-bg,
 .role-bg {
     background-image:
-            linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+            linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
             url("images/village.jpg");
 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
+    image-rendering: pixelated;
 }
-.role-bg::before {
-    content: "";
-    position: absolute;
 
-    bottom: 4%;
-    left: 50%;
-
-    width: 170px;
-    height: 220px;
-    transform: translateX(-50%);
-    z-index: 1;
-    pointer-events: none;
-    animation: villageOrWerewolfMove 0.8s steps(2) infinite;
+/* Werewolf bekommt Video statt normalem Hintergrund */
+#role-screen.role-werewolf {
+    background-image: none;
+    background-color: #080812;
 }
-.role-bg.role-villager::before {
-    width: 260px;
-    height: 220px;
 
-    background-image:
-            url("images/villager_girl.png"),
-            url("images/villager_farmer.png");
-
-    background-size:
-            120px auto,
-            120px auto;
-
-    background-position:
-            left bottom,
-            right bottom;
-
-    background-repeat: no-repeat, no-repeat;
+/* Video nur bei Werewolf anzeigen */
+#role-screen.role-werewolf .role-video {
+    display: block;
 }
-.role-bg.role-werewolf::before {
-    width: 180px;
-    height: 240px;
 
-    background-image: url("images/werewolf.png");
-    background-size: contain;
-    background-position: center bottom;
-    background-repeat: no-repeat;
+/* Bei Werewolf kein Rollenbild anzeigen, weil stattdessen Video benutzt wird */
+#role-screen.role-werewolf::before {
+    display: none;
 }
+
+/* Hintergrund für Nacht-Screens */
 .night-villager-bg,
 .night-werewolf-bg {
     background-image:
-            linear-gradient(
-                    rgba(0, 0, 0, 0.45),
-                    rgba(0, 0, 0, 0.45)
-            ),
+            linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
             url("images/village_night.png");
 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
+    image-rendering: pixelated;
 }
+
+/* Hintergrund für Win-Screens */
+/* Brauche zu ändern un zu anpassen */
+.win-villager-bg,
+.win-werewolf-bg {
+    background-image:
+            linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+            url("images/village.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    image-rendering: pixelated;
+}
+
+/* Figuren auf dem Lobby-Screen */
 .character {
     position: absolute;
     bottom: 120px;
+
     width: 90px;
 
     z-index: 1;
@@ -157,43 +176,145 @@ button, input, select, textarea {
 .girl {
     left: 39%;
 }
+
 .wolf {
     left: 55%;
     width: 100px;
     animation-delay: 0.3s;
 }
 
-.vote-list {
-    width: 100%;
-    margin-top: 20px;
+.role-bg::before {
+    content: "";
+    position: absolute;
 
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    bottom: 4%;
+    left: 50%;
+
+    width: 170px;
+    height: 220px;
+
+    transform: translateX(-50%);
+    z-index: 1;
+    pointer-events: none;
+
+    animation: villagerMove 0.8s steps(2) infinite;
 }
 
-.vote-card {
+/* Bild für Villager-Rolle */
+.role-bg.role-villager::before {
+    width: 260px;
+    height: 220px;
+
+    background-image: url("images/villager_girl.png");
+    background-size: 120px auto;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+}
+
+/*!* Bild für Werewolf-Rolle *!*/
+/*.role-bg.role-werewolf::before {*/
+/*    width: 180px;*/
+/*    height: 240px;*/
+
+/*    background-image: url("images/werewolf.png");*/
+/*    background-size: contain;*/
+/*    background-position: center bottom;*/
+/*    background-repeat: no-repeat;*/
+/*}*/
+
+/* Leichte Bewegung für Figuren */
+@keyframes villageWerewolfMove {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Bewegung für das Rollenbild.
+   translateX(-50%) bleibt dabei erhalten, damit das Bild zentriert bleibt. */
+@keyframes villagerMove {
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-8px);
+    }
+}
+
+h1 {
+    color: white;
+}
+
+p {
+    color: #ccccdd;
+}
+
+/* Nur Textfelder werden so gestylt.
+   Nicht einfach input schreiben, sonst werden auch radio buttons kaputt gestylt. */
+input[type="text"] {
     width: 100%;
-    padding: 14px 18px;
 
-    display: flex;
-    align-items: center;
-    gap: 16px;
+    padding: 10px 12px;
+    margin-top: 10px;
 
-    background-color: rgba(25, 25, 40, 0.88);
+    background-color: #2b2b3d;
     color: white;
 
     border: 4px solid #111;
     border-radius: 0;
 
-    cursor: pointer;
-
+    font-size: 20px;
     text-shadow: 2px 2px 0 #000;
 
     box-shadow:
             inset 4px 4px 0 #44445c,
-            inset -4px -4px 0 #15151f,
-            0 5px 0 #070204;
+            inset -4px -4px 0 #15151f;
+
+    outline: none;
+}
+
+/* Wenn man in ein Eingabefeld klickt */
+input[type="text"]:focus {
+    background-color: #34344a;
+
+    box-shadow:
+            inset 4px 4px 0 #5c5c7a,
+            inset -4px -4px 0 #11111a,
+            0 0 0 3px rgb(90 23 48);
+}
+
+/* Ein einheitlicher Stil für alle normalen Buttons */
+button {
+    width: 100%;
+    max-width: 700px;
+
+    padding: 14px 18px;
+    margin-top: 16px;
+
+    background-color: #5a1730;
+    color: white;
+
+    border: 4px solid #12040a;
+    border-radius: 0;
+
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    cursor: pointer;
+    text-shadow: 2px 2px 0 #000;
+
+    box-shadow:
+            inset 4px 4px 0 #8a2b4d,
+            inset -4px -4px 0 #2a0815,
+            0 6px 0 #070204;
 
     transition:
             transform 0.08s ease,
@@ -201,17 +322,21 @@ button, input, select, textarea {
             background-color 0.15s ease;
 }
 
-.vote-card:hover {
-    background-color: rgba(70, 20, 38, 0.92);
+/* Wenn die Maus über dem Button ist */
+button:hover {
+    background-color: #711d3c;
 
     box-shadow:
-            inset 4px 4px 0 #8a2b4d,
-            inset -4px -4px 0 #2a0815,
-            0 5px 0 #070204;
+            inset 4px 4px 0 #a83a63,
+            inset -4px -4px 0 #350a1a,
+            0 6px 0 #070204;
 }
 
-.vote-card:active {
-    transform: translateY(5px);
+/* Wenn der Button gerade gedrückt wird */
+button:active {
+    transform: translateY(6px);
+
+    background-color: #461124;
 
     box-shadow:
             inset -4px -4px 0 #8a2b4d,
@@ -219,45 +344,7 @@ button, input, select, textarea {
             0 0 0 #070204;
 }
 
-.vote-card.selected {
-    background-color: rgba(90, 23, 48, 0.96);
-    border-color: #12040a;
-
-    box-shadow:
-            inset 4px 4px 0 #a83a63,
-            inset -4px -4px 0 #2a0815,
-            0 0 0 4px rgba(255, 255, 255, 0.25),
-            0 5px 0 #070204;
-}
-
-.vote-card input {
-    display: none;
-}
-
-.vote-icon {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background-color: #2b2b3d;
-    border: 3px solid #111;
-
-    font-size: 24px;
-
-    box-shadow:
-            inset 3px 3px 0 #44445c,
-            inset -3px -3px 0 #15151f;
-}
-
-.vote-name {
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
+/* Wenn ein Button deaktiviert ist */
 button:disabled {
     opacity: 0.45;
     cursor: not-allowed;
@@ -270,166 +357,198 @@ button:disabled {
             0 6px 0 #070204;
 }
 
-@keyframes villageWerewolfMove {
-    0%, 100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-8px);
-    }
-}
-
-/*@keyframes moveBackground {*/
-/*    from {*/
-/*        background-size: cover, 105%;*/
-/*        background-position: center, 40% center;*/
-/*    }*/
-
-/*    to {*/
-/*        background-size: cover, 125%;*/
-/*        background-position: center, 60% center;*/
-/*    }*/
-/*}*/
-
-@keyframes villageOrWerewolfMove {
-    0%, 100% {
-        transform: translateX(-50%) translateY(0);
-    }
-
-    50% {
-        transform: translateX(-50%) translateY(-8px);
-    }
-}
-h1 {
-    color: white;
-}
-
-p {
-    color: #ccccdd;
-}
-
-input {
+/* Container für die Spielerliste in der Lobby */
+.container-player {
     width: 100%;
-    padding: 10px 12px;
+    max-width: 700px;
     margin-top: 10px;
+    padding: 0;
+}
 
-    background-color: #2b2b3d;
+/* Einheitlicher Stil für normale Listen */
+.game-list,
+.list {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    font-size: 20px;
+}
+
+/* Einzelne Einträge in normalen Listen */
+.game-list li,
+.list li {
+    padding: 10px 14px;
+
+    background-color: rgba(36, 36, 56, 0.92);
     color: white;
 
     border: 4px solid #111;
-    border-radius: 0;
 
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 20px;
+    text-shadow: 2px 2px 0 #000;
+
+    box-shadow:
+            inset 3px 3px 0 #44445c,
+            inset -3px -3px 0 #15151f;
+}
+
+/* Container für alle Vote-Karten */
+.vote-list {
+    width: 100%;
+    max-width: 700px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+/* Eine einzelne Karte im Voting */
+.vote-card {
+    position: relative;
+
+    width: 100%;
+    min-height: 72px;
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    padding: 14px 22px;
+
+    background-color: rgba(25, 25, 40, 0.92);
+    color: white;
+
+    border: 4px solid #111;
+
+    cursor: pointer;
+
+    font-size: 28px;
+    font-weight: bold;
 
     text-shadow: 2px 2px 0 #000;
 
     box-shadow:
             inset 4px 4px 0 #44445c,
-            inset -4px -4px 0 #15151f;
+            inset -4px -4px 0 #15151f,
+            0 6px 0 #070204;
 
-    outline: none;
+    transition:
+            transform 0.08s ease,
+            background-color 0.15s ease,
+            box-shadow 0.08s ease;
 }
 
-input:focus {
-    background-color: #34344a;
-
-    box-shadow:
-            inset 4px 4px 0 #5c5c7a,
-            inset -4px -4px 0 #11111a,
-            0 0 0 3px rgb(90 23 48);
-}
-
-button {
-    width: 100%;
-    padding: 14px 18px;
-    margin-top: 16px;
-
-    background-color: #5a1730; /* темнее старого #7a1f3d */
-    color: white;
-
-    border: 4px solid #12040a;
-    border-radius: 0;
-
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-
-    cursor: pointer;
-
-    text-shadow: 2px 2px 0 #000;
+/* Wenn die Maus über einer Vote-Karte ist */
+.vote-card:hover {
+    background-color: rgba(70, 20, 38, 0.96);
 
     box-shadow:
             inset 4px 4px 0 #8a2b4d,
             inset -4px -4px 0 #2a0815,
             0 6px 0 #070204;
-
-    transition:
-            transform 0.08s ease,
-            box-shadow 0.08s ease,
-            background-color 0.15s ease;
 }
 
-button:hover {
-    background-color: #711d3c;
+/* Der echte radio button bleibt technisch vorhanden,
+   aber man sieht ihn nicht. Klickbar ist die ganze Karte. */
+.vote-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Ausgewählte Vote-Karte */
+.vote-card.selected {
+    background-color: rgba(100, 24, 52, 0.98);
 
     box-shadow:
             inset 4px 4px 0 #a83a63,
-            inset -4px -4px 0 #350a1a,
+            inset -4px -4px 0 #2a0815,
+            0 0 0 4px rgba(255, 255, 255, 0.25),
             0 6px 0 #070204;
 }
 
-button:active {
-    transform: translateY(6px);
+/* Icon links in der Vote-Karte */
+.vote-icon {
+    width: 48px;
+    height: 48px;
 
-    background-color: #461124;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #2b2b3d;
+
+    border: 3px solid #111;
+
+    font-size: 26px;
 
     box-shadow:
-            inset -4px -4px 0 #8a2b4d,
-            inset 4px 4px 0 #2a0815,
-            0 0 0 #070204;
+            inset 3px 3px 0 #44445c,
+            inset -3px -3px 0 #15151f;
 }
 
-.hidden {
-    display: none;
+/* Name des Spielers in der Vote-Karte */
+.vote-name {
+    font-size: 30px;
 }
 
-.container-player {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 10px;
-    padding: 0;
-}
-
-.list {
-    font-size: 20px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.list li {
-    font-family: Georgia, serif;
-    padding: 10px;
-    margin-top: 8px;
-    background-color: #242438;
-}
-
+/* Anpassungen für mobile version */
 @media screen and (max-width: 768px) {
-    .container {
-        width: 100%;
-        padding: 10px;
+    body {
+        font-size: 24px;
     }
 
-    .header {
-        display: none;
+    .screen {
+        padding: 16px;
     }
 
-    .mobile-menu {
-        display: block;
+    .box {
+        width: 94vw;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 12px 14px;
+    }
+
+    input[type="text"] {
+        font-size: 18px;
+    }
+
+    .vote-card {
+        min-height: 60px;
+        padding: 12px 16px;
+
+        font-size: 22px;
+        gap: 14px;
+    }
+
+    .vote-icon {
+        width: 40px;
+        height: 40px;
+
+        font-size: 22px;
+    }
+
+    .vote-name {
+        font-size: 22px;
+    }
+
+    .character {
+        bottom: 90px;
+        width: 70px;
+    }
+
+    .wolf {
+        width: 80px;
     }
 }

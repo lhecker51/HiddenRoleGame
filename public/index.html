@@ -8,11 +8,13 @@
 </head>
 <body>
 
-<!-- login screen -->
+<!-- Login-Screen: hier gibt der Spieler seinen Namen und den Session-Code ein -->
 <section id="login-screen" class="screen lg-bg">
+    <!-- Video im Hintergrund -->
     <video autoplay muted loop playsinline class="bg-video">
         <source src="images/village.mp4" type="video/mp4">
     </video>
+
     <div class="box">
         <h1>There are Werewolves among us…</h1>
         <p><i>Enter your name and join a session.</i></p>
@@ -24,79 +26,105 @@
 </section>
 
 
-<!--hier kommen die spieler hin, die eingeloggt sind-->
+<!-- Lobby-Screen: hier sieht man alle Spieler, die der Session beigetreten sind -->
 <section id="game-screen" class="screen hidden game-bg">
+    <!-- Dekorative Figuren im Hintergrund. -->
+    <!--
     <img class="character girl" src="images/villager_girl.png" alt="">
     <img class="character wolf" src="images/wolf_mask.png" alt="">
+    -->
     <div class="box">
         <h2>Waiting for players...</h2>
         <p id="session-code-p"></p>
         <p>Players in session:</p>
         <div class="container-player">
-            <ul id="player-list"></ul>
+            <ul id="player-list" class="game-list"></ul>
         </div>
         <button id="start-btn">Start game</button>
     </div>
 </section>
 
+
+<!-- Rollen-Screen: hier sieht jeder Spieler seine Rolle -->
 <section id="role-screen" class="screen hidden role-bg">
+    <!-- Video nur für Werewolf-Rolle -->
+    <video autoplay muted loop playsinline class="bg-video role-video">
+        <source src="images/village.mp4" type="video/mp4">
+    </video>
     <div class="box">
         <div id="timer-display" class="hidden">Timer: <span id="timer-seconds">0</span>s</div>
         <h1>Your role is: </h1>
         <h2 id="role-name"></h2>
         <div id="werewolf-team" class="hidden">
             <p>Your Werewolf team:</p>
-            <ul id="werewolf-team-list"></ul>
+            <ul id="werewolf-team-list" class="game-list"></ul>
         </div>
     </div>
 </section>
 
+
+<!-- Nacht-Screen für Dorfbewohner: sie warten nur -->
 <section id="night-villager-screen" class="screen hidden night-villager-bg">
     <h1 id="villager-night">
-        Night: <span id="villager-night-count">1</span>
+        Night: <span id="villager-night-count"></span>
     </h1>
     <p>You are sleeping</p>
     <p>Wait until werewolves choose a victim</p>
 </section>
 
+
+<!-- Nacht-Screen für Werwölfe: hier wählen sie ein Opfer -->
 <section id="night-werewolf-screen" class="screen hidden night-werewolf-bg">
-    <h1 id="werewolf-night">
-        Night: <span id="werewolf-night-count">1</span>
-    </h1>
-    <h2>Choose a victim: </h2>
-    <div id="night-voting-list"></div>
-    <button id="werewolf-victim-btn">Submit kill vote</button>
+    <div class="box">
+        <h1 id="werewolf-night">
+            Night: <span id="werewolf-night-count"></span>
+        </h1>
+        <div id="timer-display" class="hidden">Timer: <span id="timer-seconds">0</span>s</div>
+        <h2>Choose a victim: </h2>
+        <div id="night-voting-list" class="vote-list"></div>
+        <button id="werewolf-victim-btn">Submit kill vote</button>
+    </div>
 </section>
 
+
+<!-- Tag-Screen: hier sehen Spieler das Ergebnis der Nacht und können diskutieren/voten -->
 <section id="day-screen" class="screen hidden day-bg">
-    <h1 id="day">
-        Day: <span id="day-count">1</span>
-    </h1>
-    <p id="night-result">Someone was killed during the night:</p>
-    <p>You can discuss and vote for a werewolf: </p>
-    <div id="day-voting-list"></div>
-    <button id="werewolf-vote-btn">Vote for werewolf</button>
+    <div class="box">
+        <h1 id="day">
+            Day: <span id="day-count">1</span>
+        </h1>
+        <div id="timer-display" class="hidden">Timer: <span id="timer-seconds">0</span>s</div>
+        <p id="night-result">Someone was killed during the night:</p>
+        <p>You can discuss and vote for a werewolf: </p>
+        <div id="day-voting-list" class="vote-list"></div>
+        <button id="werewolf-vote-btn">Vote for werewolf</button>
+    </div>
 </section>
 
+
+<!-- Endscreen: die Dorfbewohner haben gewonnen -->
 <section id="win-villager-screen" class="screen hidden win-villager-bg">
     <h1 id="villager-win">Villager wins!</h1>
     <h2>Game over!</h2>
     <p>The werewolves were killed by the villagers</p>
     <p>The werewolves were: </p>
-    <div id="werewolf-villager-list"></div>
+    <div id="werewolf-villager-list" class="game-list"></div>
     <button id="restart-villager-btn">Restart game</button>
 </section>
 
+
+<!-- Endscreen: die Werwölfe haben gewonnen -->
 <section id="win-werewolf-screen" class="screen hidden win-werewolf-bg">
     <h1 id="werewolf-win">Werewolf wins!</h1>
     <h2>Game over!</h2>
     <p>The villagers were killed by the werewolves</p>
     <p>The werewolves were: </p>
-    <div id="werewolf-list"></div>
+    <div id="werewolf-list" class="game-list"></div>
     <button id="restart-werewolf-btn">Restart game</button>
 </section>
 
 <script src="/socket.io/socket.io.js"></script>
+
 <script src="client.js"></script>
 </body>
 </html>

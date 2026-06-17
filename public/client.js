@@ -10,8 +10,7 @@ const werewolves = [];
 let role;
 let countdownInterval = null;
 
-
-//lobby and join
+// lobby and join
 document.getElementById("join-btn").addEventListener("click", () => {
     console.log("Join button clicked.");
     const player_name = document.getElementById("player-name").value.trim();
@@ -33,13 +32,13 @@ socket.on("join_success", () => {
 });
 
 socket.on("player_joined", (player_name) => {
-    console.log("Player joined.");
+    console.log("Player joined:", player_name);
     players.push(player_name);
     update_player_list();
 });
 
 socket.on("player_left", (player_name) => {
-    console.log("Player left.");
+    console.log("Player left:", player_name);
     const index = players.indexOf(player_name);
     if (index > -1) {
         players.splice(index, 1);
@@ -59,13 +58,10 @@ document.getElementById("start-btn").addEventListener("click", () => {
 
 socket.on("start_success", () => {
     console.log("Game start successful!");
-})
-
+});
 
 socket.on("timer", (timeMilliseconds) => {
-    const totalSeconds = timeMilliseconds / 1000;
     console.log(`Started timer for ${timeMilliseconds / 1000} seconds...`);
-
 
     if (countdownInterval) {
         clearInterval(countdownInterval);
@@ -74,7 +70,9 @@ socket.on("timer", (timeMilliseconds) => {
     const timerDisplay = document.getElementById("timer-display");
     const timerSeconds = document.getElementById("timer-seconds");
 
-    timerSeconds.textContent = secondsLeft;
+    let secondsLeft = timeMilliseconds / 1000;
+
+    timerSeconds.textContent = secondsLeft.toString();
     timerDisplay.classList.remove("hidden");
 
     countdownInterval = setInterval(() => {
@@ -86,14 +84,13 @@ socket.on("timer", (timeMilliseconds) => {
             timerDisplay.classList.add("hidden");
             console.log("Client-Timer abgelaufen.");
         } else {
-            timerSeconds.textContent = secondsLeft;
+            timerSeconds.textContent = secondsLeft.toString();
         }
     }, 1000);
 });
 
-
-
 socket.on("role_update", (received_role) => {
+    console.log("Role update received:", received_role);
     role = received_role;
     document.getElementById("game-screen").classList.add("hidden");
     document.getElementById("role-name").innerHTML = role;
@@ -104,7 +101,6 @@ socket.on("role_update", (received_role) => {
     } else if (role == "Werewolf") {
         document.getElementById("role-screen").classList.add("role-werewolf");
     }
-    console.log("Role update received:", received_role);
     document.getElementById("role-screen").classList.remove("hidden");
 });
 
@@ -124,19 +120,21 @@ function update_werewolf_list() {
 
 socket.on("start_night", (number) => {
     console.log("It is night", number);
+
+    document.getElementById("villager-night-count").innerHTML = number.toString();
+    document.getElementById("werewolf-night-count").innerHTML = number.toString();
+
     document.getElementById("role-screen").classList.add("hidden");
     if (role == "Villager") {
         document.getElementById("night-villager-screen").classList.remove("hidden");
-        console.log("villager screen worked");
-
+        console.log("Showing villager night screen.");
     } else if (role == "Werewolf") {
         document.getElementById("night-werewolf-screen").classList.remove("hidden");
-        console.log("werewolf screen worked");
+        console.log("Showing werewolf night screen.");
     }
 });
 
 function start_werewolf_voting() {
-    console.log("Started radiobutton creation");
     const victim_container = document.getElementById("night-voting-list");
     victim_container.innerHTML = "";
     const victim_list = get_victims();
@@ -150,19 +148,36 @@ function start_werewolf_voting() {
         radioButton.value = value;
         radioButton.id = radioId;
 
+        const label = document.createElement('label');
+        label.htmlFor = radioId;
+        label.classList.add("vote-card");
+
+        const icon = document.createElement("span");
+        icon.classList.add("vote-icon");
+        icon.textContent = "☠";
+
+        const name = document.createElement("span");
+        name.classList.add("vote-name");
+        name.textContent = value;
+
         radioButton.addEventListener("change", (e) => {
             const current_selection = e.target.value;
-            console.log("Auswahl geändert auf:", current_selection);
+            console.log("Selected victim:", current_selection);
+
+            document.querySelectorAll(".vote-card").forEach(card => {
+                card.classList.remove("selected");
+            });
+
+            label.classList.add("selected");
 
             socket.emit("select_werewolf", current_selection);
         });
 
-        const label = document.createElement('label');
-        label.htmlFor = radioId;
-        label.textContent = value;
+        label.appendChild(radioButton);
+        label.appendChild(icon);
+        label.appendChild(name);
 
-
-        victim_container.appendChild(radioButton);
+        //victim_container.appendChild(radioButton);
         victim_container.appendChild(label);
     });
 }
@@ -181,7 +196,7 @@ function setup_werewolf_submit() {
             return;
         }
 
-        console.log("You locked in vote for:", selected_value);
+        console.log("Voted to kill victim:", selected_value);
 
         socket.emit("vote_werewolf", selected_value);
 
@@ -198,7 +213,7 @@ function get_werewolf_result() {
 
 
 function get_victims() {
-    console.log("Victim Berechnung wurde geladen.");
+    console.log("Calculating possible victims...");
     return players.filter(victim => !werewolves.includes(victim));
 
 }
@@ -206,12 +221,16 @@ function get_victims() {
 socket.on("start_werewolf_vote", () => {
     console.log("Werewolf vote started...");
 
+    const submitBtn = document.getElementById("werewolf-victim-btn");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Vote";
+
     start_werewolf_voting();
     setup_werewolf_submit();
 });
 
 
-//schickt mir info ueber alle selected victims von den woelfen
+// schickt mir info über alle selected victims von den wölfen
 socket.on("selected_werewolf", (victim) => {
     console.log(victim, "was selected for killing...");
 });
@@ -225,13 +244,22 @@ socket.on("death", (player_name) => {
     }
     const werewolf_index = werewolves.indexOf(player_name);
     if (werewolf_index > -1) {
-        players.splice(werewolf_index, 1);
+        werewolves.splice(werewolf_index, 1);
+        update_werewolf_list();
     }
+});
+
+socket.on("you_died", () => {
+    console.log("You died...");
 });
 
 socket.on("start_day", (number) => {
     console.log("It is day", number);
-    document.getElementById("day-screen").classList.remove("Hidden");
+    document.getElementById("day-count").innerHTML = number.toString();
+    document.getElementById("night-villager-screen").classList.add("hidden");
+    document.getElementById("night-werewolf-screen").classList.add("hidden");
+
+    document.getElementById("day-screen").classList.remove("hidden");
 });
 
 socket.on("start_day_vote", () => {
