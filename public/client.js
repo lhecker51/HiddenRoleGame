@@ -239,15 +239,15 @@ function setup_werewolf_submit() {
             victim: selected_value
         });
 
-        clone.textContent = "Current vote confirmed";
+        //clone.textContent = "Current vote confirmed";
         //console.log("Voted to kill victim:", selected_value);
 
-        //socket.emit("vote_werewolf", selected_value);
+        socket.emit("vote_werewolf", selected_value);
 
-        //clone.disabled = true;
-        //clone.textContent = "Vote submitted...";
+        clone.disabled = true;
+        clone.textContent = "Vote submitted...";
 
-        //document.querySelectorAll('input[name="werewolf-voting"]').forEach(radio => radio.disabled = true);
+        document.querySelectorAll('input[name="werewolf-voting"]').forEach(radio => radio.disabled = true);
     });
 }
 
