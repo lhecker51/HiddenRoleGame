@@ -452,6 +452,22 @@ function setup_day_vote_submit() {
     });
 }
 
+socket.on("start_seeing", () => {
+    console.log("Start seeing...");
+    start_seer_voting();
+    setup_seer_vote_submit();
+});
+
+function start_seer_voting() {
+}
+
+function setup_seer_vote_submit() {
+}
+
+socket.on("seer_role_reveal", (role) => {
+   document.getElementById("seer-result").innerHTML = role;
+});
+
 socket.on("village_won", (werewolf_list) => {
     console.log("The villagers won the game!");
 
