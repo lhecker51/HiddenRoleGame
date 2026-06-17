@@ -347,6 +347,7 @@ socket.on("death", (player_name) => {
 
 socket.on("you_died", () => {
     console.log("You died...");
+    amIDead = true;
     showDeadPlayerState();
 });
 
@@ -591,7 +592,6 @@ function hideAllGameScreens() {
     });
 }
 function showDeadPlayerState() {
-    amIDead = true;
 
     hideAllGameScreens();
 
