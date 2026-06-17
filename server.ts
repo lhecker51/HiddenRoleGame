@@ -18,6 +18,7 @@ class Role {
 
 const villagerRole: Role = new Role("Villager");
 const werewolfRole: Role = new Role("Werewolf");
+const seerRole: Role = new Role("Seer");
 
 class Player {
     socket: Socket;
@@ -96,13 +97,12 @@ io.on("connection", (socket: Socket) => {
             return;
         }
 
-        const numberOfPlayers = session.players.length;
         if (session.round > 0) {
             socket.emit("error", {message: "Game has already started."});
             return;
         }
 
-        if (numberOfPlayers < 1) {  // adjust minimum number of players as needed
+        if (session.players.length < 1) {  // adjust minimum number of players as needed
             socket.emit("error", {message: "Too few players have joined this session."});
             return;
         }
@@ -110,26 +110,8 @@ io.on("connection", (socket: Socket) => {
         session.round = 1;
         socket.emit("start_success")
 
-        let numberOfWerewolves = 0;
-        while (numberOfWerewolves < Math.ceil(numberOfPlayers / 5.0)) {
-            const randomIndex = Math.floor(Math.random() * numberOfPlayers);
-            const player = session.players[randomIndex];
-            if (player.role === villagerRole) {
-                player.role = werewolfRole;
-                numberOfWerewolves++;
-            }
-        }
-
-        for (const player of session.players) {
-            player.socket.emit("role_update", player.role.name);
-        }
-
-        const werewolfList: Player[] = session.players.filter(p => p.role === werewolfRole);
-        for (const player of session.players) {
-            if (werewolfList.includes(player)) {
-                player.socket.emit("werewolf_list", werewolfList.map(p => p.name));
-            }
-        }
+        distributeRoles(session.players);
+        sendRoleUpdates(session.players);
 
         const timeoutMilliseconds: number = 10000;
         session.broadcast("timer", {name: "role-timer", time: timeoutMilliseconds});
@@ -172,12 +154,52 @@ io.on("connection", (socket: Socket) => {
     });
 });
 
+function distributeRoles(players: Player[]) {
+    let numberOfWerewolves = 0;
+    while (numberOfWerewolves < Math.ceil(players.length / 5.0)) {
+        const randomIndex = Math.floor(Math.random() * players.length);
+        const player = players[randomIndex];
+        if (player.role === villagerRole) {
+            player.role = werewolfRole;
+            numberOfWerewolves++;
+        }
+    }
+
+    if (players.length > 4) return;
+
+    let numberOfSeers = 0;
+    while (numberOfSeers < Math.ceil(players.length / 8.0)) {
+        const randomIndex = Math.floor(Math.random() * players.length);
+        const player = players[randomIndex];
+        if (player.role === villagerRole) {
+            player.role = seerRole;
+            numberOfSeers++;
+        }
+    }
+}
+
+function sendRoleUpdates(players: Player[]) {
+    for (const player of players) {
+        player.socket.emit("role_update", player.role.name);
+    }
+
+    const werewolfList: Player[] = players.filter(p => p.role === werewolfRole);
+    for (const player of players) {
+        if (werewolfList.includes(player)) {
+            player.socket.emit("werewolf_list", werewolfList.map(p => p.name));
+        }
+    }
+}
+
 async function handleNight(session: Session) {
     for (const player of session.players) {
         player.socket.emit("start_night", session.round);
         await sleep(2000);
         if (player.role === werewolfRole && player.isAlive) {
             player.socket.emit("start_werewolf_vote");
+        }
+        if (player.role === seerRole && player.isAlive) {
+            player.socket.emit("start_seeing");
         }
     }
 

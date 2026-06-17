@@ -248,6 +248,10 @@ socket.on("selected_werewolf", (victim) => {
     console.log(victim, "was selected for killing...");
 });
 
+socket.on("start_seeing", () => {
+    console.log("Starting seeing...");
+});
+
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
     document.getElementById("night-result").innerHTML += player_name;
