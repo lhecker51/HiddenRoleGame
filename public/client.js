@@ -121,6 +121,8 @@ socket.on("role_update", (received_role) => {
         document.getElementById("role-screen").classList.add("role-villager");
     } else if (role == "Werewolf") {
         document.getElementById("role-screen").classList.add("role-werewolf");
+    } else if (role == "Seer") {
+        document.getElementById("role-screen").classList.add("role-werewolf");
     }
     document.getElementById("role-screen").classList.remove("hidden");
 });
@@ -152,6 +154,9 @@ socket.on("start_night", (number) => {
     } else if (role == "Werewolf") {
         document.getElementById("night-werewolf-screen").classList.remove("hidden");
         console.log("Showing werewolf night screen.");
+    } else if (role == "Seer") {
+        document.getElementById("night-seer-screen").classList.remove("hidden");
+        console.log("Showing seer night screen.");
     }
 });
 
