@@ -83,7 +83,7 @@ socket.on("timer", ({name, time}) => {
         timerSeconds = document.getElementById("day-timer-seconds");
     }
 
-    printTimer(timerDisplay, timerSeconds, time);
+    printTimer(timerSeconds, timerDisplay, time);
 
 });
 
