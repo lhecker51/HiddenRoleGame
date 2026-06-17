@@ -76,8 +76,16 @@ socket.on("timer", ({name, time}) => {
         timerSeconds = document.getElementById("role-timer-seconds");
     }
     if (name == "night-timer") {
-        timerDisplay = document.getElementById("night-timer-display");
-        timerSeconds = document.getElementById("night-timer-seconds");
+        if (role === "Villager") {
+            timerDisplay = document.getElementById("night--timer-villager-display");
+            timerSeconds = document.getElementById("night-timer-villager-seconds");
+        } else if (role === "Werewolf") {
+            timerDisplay = document.getElementById("night-timer-werewolf-display");
+            timerSeconds = document.getElementById("night-timer-werewolf-seconds");
+        } else if (role === "Seer") {
+            timerDisplay = document.getElementById("night-timer-seer-display");
+            timerSeconds = document.getElementById("night-timer-seer-seconds");
+        }
     }
     if (name == "day-timer") {
         timerDisplay = document.getElementById("day-timer-display");
@@ -121,7 +129,7 @@ socket.on("role_update", (received_role) => {
     } else if (role == "Werewolf") {
         document.getElementById("role-screen").classList.add("role-werewolf");
     } else if (role == "Seer") {
-        document.getElementById("role-screen").classList.add("role-werewolf");
+        document.getElementById("role-screen").classList.add("role-seer");
     }
     document.getElementById("role-screen").classList.remove("hidden");
 
