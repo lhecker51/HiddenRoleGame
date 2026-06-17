@@ -230,7 +230,9 @@ async function handleNight(session: Session) {
     }
     for (const player of session.players) {
         player.socket.emit("start_night", session.round);
-        await sleep(2000);
+    }
+    await sleep(2000);
+    for (const player of session.players) {
         if (player.role === werewolfRole && player.isAlive) {
             player.socket.emit("start_werewolf_vote");
         }

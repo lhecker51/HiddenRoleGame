@@ -64,7 +64,10 @@ textarea {
 
 /* Sichtbare Box nur auf dem Lobby-Screen */
 #game-screen .box,
-#day-screen .box {
+#day-screen .box,
+#win-villager-screen. box,
+#win-werewolf-screen. box
+{
     padding: 28px 32px;
 
     background-color: rgba(10, 10, 22, 0.58);

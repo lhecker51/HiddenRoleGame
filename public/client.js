@@ -184,7 +184,7 @@ function start_werewolf_voting() {
     const victim_list = get_victims();
 
     victim_list.forEach((value, index) => {
-        const radioId = `option-${index}`;
+        const radioId = `night-option-${index}`;
 
         const radioButton = document.createElement('input');
         radioButton.type = 'radio';
@@ -385,7 +385,7 @@ function start_day_voting() {
     container.innerHTML = "";
 
     players.forEach((value, index) => {
-        const radioId = `option-${index}`;
+        const radioId = `day-option-${index}`;
 
         const radioButton = document.createElement('input');
         radioButton.type = 'radio';
