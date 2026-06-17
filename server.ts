@@ -132,7 +132,7 @@ io.on("connection", (socket: Socket) => {
         }
 
         const timeoutMilliseconds: number = 10000;
-        session.broadcast("timer", timeoutMilliseconds);
+        session.broadcast("timer", {name: "role-timer", time: timeoutMilliseconds});
         await sleep(timeoutMilliseconds);
         await handleNight(session);
     });
@@ -182,7 +182,7 @@ async function handleNight(session: Session) {
     }
 
     const timeoutMilliseconds: number = 20000;
-    session.broadcast("timer", timeoutMilliseconds);
+    session.broadcast("timer", {name: "night-timer", time: timeoutMilliseconds});
     await sleep(timeoutMilliseconds);
     concludeVoting(session);
     await proceedUnlessEnded(session, () => handleDay(session));
@@ -197,7 +197,7 @@ async function handleDay(session: Session) {
         }
     }
     const timeoutMilliseconds: number = 40000;
-    session.broadcast("timer", timeoutMilliseconds);
+    session.broadcast("timer", {name: "day-timer", time: timeoutMilliseconds});
     await sleep(timeoutMilliseconds);
     concludeVoting(session);
     await proceedUnlessEnded(session, () => handleNight(session));

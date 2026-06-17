@@ -60,23 +60,37 @@ socket.on("start_success", () => {
     console.log("Game start successful!");
 });
 
-socket.on("timer", (timeMilliseconds) => {
-    console.log(`Started timer for ${timeMilliseconds / 1000} seconds...`);
+socket.on("timer", ({name, time}) => {
+    console.log(`Started ${name} for ${time / 1000} seconds...`);
 
     if (countdownInterval) {
         clearInterval(countdownInterval);
     }
 
-    //hier logik welche html tags ausgewaehlt werden
-    
+    let timerDisplay;
+    let timerSeconds;
+
+    if (name == "role-timer") {
+        timerDisplay = document.getElementById("role-timer-display");
+        timerSeconds = document.getElementById("role-timer-seconds");
+    }
+    if (name == "night-timer") {
+        timerDisplay = document.getElementById("night-timer-display");
+        timerSeconds = document.getElementById("night-timer-seconds");
+    }
+    if (name == "day-timer") {
+        timerDisplay = document.getElementById("day-timer-display");
+        timerSeconds = document.getElementById("day-timer-seconds");
+    }
+
+    printTimer(timerDisplay, timerSeconds, time);
+
 });
 
 //parameter: html tags
 function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
-    const timerDisplay = document.getElementById(timerSeconds);
-    const timerSeconds = document.getElementById(timerDisplay);
 
-    let secondsLeft = timeMilliseconds / 1000;
+    let secondsLeft = time / 1000;
 
     timerSeconds.textContent = secondsLeft.toString();
     timerDisplay.classList.remove("hidden");
