@@ -170,7 +170,7 @@ function distributeRoles(players: Player[]) {
         }
     }
 
-    if (players.length > 4) return;
+    if (players.length < 4) return;
 
     let numberOfSeers = 0;
     while (numberOfSeers < Math.ceil(players.length / 8.0)) {
@@ -265,13 +265,20 @@ async function proceedUnlessEnded(session: Session, func: Function) {
         }
     }
 
+    const werewolfList: Player[] = [];
+    for (const player of session.players) {
+        if (player.role === werewolfRole) {
+            werewolfList.push(player.name);
+        }
+    }
+
     if (numberOfWerewolvesAlive === 0) {
-        session.broadcast("village_won");
+        session.broadcast("village_won", werewolfList);
         return;
     }
 
     if (numberOfWerewolvesAlive > numberOfVillagersAlive) {
-        session.broadcast("werewolves_won");
+        session.broadcast("werewolves_won", werewolfList);
         return;
     }
 
