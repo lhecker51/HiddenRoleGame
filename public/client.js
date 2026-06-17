@@ -313,7 +313,7 @@ socket.on("village_won", () => {
         console.log("Restart button was clicked.");
         socket.emit("restart_game", session_code);
 
-        resetClientStarte();
+        resetClientState();
     }, { once: true});
 });
 
@@ -353,6 +353,21 @@ function resetClientState() {
 
 socket.on("werewolves_won", () => {
     console.log("The werewolves won the game!");
+    document.getElementById('win-werewolf-screen').classList.remove("hidden");
+    if (werewolf_list) {
+        werewolves.length = 0;
+        for (const werewolf of werewolf_list) {
+            werewolves.push(werewolf);
+        }
+        update_werewolf_list("werewolf-list");
+    }
+    const restart_button = document.getElementById('restart-werewolf-btn');
+    restart_button.addEventListener("click", () => {
+        console.log("Restart button was clicked.");
+        socket.emit("restart_game", session_code);
+
+        resetClientState();
+    }, { once: true});
 });
 
 socket.on("error", (data) => {
