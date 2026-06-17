@@ -581,7 +581,8 @@ function hideAllGameScreens() {
         "night-villager-screen",
         "night-werewolf-screen",
         "night-seer-screen",
-        "day-screen"
+        "day-screen",
+        "werewolf-team"
     ];
     screens.forEach(id => {
         const el = document.getElementById(id);
