@@ -141,8 +141,8 @@ socket.on("role_update", (received_role) => {
 
 socket.on("werewolf_list", (werewolf_list) => {
     document.getElementById("werewolf-team").classList.remove("hidden");
-    werewolves.length = 0; 
-    
+    werewolves.length = 0;
+
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
     }
@@ -351,7 +351,7 @@ socket.on("death", (player_name) => {
 
 socket.on("you_died", () => {
     console.log("You died...");
-    amIDead = True;
+    amIDead = true;
     document.getElementById('night-result').classList.add("hidden");
     document.getElementById('own-death-bool').classList.remove("hidden");
 });
@@ -372,13 +372,13 @@ socket.on("start_day_vote", () => {
 
 socket.on("village_won", (werewolf_list) => {
     console.log("The villagers won the game!");
-    
+
     hideAllGameScreens();
 
     document.getElementById('win-villager-screen').classList.remove("hidden");
 
     const fateDisplay = document.getElementById("villager-win-fate");
-    
+
     if (role === "Villager") {
         if (amIDead) {
             fateDisplay.textContent = "☠️ Du wurdest von den Werwölfen gefressen... aber dein Dorf hat überlebt und gewonnen!";
@@ -394,7 +394,7 @@ socket.on("village_won", (werewolf_list) => {
     } else if (role === "Werewolf") {
         fateDisplay.textContent = "💀 Du wurdest vom Dorf enttarnt und gehängt. Dein Rudel hat verloren!";
     }
-    
+
     werewolves.length = 0;
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
@@ -405,13 +405,13 @@ socket.on("village_won", (werewolf_list) => {
     restart_button.addEventListener("click", () => {
         socket.emit("restart_game", session_code);
         resetClientState();
-    }, { once: true});
+    }, {once: true});
 });
 
 
 socket.on("werewolves_won", (werewolf_list) => {
     console.log("The werewolves won the game!");
-    
+
     hideAllGameScreens();
 
     document.getElementById('win-werewolf-screen').classList.remove("hidden");
@@ -431,7 +431,7 @@ socket.on("werewolves_won", (werewolf_list) => {
             fateDisplay.textContent = "😰 Du hast zwar die Nächte überlebt, aber die Werwölfe haben die Übermacht erlangt. Du wurdest überrannt!";
         }
     }
-    
+
     werewolves.length = 0;
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
@@ -442,7 +442,7 @@ socket.on("werewolves_won", (werewolf_list) => {
     restart_button.addEventListener("click", () => {
         socket.emit("restart_game", session_code);
         resetClientState();
-    }, { once: true});
+    }, {once: true});
 });
 
 socket.on("error", (data) => {
@@ -461,18 +461,18 @@ function resetClientState() {
         countdownInterval = null;
     }
 
-    werewolves.length = 0; 
+    werewolves.length = 0;
     role = null;
 
     document.getElementById("status").textContent = "";
     document.getElementById("night-result").innerHTML = "Someone was killed during the night:";
 
     const screensToHide = [
-        "role-screen", 
-        "night-villager-screen", 
-        "night-werewolf-screen", 
+        "role-screen",
+        "night-villager-screen",
+        "night-werewolf-screen",
         "night-seer-screen",
-        "day-screen", 
+        "day-screen",
         "win-villager-screen",
         "win-werewolf-screen",
         "werewolf-team"

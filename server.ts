@@ -136,9 +136,9 @@ io.on("connection", (socket: Socket) => {
     });
 
     socket.on("restart_game", () => {
-    //TO DO: hier alles resetten!!!
-    console.log("The game was restarted. Reached server.");
-});
+        //TO DO: hier alles resetten!!!
+        console.log("The game was restarted. Reached server.");
+    });
 
     socket.on("disconnect", () => {
         const sessionCode = socket.data.code;
@@ -239,8 +239,7 @@ function concludeVoting(session: Session) {
             mostVotedPlayer = player;
             mostVotes = player.votes;
             tie = false;
-        }
-        else if (player.votes == mostVotes && player.votes > 0) {
+        } else if (player.votes == mostVotes && player.votes > 0) {
             tie = true;
         }
         player.votes = 0;
