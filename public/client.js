@@ -191,6 +191,7 @@ function start_werewolf_voting() {
         radioButton.name = 'werewolf-voting';
         radioButton.value = value;
         radioButton.id = radioId;
+        radioButton.disabled = false;
 
         const label = document.createElement('label');
         label.htmlFor = radioId;
@@ -212,7 +213,7 @@ function start_werewolf_voting() {
             const current_selection = e.target.value;
             console.log("Selected victim:", current_selection);
 
-            document.querySelectorAll(".vote-card").forEach(card => {
+            victim_container.querySelectorAll(".vote-card").forEach(card => {
                 card.classList.remove("selected");
             });
 
@@ -389,6 +390,7 @@ function start_day_voting() {
         radioButton.name = 'day-voting';
         radioButton.value = value;
         radioButton.id = radioId;
+        radioButton.disabled = false;
 
         const label = document.createElement('label');
         label.htmlFor = radioId;
@@ -410,7 +412,7 @@ function start_day_voting() {
             const current_selection = e.target.value;
             console.log("Selected to vote:", current_selection);
 
-            document.querySelectorAll(".vote-card").forEach(card => {
+            container.querySelectorAll(".vote-card").forEach(card => {
                 card.classList.remove("selected");
             });
 
