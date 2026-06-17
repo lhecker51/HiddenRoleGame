@@ -458,6 +458,10 @@ function start_seer_voting() {
 function setup_seer_vote_submit() {
 }
 
+socket.on("seer_role_reveal", (role) => {
+   document.getElementById("seer-result").innerHTML = role;
+});
+
 socket.on("village_won", (werewolf_list) => {
     console.log("The villagers won the game!");
 

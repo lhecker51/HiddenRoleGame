@@ -149,6 +149,14 @@ io.on("connection", (socket: Socket) => {
         }
     });
 
+    socket.on("seer_role_reveal_request", (player_name) => {
+       for (const player of session.players) {
+           if (player.name == player_name) {
+               socket.emit("seer_role_reveal", player.role);
+           }
+       }
+    });
+
     socket.on("restart_game", () => {
         socket.emit("debug", "Restarting game...");
         session.round = 0;
