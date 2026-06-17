@@ -371,9 +371,58 @@ socket.on("start_day", (number) => {
 });
 
 socket.on("start_day_vote", () => {
-    //TODO
     console.log("Day vote started!");
+    start_day_voting();
 });
+
+function start_day_voting() {
+    const container = document.getElementById("day-voting-list");
+    container.innerHTML = "";
+
+    players.forEach((value, index) => {
+        const radioId = `option-${index}`;
+
+        const radioButton = document.createElement('input');
+        radioButton.type = 'radio';
+        radioButton.name = 'day-voting';
+        radioButton.value = value;
+        radioButton.id = radioId;
+
+        const label = document.createElement('label');
+        label.htmlFor = radioId;
+        label.classList.add("day-vote-card");
+        label.dataset.target = value;
+
+        const icon = document.createElement("span");
+        icon.classList.add("day-vote-icon");
+        icon.textContent = "✘";
+
+        const name = document.createElement("span");
+        name.classList.add("day-vote-name");
+        name.textContent = value;
+
+        const voters = document.createElement("span");
+        voters.classList.add("day-voters");
+
+        radioButton.addEventListener("change", (e) => {
+            const current_selection = e.target.value;
+            console.log("Selected to vote:", current_selection);
+
+            document.querySelectorAll(".day-vote-card").forEach(card => {
+                card.classList.remove("selected");
+            });
+
+            label.classList.add("selected");
+        });
+
+        label.appendChild(radioButton);
+        label.appendChild(icon);
+        label.appendChild(name);
+        label.appendChild(voters);
+
+        container.appendChild(label);
+    });
+}
 
 socket.on("village_won", (werewolf_list) => {
     console.log("The villagers won the game!");
