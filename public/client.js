@@ -11,6 +11,7 @@ let role;
 let countdownInterval = null;
 let werewolfVotes = {};
 let amIDead = false;
+let someoneDiedThisNight = false;
 
 // lobby and join
 document.getElementById("join-btn").addEventListener("click", () => {
@@ -163,6 +164,9 @@ socket.on("start_night", (number) => {
         return;
     }
     console.log("It is night", number);
+
+    someoneDiedThisNight = false;
+
     hideAllGameScreens();
 
     document.getElementById("villager-night-count").innerHTML = number.toString();
@@ -324,6 +328,8 @@ socket.on("selected_werewolf", (victim) => {
 
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
+
+    someoneDiedThisNight = true;
     document.getElementById("night-result").innerHTML = `<b>${player_name}</b> was killed last night!`;
     const player_index = players.indexOf(player_name);
     if (player_index > -1) {
@@ -354,7 +360,7 @@ socket.on("start_day", (number) => {
     document.getElementById("day-count").innerHTML = number.toString();
 
     const resultElement = document.getElementById("night-result");
-    if (!resultElement.innerHTML.includes("was killed!")) {
+    if (!someoneDiedThisNight) {
         resultElement.innerHTML = "The night went by calmly. No-one died.";
     }
 
