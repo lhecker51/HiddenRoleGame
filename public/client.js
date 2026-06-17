@@ -336,7 +336,7 @@ socket.on("selected_werewolf", (victim) => {
 
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
-    document.getElementById("night-result").innerHTML += ` ${player_name}`;
+    document.getElementById("night-result").innerHTML = `<b>${player_name}</b> wurde heute Nacht umgebracht!`;
     const player_index = players.indexOf(player_name);
     if (player_index > -1) {
         players.splice(player_index, 1);
@@ -346,6 +346,7 @@ socket.on("death", (player_name) => {
         werewolves.splice(werewolf_index, 1);
         update_werewolf_list("werewolf-team-list");
     }
+    update_player_list();
 });
 
 
@@ -358,9 +359,13 @@ socket.on("you_died", () => {
 
 socket.on("start_day", (number) => {
     console.log("It is day", number);
+    hideAllGameScreens();
     document.getElementById("day-count").innerHTML = number.toString();
-    document.getElementById("night-villager-screen").classList.add("hidden");
-    document.getElementById("night-werewolf-screen").classList.add("hidden");
+
+    const resultElement = document.getElementById("night-result");
+    if (!resultElement.innerHTML.includes("wurde heute Nacht umgebracht")) {
+        resultElement.innerHTML = "Die Nacht verlief ruhig. Niemand ist gestorben!";
+    }
 
     document.getElementById("day-screen").classList.remove("hidden");
 });
@@ -436,7 +441,7 @@ socket.on("werewolves_won", (werewolf_list) => {
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
     }
-    update_werewolf_list("werewolf-list");
+    update_werewolf_list("werewolf-win-list");
 
     const restart_button = document.getElementById('restart-werewolf-btn');
     restart_button.addEventListener("click", () => {
