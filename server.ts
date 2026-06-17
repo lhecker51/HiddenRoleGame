@@ -150,11 +150,11 @@ io.on("connection", (socket: Socket) => {
     });
 
     socket.on("seer_role_reveal_request", (player_name) => {
-       for (const player of session.players) {
-           if (player.name == player_name) {
-               socket.emit("seer_role_reveal", player.role);
-           }
-       }
+        for (const player of session.players) {
+            if (player.name == player_name) {
+                socket.emit("seer_role_reveal", player.role.name);
+            }
+        }
     });
 
     socket.on("restart_game", () => {

@@ -184,7 +184,7 @@ function start_werewolf_voting() {
     const victim_list = get_victims();
 
     victim_list.forEach((value, index) => {
-        const radioId = `night-option-${index}`;
+        const radioId = `werwewolf-option-${index}`;
 
         const radioButton = document.createElement('input');
         radioButton.type = 'radio';
@@ -311,14 +311,12 @@ socket.on("werewolf_votes_update", ({votes}) => {
 function get_victims() {
     console.log("Calculating possible victims...");
     return players.filter(victim => !werewolves.includes(victim));
-
 }
 
 // schickt mir info über alle selected victims von den wölfen
 socket.on("selected_werewolf", (victim) => {
     console.log(victim, "was selected for killing...");
 });
-
 
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
@@ -454,18 +452,87 @@ function setup_day_vote_submit() {
 
 socket.on("start_seeing", () => {
     console.log("Start seeing...");
+    document.getElementById("seer-result").innerHTML = "";
     start_seer_voting();
     setup_seer_vote_submit();
 });
 
 function start_seer_voting() {
+    const container = document.getElementById("seer-voting-list");
+    container.innerHTML = "";
+
+    players.forEach((value, index) => {
+        const radioId = `seer-option-${index}`;
+
+        const radioButton = document.createElement('input');
+        radioButton.type = 'radio';
+        radioButton.name = 'seer-voting';
+        radioButton.value = value;
+        radioButton.id = radioId;
+
+        const label = document.createElement('label');
+        label.htmlFor = radioId;
+        label.classList.add("vote-card");
+        label.dataset.target = value;
+
+        const icon = document.createElement("span");
+        icon.classList.add("vote-icon");
+        icon.textContent = "🔍";
+
+        const name = document.createElement("span");
+        name.classList.add("vote-name");
+        name.textContent = value;
+
+        const voters = document.createElement("span");
+        voters.classList.add("seer-voters");
+
+        radioButton.addEventListener("change", (e) => {
+            const current_selection = e.target.value;
+            console.log("Selected to vote:", current_selection);
+
+            document.querySelectorAll(".vote-card").forEach(card => {
+                card.classList.remove("selected");
+            });
+
+            label.classList.add("selected");
+        });
+
+        label.appendChild(radioButton);
+        label.appendChild(icon);
+        label.appendChild(name);
+        label.appendChild(voters);
+
+        container.appendChild(label);
+    });
 }
 
 function setup_seer_vote_submit() {
+    const submitBtn = document.getElementById("seer-submit-btn");
+
+    const clone = submitBtn.cloneNode(true);
+    submitBtn.parentNode.replaceChild(clone, submitBtn);
+
+    clone.addEventListener("click", () => {
+        const selected_value = document.querySelector('input[name="seer-voting"]:checked')?.value;
+
+        if (!selected_value) {
+            alert("You must choose a player before submitting!");
+            return;
+        }
+
+        console.log("Role reveal confirmed:", selected_value);
+        socket.emit("seer_role_reveal_request", selected_value);
+
+        clone.disabled = true;
+        clone.textContent = "Vote submitted...";
+
+        document.querySelectorAll('input[name="seer-voting"]').forEach(radio => radio.disabled = true);
+    });
 }
 
 socket.on("seer_role_reveal", (role) => {
-   document.getElementById("seer-result").innerHTML = role;
+    console.log("Revealing role:", role);
+    document.getElementById("seer-result").innerHTML = role;
 });
 
 socket.on("village_won", (werewolf_list) => {
@@ -619,6 +686,7 @@ function hideAllGameScreens() {
         if (el) el.classList.add("hidden");
     });
 }
+
 function showDeadPlayerState() {
     hideAllGameScreens();
 
