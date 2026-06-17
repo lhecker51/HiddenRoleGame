@@ -268,7 +268,7 @@ async function proceedUnlessEnded(session: Session, func: Function) {
     const werewolfList: Player[] = [];
     for (const player of session.players) {
         if (player.role === werewolfRole) {
-            werewolfList.push(player);
+            werewolfList.push(player.name);
         }
     }
 
