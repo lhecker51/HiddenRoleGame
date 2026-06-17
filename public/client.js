@@ -200,6 +200,14 @@ function setup_werewolf_submit() {
 
         socket.emit("vote_werewolf", selected_value);
 
+        document.getElementById("night-werewolf-screen").classList.add("hidden");
+        document.getElementById("night-villager-screen").classList.add("hidden");
+
+        document.getElementById("night-result").textContent =
+            selected_value + " was killed during the night.";
+
+        document.getElementById("day-screen").classList.remove("hidden");
+
         clone.disabled = true;
         clone.textContent = "Vote submitted...";
 
