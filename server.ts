@@ -213,7 +213,7 @@ function concludeVoting(session: Session) {
             mostVotes = player.votes;
             tie = false;
         }
-        if (player.votes == mostVotes) {
+        else if (player.votes == mostVotes && player.votes > 0) {
             tie = true;
         }
         player.votes = 0;
