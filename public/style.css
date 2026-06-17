@@ -101,7 +101,7 @@ textarea {
 /*}*/
 .lg-bg {
     background-image:
-            linear-gradient(rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.32)),
+            linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
             url("images/village.gif");
 
     background-size: cover;
