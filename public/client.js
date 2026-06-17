@@ -322,11 +322,6 @@ function get_victims() {
     return players.filter(victim => !werewolves.includes(victim));
 }
 
-// schickt mir info über alle selected victims von den wölfen
-socket.on("selected_werewolf", (victim) => {
-    console.log(victim, "was selected for killing...");
-});
-
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
 
@@ -567,9 +562,9 @@ socket.on("village_won", (werewolf_list) => {
     document.getElementById('win-villager-screen').classList.remove("hidden");
 
     if (role === 'Werewolf') {
-        document.getElementsByClassName("game-end-info").classList.remove("hidden");
+        document.querySelector(".game-end-info").classList.remove("hidden");
     } else {
-        document.getElementsByClassName("game-end-info").innerHTML = "Victory!";
+        document.querySelector(".game-end-info").innerHTML = "Victory!";
     }
 
     const fateDisplay = document.getElementById("villager-win-fate");
@@ -612,9 +607,9 @@ socket.on("werewolves_won", (werewolf_list) => {
     document.getElementById('win-werewolf-screen').classList.remove("hidden");
 
     if (role === 'Werewolf') {
-        document.getElementsByClassName("game-end-info").innerHTML = 'Victory!'
+        document.querySelector(".game-end-info").innerHTML = 'Victory!';
     } else {
-        document.getElementsByClassName("game-end-info").classList.remove("hidden");
+        document.querySelector(".game-end-info").classList.remove("hidden");
     }
 
     const fateDisplay = document.getElementById("werewolf-win-fate");
