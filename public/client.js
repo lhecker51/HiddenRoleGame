@@ -10,6 +10,7 @@ const werewolves = [];
 let role;
 let countdownInterval = null;
 let werewolfVotes = {};
+let amIDead = false;
 
 // lobby and join
 document.getElementById("join-btn").addEventListener("click", () => {
@@ -342,6 +343,7 @@ socket.on("start_seeing", () => {
 
 socket.on("you_died", () => {
     console.log("You died...");
+    amIDead = True;
     document.getElementById('night-result').classList.add("hidden");
     document.getElementById('own-death-bool').classList.remove("hidden");
 });
@@ -366,6 +368,24 @@ socket.on("village_won", (werewolf_list) => {
     hideAllGameScreens();
 
     document.getElementById('win-villager-screen').classList.remove("hidden");
+
+    const fateDisplay = document.getElementById("villager-win-fate");
+    
+    if (role === "Villager") {
+        if (amIDead) {
+            fateDisplay.textContent = "☠️ Du wurdest von den Werwölfen gefressen... aber dein Dorf hat überlebt und gewonnen!";
+        } else {
+            fateDisplay.textContent = "🎉 Du hast überlebt und die Werwölfe erfolgreich vertrieben! Das Dorf ist sicher.";
+        }
+    } else if (role === "Seer") {
+        if (amIDead) {
+            fateDisplay.textContent = "☠️ Die Werwölfe haben dich erwischt, weil du zu viel wusstest... aber deine Visionen haben dem Dorf zum Sieg verholfen!";
+        } else {
+            fateDisplay.textContent = "🔮 Deine Seherkräfte haben das Dorf gerettet! Du hast überlebt und die Werwölfe besiegt.";
+        }
+    } else if (role === "Werewolf") {
+        fateDisplay.textContent = "💀 Du wurdest vom Dorf enttarnt und gehängt. Dein Rudel hat verloren!";
+    }
     
     werewolves.length = 0;
     for (const werewolf of werewolf_list) {
@@ -387,6 +407,22 @@ socket.on("werewolves_won", (werewolf_list) => {
     hideAllGameScreens();
 
     document.getElementById('win-werewolf-screen').classList.remove("hidden");
+
+    const fateDisplay = document.getElementById("werewolf-win-fate");
+
+    if (role === "Werewolf") {
+        if (amIDead) {
+            fateDisplay.textContent = "☠️ Du wurdest tagsüber vom Dorf gelyncht... aber dein Rudel hat das Dorf am Ende trotzdem überrannt! Sieg!";
+        } else {
+            fateDisplay.textContent = "🐺 Heul! Du hast überlebt und das Dorf komplett ausgelöscht. Der Wald gehört euch!";
+        }
+    } else if (role === "Villager" || role === "Seer") {
+        if (amIDead) {
+            fateDisplay.textContent = "💀 Du bist in der Nacht gestorben... und das restliche Dorf wurde ebenfalls vernichtet.";
+        } else {
+            fateDisplay.textContent = "😰 Du hast zwar die Nächte überlebt, aber die Werwölfe haben die Übermacht erlangt. Du wurdest überrannt!";
+        }
+    }
     
     werewolves.length = 0;
     for (const werewolf of werewolf_list) {
