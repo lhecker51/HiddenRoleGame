@@ -546,6 +546,9 @@ function setup_seer_vote_submit() {
 }
 
 socket.on("seer_role_reveal", (role) => {
+    if (amIDead) {
+        return;
+    }
     console.log("Revealing role:", role);
     document.getElementById("seer-result").innerHTML = role;
 });

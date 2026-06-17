@@ -149,7 +149,7 @@ textarea {
 .win-villager-bg {
     background-image:
             linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
-            url("images/village.png");
+            url("images/village.jpg");
 
     background-size: cover;
     background-position: center;
