@@ -90,7 +90,7 @@ socket.on("timer", ({name, time}) => {
 //parameter: html tags
 function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
 
-    let secondsLeft = time / 1000;
+    let secondsLeft = timeMilliseconds / 1000;
 
     timerSeconds.textContent = secondsLeft.toString();
     timerDisplay.classList.remove("hidden");
