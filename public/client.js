@@ -90,8 +90,6 @@ socket.on("timer", ({name, time}) => {
 
 //parameter: html tags
 function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
-    console.log('Reached Print Timer');
-
     let secondsLeft = timeMilliseconds / 1000;
 
     timerSeconds.textContent = secondsLeft.toString();
@@ -104,7 +102,7 @@ function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
             clearInterval(countdownInterval);
             timerSeconds.textContent = "0";
             timerDisplay.classList.add("hidden");
-            console.log("Client-Timer abgelaufen.");
+            console.log("Timer finished.");
         } else {
             timerSeconds.textContent = secondsLeft.toString();
         }
