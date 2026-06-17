@@ -177,6 +177,7 @@ io.on("connection", (socket: Socket) => {
         for (const player of session.players) {
             if (!remainingPlayers.includes(player)) {
                 session.broadcast("player_left", player.name);
+                session.broadcast("death", player.name);
             }
         }
         session.players = remainingPlayers;
