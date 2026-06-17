@@ -132,7 +132,6 @@ socket.on("start_night", (number) => {
     } else if (role == "Werewolf") {
         document.getElementById("night-werewolf-screen").classList.remove("hidden");
         console.log("werewolf screen worked");
-        start_werewolf_voting();
     }
 });
 
