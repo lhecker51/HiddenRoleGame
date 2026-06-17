@@ -132,7 +132,8 @@ textarea {
 
 /* Hintergrund für Nacht-Screens */
 .night-villager-bg,
-.night-werewolf-bg {
+.night-werewolf-bg,
+.night-seer-bg {
     background-image:
             linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
             url("images/village_night.png");

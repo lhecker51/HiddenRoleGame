@@ -322,11 +322,6 @@ function get_victims() {
     return players.filter(victim => !werewolves.includes(victim));
 }
 
-// schickt mir info über alle selected victims von den wölfen
-socket.on("selected_werewolf", (victim) => {
-    console.log(victim, "was selected for killing...");
-});
-
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
 
@@ -385,6 +380,7 @@ socket.on("start_day_vote", () => {
         return;
     }
     const submitBtn = document.getElementById("day-vote-btn");
+    submitBtn.classList.remove("hidden");
     submitBtn.disabled = false;
     submitBtn.textContent = "Cast your vote";
 
@@ -757,7 +753,10 @@ function showDeadPlayerState() {
     if (nightResult) {
         nightResult.classList.add("hidden");
     }
-
+    const voting_text = document.getElementById("voting-info-day");
+    if (voting_text) {
+        voting_text.classList.add("hidden");
+    }
     const dayVotingList = document.getElementById("day-voting-list");
     if (dayVotingList) {
         dayVotingList.innerHTML = "";
