@@ -135,8 +135,8 @@ socket.on("werewolf_list", (werewolf_list) => {
     document.getElementById("werewolf-team").classList.remove("hidden");
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
-        update_werewolf_list("werewolf-team-list");
     }
+    update_werewolf_list("werewolf-team-list");
     console.log("Werewolves are:", werewolves);
 });
 
@@ -302,16 +302,16 @@ socket.on("start_day_vote", () => {
     console.log("Day vote started!");
 });
 
-socket.on("village_won", () => {
+socket.on("village_won", (werewolf_list) => {
     console.log("The villagers won the game!");
     document.getElementById('win-villager-screen').classList.remove("hidden");
-    if (werewolf_list) {
-        werewolves.length = 0;
-        for (const werewolf of werewolf_list) {
-            werewolves.push(werewolf);
-        }
-        update_werewolf_list("werewolf-villager-list");
+
+    werewolves.length = 0;
+    for (const werewolf of werewolf_list) {
+        werewolves.push(werewolf);
     }
+    update_werewolf_list("werewolf-villager-list");
+
     const restart_button = document.getElementById('restart-villager-btn');
     restart_button.addEventListener("click", () => {
         console.log("Restart button was clicked.");
@@ -353,18 +353,19 @@ function resetClientState() {
     
     update_player_list();
     update_werewolf_list("werewolf-team-list");
+
 }
 
-socket.on("werewolves_won", () => {
+socket.on("werewolves_won", (werewolf_list) => {
     console.log("The werewolves won the game!");
     document.getElementById('win-werewolf-screen').classList.remove("hidden");
-    if (werewolf_list) {
-        werewolves.length = 0;
-        for (const werewolf of werewolf_list) {
-            werewolves.push(werewolf);
-        }
-        update_werewolf_list("werewolf-list");
+    werewolves.length = 0;
+    for (const werewolf of werewolf_list) {
+        werewolves.push(werewolf);
     }
+    
+    update_werewolf_list("werewolf-list");
+
     const restart_button = document.getElementById('restart-werewolf-btn');
     restart_button.addEventListener("click", () => {
         console.log("Restart button was clicked.");
