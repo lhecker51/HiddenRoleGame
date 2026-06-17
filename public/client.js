@@ -171,6 +171,7 @@ socket.on("start_night", (number) => {
 
     document.getElementById("villager-night-count").innerHTML = number.toString();
     document.getElementById("werewolf-night-count").innerHTML = number.toString();
+    document.getElementById("seer-night-count").innerHTML = number.toString();
 
     document.getElementById("role-screen").classList.add("hidden");
     if (role == "Villager") {
