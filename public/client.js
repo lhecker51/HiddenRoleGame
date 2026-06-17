@@ -552,6 +552,20 @@ socket.on("debug", (message) => {
     console.log("Debug received:", message);
 });
 
+socket.on("start_werewolf_vote", () => {
+    console.log("Werewolf vote started!");
+    if (amIDead) {
+        showDeadPlayerState();
+        return;
+    }
+    const submitBtn = document.getElementById("werewolf-victim-btn");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Choose a victim";
+
+    start_werewolf_voting();
+    setup_werewolf_submit();
+});
+
 
 function resetClientState() {
     if (countdownInterval) {
