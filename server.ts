@@ -141,9 +141,9 @@ io.on("connection", (socket: Socket) => {
         }
     });
 
-    socket.on("vote_werewolf", (victim) => {
+    socket.on("vote", (voted) => {
         for (const player of session.players) {
-            if (player.name == victim) {
+            if (player.name == voted) {
                 player.votes++;
             }
         }
