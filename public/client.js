@@ -252,10 +252,7 @@ function setup_werewolf_submit() {
             victim: selected_value
         });
 
-        //clone.textContent = "Current vote confirmed";
-        //console.log("Voted to kill victim:", selected_value);
-
-        socket.emit("vote_werewolf", selected_value);
+        socket.emit("vote", selected_value);
 
         clone.disabled = true;
         clone.textContent = "Vote submitted...";
@@ -315,16 +312,14 @@ function get_victims() {
 
 }
 
-socket.on("start_werewolf_vote", () => {
-    console.log("Werewolf vote started...");
-    werewolfVotes = {};
-    document.getElementById("werewolf-vote-status").innerHTML = "";
-    const submitBtn = document.getElementById("werewolf-victim-btn");
+socket.on("start_day_vote", () => {
+    console.log("Day vote started!");
+    const submitBtn = document.getElementById("day-vote-btn");
     submitBtn.disabled = false;
-    submitBtn.textContent = "Confirm current vote";
+    submitBtn.textContent = "Stimme abgeben";
 
-    start_werewolf_voting();
-    setup_werewolf_submit();
+    start_day_voting();
+    setup_day_vote_submit();
 });
 
 
@@ -372,9 +367,9 @@ socket.on("start_day", (number) => {
 
 socket.on("start_day_vote", () => {
     console.log("Day vote started!");
-
     const submitBtn = document.getElementById("day-vote-btn");
     submitBtn.disabled = false;
+    submitBtn.textContent = "Stimme abgeben";
 
     start_day_voting();
     setup_day_vote_submit();
