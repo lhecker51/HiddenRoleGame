@@ -89,6 +89,7 @@ socket.on("timer", ({name, time}) => {
 
 //parameter: html tags
 function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
+    console.log('Reached Print Timer');
 
     let secondsLeft = timeMilliseconds / 1000;
 
