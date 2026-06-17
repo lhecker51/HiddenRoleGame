@@ -385,6 +385,7 @@ socket.on("start_day_vote", () => {
         return;
     }
     const submitBtn = document.getElementById("day-vote-btn");
+    submitBtn.classList.remove("hidden");
     submitBtn.disabled = false;
     submitBtn.textContent = "Cast your vote";
 
