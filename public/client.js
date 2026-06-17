@@ -159,6 +159,8 @@ function update_werewolf_list(html_tag = "werewolf-team-list") {
 
 socket.on("start_night", (number) => {
     console.log("It is night", number);
+    
+    hideAllGameScreens();
 
     document.getElementById("villager-night-count").innerHTML = number.toString();
     document.getElementById("werewolf-night-count").innerHTML = number.toString();
