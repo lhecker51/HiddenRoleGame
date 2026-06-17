@@ -96,7 +96,7 @@ textarea {
 .day-bg,
 .role-bg {
     background-image:
-            linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.72)),
+            linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
             url("images/village.jpg");
 
     background-size: cover;
