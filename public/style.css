@@ -94,6 +94,12 @@ textarea {
     z-index: 0;
 }
 
+/* Video im Role-Screen ist standardmäßig aus.
+   Es wird nur für Werewolf angezeigt. */
+#role-screen .role-video {
+    display: none;
+}
+
 /* Hintergrund für Lobby, Tag und Rollen-Screen */
 .game-bg,
 .day-bg,
@@ -107,6 +113,22 @@ textarea {
     background-repeat: no-repeat;
 
     image-rendering: pixelated;
+}
+
+/* Werewolf bekommt Video statt normalem Hintergrund */
+#role-screen.role-werewolf {
+    background-image: none;
+    background-color: #080812;
+}
+
+/* Video nur bei Werewolf anzeigen */
+#role-screen.role-werewolf .role-video {
+    display: block;
+}
+
+/* Bei Werewolf kein Rollenbild anzeigen, weil stattdessen Video benutzt wird */
+#role-screen.role-werewolf::before {
+    display: none;
 }
 
 /* Hintergrund für Nacht-Screens */
@@ -175,7 +197,7 @@ textarea {
     z-index: 1;
     pointer-events: none;
 
-    animation: villageOrWerewolfMove 0.8s steps(2) infinite;
+    animation: villagerMove 0.8s steps(2) infinite;
 }
 
 /* Bild für Villager-Rolle */
@@ -189,16 +211,16 @@ textarea {
     background-repeat: no-repeat;
 }
 
-/* Bild für Werewolf-Rolle */
-.role-bg.role-werewolf::before {
-    width: 180px;
-    height: 240px;
+/*!* Bild für Werewolf-Rolle *!*/
+/*.role-bg.role-werewolf::before {*/
+/*    width: 180px;*/
+/*    height: 240px;*/
 
-    background-image: url("images/werewolf.png");
-    background-size: contain;
-    background-position: center bottom;
-    background-repeat: no-repeat;
-}
+/*    background-image: url("images/werewolf.png");*/
+/*    background-size: contain;*/
+/*    background-position: center bottom;*/
+/*    background-repeat: no-repeat;*/
+/*}*/
 
 /* Leichte Bewegung für Figuren */
 @keyframes villageWerewolfMove {
@@ -214,7 +236,7 @@ textarea {
 
 /* Bewegung für das Rollenbild.
    translateX(-50%) bleibt dabei erhalten, damit das Bild zentriert bleibt. */
-@keyframes villageOrWerewolfMove {
+@keyframes villagerMove {
     0%,
     100% {
         transform: translateX(-50%) translateY(0);
