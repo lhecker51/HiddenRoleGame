@@ -153,6 +153,11 @@ io.on("connection", (socket: Socket) => {
         }
     });
 
+    socket.on("restart_game", () => {
+    //TO DO: hier alles resetten!!!
+    console.log("The game was restarted. Reached server.");
+});
+
     socket.on("disconnect", () => {
         const sessionCode = socket.data.code;
         if (!sessionCode || !sessions[sessionCode]) return;
@@ -251,11 +256,7 @@ async function proceedUnlessEnded(session: Session, func: Function) {
     await func();
 }
 
-socket.on("game_restarted", () => {
-    //TO DO: hier alles resetten!!!
-    console.log("The host restarted the game.");
-    resetClientState();
-});
+
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
