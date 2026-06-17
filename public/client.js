@@ -321,11 +321,6 @@ function get_victims() {
     return players.filter(victim => !werewolves.includes(victim));
 }
 
-// schickt mir info über alle selected victims von den wölfen
-socket.on("selected_werewolf", (victim) => {
-    console.log(victim, "was selected for killing...");
-});
-
 socket.on("death", (player_name) => {
     console.log(player_name, "has died!");
 
