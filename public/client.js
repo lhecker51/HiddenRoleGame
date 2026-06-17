@@ -10,6 +10,7 @@ const werewolves = [];
 let role;
 let countdownInterval = null;
 let werewolfVotes = {};
+let amIDead = false;
 
 // lobby and join
 document.getElementById("join-btn").addEventListener("click", () => {
@@ -93,9 +94,10 @@ socket.on("timer", ({name, time}) => {
     }
 
     printTimer(timerSeconds, timerDisplay, time);
+
 });
 
-// parameter: html tags
+//parameter: html tags
 function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
     let secondsLeft = timeMilliseconds / 1000;
 
@@ -132,23 +134,27 @@ socket.on("role_update", (received_role) => {
     }
     document.getElementById("role-screen").classList.remove("hidden");
 
-    // play among us role reveal sound
+    // Play among us role reveal sound
     const amongUsRoleRevealSound = new Audio("./among-us-role-reveal.mp3");
     amongUsRoleRevealSound.play();
 });
 
 socket.on("werewolf_list", (werewolf_list) => {
     document.getElementById("werewolf-team").classList.remove("hidden");
+    werewolves.length = 0; 
+    
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
     }
     update_werewolf_list("werewolf-team-list");
-    console.log("Werewolves are:", werewolves);
+    console.log("Werewolves are updated:", werewolves);
 });
 
-function update_werewolf_list(html_tag) {
+function update_werewolf_list(html_tag = "werewolf-team-list") {
     const list = document.getElementById(html_tag);
-    list.innerHTML = werewolves.map(werewolf => `<li>${werewolf}</li>`).join("");
+    if (list) {
+        list.innerHTML = werewolves.map(werewolf => `<li>${werewolf}</li>`).join("");
+    }
 }
 
 socket.on("start_night", (number) => {
@@ -331,22 +337,13 @@ socket.on("start_seeing", () => {
     console.log("Starting seeing...");
 });
 
-socket.on("death", (player_name) => {
-    console.log(player_name, "has died!");
-    document.getElementById("night-result").innerHTML += player_name;
-    const player_index = players.indexOf(player_name);
-    if (player_index > -1) {
-        players.splice(player_index, 1);
-    }
-    const werewolf_index = werewolves.indexOf(player_name);
-    if (werewolf_index > -1) {
-        werewolves.splice(werewolf_index, 1);
-        update_werewolf_list();
-    }
+socket.on("start_seeing", () => {
+    //TODO
 });
 
 socket.on("you_died", () => {
     console.log("You died...");
+    amIDead = True;
     document.getElementById('night-result').classList.add("hidden");
     document.getElementById('own-death-bool').classList.remove("hidden");
 });
@@ -367,8 +364,29 @@ socket.on("start_day_vote", () => {
 
 socket.on("village_won", (werewolf_list) => {
     console.log("The villagers won the game!");
+    
+    hideAllGameScreens();
+
     document.getElementById('win-villager-screen').classList.remove("hidden");
 
+    const fateDisplay = document.getElementById("villager-win-fate");
+    
+    if (role === "Villager") {
+        if (amIDead) {
+            fateDisplay.textContent = "☠️ Du wurdest von den Werwölfen gefressen... aber dein Dorf hat überlebt und gewonnen!";
+        } else {
+            fateDisplay.textContent = "🎉 Du hast überlebt und die Werwölfe erfolgreich vertrieben! Das Dorf ist sicher.";
+        }
+    } else if (role === "Seer") {
+        if (amIDead) {
+            fateDisplay.textContent = "☠️ Die Werwölfe haben dich erwischt, weil du zu viel wusstest... aber deine Visionen haben dem Dorf zum Sieg verholfen!";
+        } else {
+            fateDisplay.textContent = "🔮 Deine Seherkräfte haben das Dorf gerettet! Du hast überlebt und die Werwölfe besiegt.";
+        }
+    } else if (role === "Werewolf") {
+        fateDisplay.textContent = "💀 Du wurdest vom Dorf enttarnt und gehängt. Dein Rudel hat verloren!";
+    }
+    
     werewolves.length = 0;
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
@@ -377,29 +395,44 @@ socket.on("village_won", (werewolf_list) => {
 
     const restart_button = document.getElementById('restart-villager-btn');
     restart_button.addEventListener("click", () => {
-        console.log("Restart button was clicked.");
         socket.emit("restart_game", session_code);
-
         resetClientState();
-    }, {once: true});
+    }, { once: true});
 });
 
 
 socket.on("werewolves_won", (werewolf_list) => {
     console.log("The werewolves won the game!");
+    
+    hideAllGameScreens();
+
     document.getElementById('win-werewolf-screen').classList.remove("hidden");
+
+    const fateDisplay = document.getElementById("werewolf-win-fate");
+
+    if (role === "Werewolf") {
+        if (amIDead) {
+            fateDisplay.textContent = "☠️ Du wurdest tagsüber vom Dorf gelyncht... aber dein Rudel hat das Dorf am Ende trotzdem überrannt! Sieg!";
+        } else {
+            fateDisplay.textContent = "🐺 Heul! Du hast überlebt und das Dorf komplett ausgelöscht. Der Wald gehört euch!";
+        }
+    } else if (role === "Villager" || role === "Seer") {
+        if (amIDead) {
+            fateDisplay.textContent = "💀 Du bist in der Nacht gestorben... und das restliche Dorf wurde ebenfalls vernichtet.";
+        } else {
+            fateDisplay.textContent = "😰 Du hast zwar die Nächte überlebt, aber die Werwölfe haben die Übermacht erlangt. Du wurdest überrannt!";
+        }
+    }
+    
     werewolves.length = 0;
     for (const werewolf of werewolf_list) {
         werewolves.push(werewolf);
     }
-
     update_werewolf_list("werewolf-list");
 
     const restart_button = document.getElementById('restart-werewolf-btn');
     restart_button.addEventListener("click", () => {
-        console.log("Restart button was clicked.");
         socket.emit("restart_game", session_code);
-
         resetClientState();
     }, { once: true});
 });
@@ -415,36 +448,53 @@ socket.on("debug", (message) => {
 
 
 function resetClientState() {
-if (countdownInterval) {
-    clearInterval(countdownInterval);
-    countdownInterval = null;
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
+
+    werewolves.length = 0; 
+    role = null;
+
+    document.getElementById("status").textContent = "";
+    document.getElementById("night-result").innerHTML = "Someone was killed during the night:";
+
+    const screensToHide = [
+        "role-screen", 
+        "night-villager-screen", 
+        "night-werewolf-screen", 
+        "night-seer-screen",
+        "day-screen", 
+        "win-villager-screen",
+        "win-werewolf-screen",
+        "werewolf-team"
+    ];
+    screensToHide.forEach(screenId => {
+        const el = document.getElementById(screenId);
+        if (el) el.classList.add("hidden");
+    });
+
+    const deathScreen = document.getElementById('own-death-bool');
+    if (deathScreen) deathScreen.classList.add("hidden");
+
+    document.getElementById("game-screen").classList.remove("hidden");
+
+    update_player_list();
+    update_werewolf_list("werewolf-team-list");
 }
 
-werewolves.length = 0;
-role = null;
-
-document.getElementById("status").textContent = "";
-document.getElementById("night-result").innerHTML = "";
-
-const screensToHide = [
-    "role-screen",
-    "night-villager-screen",
-    "night-werewolf-screen",
-    "day-screen",
-    "win-villager-screen",
-    "werewolf-team"
-];
-screensToHide.forEach(screenId => {
-    const el = document.getElementById(screenId);
-    if (el) el.classList.add("hidden");
-});
-
-const deathScreen = document.getElementById('own-death-bool');
-if (deathScreen) deathScreen.classList.add("hidden");
-
-document.getElementById("game-screen").classList.remove("hidden");
-
-update_player_list();
-update_werewolf_list("werewolf-team-list");
-
+function hideAllGameScreens() {
+    const screens = [
+        "login-screen",
+        "game-screen",
+        "role-screen",
+        "night-villager-screen",
+        "night-werewolf-screen",
+        "night-seer-screen",
+        "day-screen"
+    ];
+    screens.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add("hidden");
+    });
 }

@@ -91,7 +91,10 @@
             Night: <span id="seer-night-count"></span>
         </h1>
         <div id="night-timer-seer-display" class="hidden">Timer: <span id="night-timer-seer-seconds">0</span>s</div>
-        <h2>Choose, whose role you want to see:</h2>
+        <h2>Choose whose role you want to see:</h2>
+        <div id="seer-voting-list" class="vote-list"></div>
+        <button id="seer-submit-btn">Reveal Role</button>
+        <p id="seer-result" style="font-weight: bold; font-size: 1.2rem; margin-top: 15px; color: gold;"></p>
     </div>
 </section>
 
@@ -115,6 +118,9 @@
 <!-- Endscreen: die Dorfbewohner haben gewonnen -->
 <section id="win-villager-screen" class="screen hidden win-villager-bg">
     <h1 id="villager-win">Villager wins!</h1>
+    <div class="personal-fate-box">
+        <p id="villager-win-fate" class="fate-text"></p>
+    </div>
     <h2>Game over!</h2>
     <p>The werewolves were killed by the villagers</p>
     <p>The werewolves were: </p>
@@ -126,11 +132,13 @@
 <!-- Endscreen: die Werwölfe haben gewonnen -->
 <section id="win-werewolf-screen" class="screen hidden win-werewolf-bg">
     <h1 id="werewolf-win">Werewolf wins!</h1>
+    <div class="personal-fate-box">
+        <p id="werewolf-win-fate" class="fate-text"></p>
+    </div>
     <h2>Game over!</h2>
     <p>The villagers were killed by the werewolves</p>
     <p>The werewolves were: </p>
-    <div id="werewolf-list" class="game-list"></div>
-    <button id="restart-werewolf-btn">Restart game</button>
+    <div id="werewolf-win-list" class="game-list"></div> <button id="restart-werewolf-btn">Restart game</button>
 </section>
 
 <script src="/socket.io/socket.io.js"></script>
