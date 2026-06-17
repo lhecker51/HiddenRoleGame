@@ -67,8 +67,14 @@ socket.on("timer", (timeMilliseconds) => {
         clearInterval(countdownInterval);
     }
 
-    const timerDisplay = document.getElementById("timer-display");
-    const timerSeconds = document.getElementById("timer-seconds");
+    //hier logik welche html tags ausgewaehlt werden
+    
+});
+
+//parameter: html tags
+function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
+    const timerDisplay = document.getElementById(timerSeconds);
+    const timerSeconds = document.getElementById(timerDisplay);
 
     let secondsLeft = timeMilliseconds / 1000;
 
@@ -87,7 +93,7 @@ socket.on("timer", (timeMilliseconds) => {
             timerSeconds.textContent = secondsLeft.toString();
         }
     }, 1000);
-});
+}
 
 socket.on("role_update", (received_role) => {
     console.log("Role update received:", received_role);
