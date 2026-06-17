@@ -557,6 +557,12 @@ socket.on("village_won", (werewolf_list) => {
 
     document.getElementById('win-villager-screen').classList.remove("hidden");
 
+    if (role === 'Werewolf') {
+        document.getElementByClass("game-end-info").classList.remove("hidden");
+    } else {
+        document.getElementByClass("game-end-info").innerHTML = "Victory!";
+    }
+
     const fateDisplay = document.getElementById("villager-win-fate");
 
     if (role === "Villager") {
@@ -595,6 +601,12 @@ socket.on("werewolves_won", (werewolf_list) => {
     hideAllGameScreens();
 
     document.getElementById('win-werewolf-screen').classList.remove("hidden");
+
+    if (role === 'Werewolf') {
+        document.getElementByClass("game-end-info").innerHTML = 'Victory!'
+    } else {
+        document.getElementByClass("game-end-info").classList.remove("hidden");
+    }
 
     const fateDisplay = document.getElementById("werewolf-win-fate");
 
