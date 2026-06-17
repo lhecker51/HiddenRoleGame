@@ -147,9 +147,11 @@ socket.on("werewolf_list", (werewolf_list) => {
     console.log("Werewolves are:", werewolves);
 });
 
-function update_werewolf_list(html_tag) {
+function update_werewolf_list(html_tag = "werewolf-team-list") {
     const list = document.getElementById(html_tag);
-    list.innerHTML = werewolves.map(werewolf => `<li>${werewolf}</li>`).join("");
+    if (list) {
+        list.innerHTML = werewolves.map(werewolf => `<li>${werewolf}</li>`).join("");
+    }
 }
 
 socket.on("start_night", (number) => {
@@ -332,18 +334,8 @@ socket.on("start_seeing", () => {
     console.log("Starting seeing...");
 });
 
-socket.on("death", (player_name) => {
-    console.log(player_name, "has died!");
-    document.getElementById("night-result").innerHTML += player_name;
-    const player_index = players.indexOf(player_name);
-    if (player_index > -1) {
-        players.splice(player_index, 1);
-    }
-    const werewolf_index = werewolves.indexOf(player_name);
-    if (werewolf_index > -1) {
-        werewolves.splice(werewolf_index, 1);
-        update_werewolf_list();
-    }
+socket.on("start_seeing", () => {
+    //TODO
 });
 
 socket.on("you_died", () => {
@@ -394,13 +386,12 @@ socket.on("werewolves_won", (werewolf_list) => {
         werewolves.push(werewolf);
     }
     
-    update_werewolf_list("werewolf-list");
+    update_werewolf_list("werewolf-win-list"); // Nutzt die neue, eindeutige ID
 
     const restart_button = document.getElementById('restart-werewolf-btn');
     restart_button.addEventListener("click", () => {
         console.log("Restart button was clicked.");
         socket.emit("restart_game", session_code);
-
         resetClientState();
     }, { once: true});
 });
@@ -416,36 +407,37 @@ socket.on("debug", (message) => {
 
 
 function resetClientState() {
-if (countdownInterval) {
-    clearInterval(countdownInterval);
-    countdownInterval = null;
-}
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
 
-werewolves.length = 0; 
-role = null;
+    werewolves.length = 0; 
+    role = null;
 
-document.getElementById("status").textContent = "";
-document.getElementById("night-result").innerHTML = "";
+    document.getElementById("status").textContent = "";
+    document.getElementById("night-result").innerHTML = "Someone was killed during the night:";
 
-const screensToHide = [
-    "role-screen", 
-    "night-villager-screen", 
-    "night-werewolf-screen", 
-    "day-screen", 
-    "win-villager-screen",
-    "werewolf-team"
-];
-screensToHide.forEach(screenId => {
-    const el = document.getElementById(screenId);
-    if (el) el.classList.add("hidden");
-});
+    const screensToHide = [
+        "role-screen", 
+        "night-villager-screen", 
+        "night-werewolf-screen", 
+        "night-seer-screen",
+        "day-screen", 
+        "win-villager-screen",
+        "win-werewolf-screen",
+        "werewolf-team"
+    ];
+    screensToHide.forEach(screenId => {
+        const el = document.getElementById(screenId);
+        if (el) el.classList.add("hidden");
+    });
 
-const deathScreen = document.getElementById('own-death-bool');
-if (deathScreen) deathScreen.classList.add("hidden");
+    const deathScreen = document.getElementById('own-death-bool');
+    if (deathScreen) deathScreen.classList.add("hidden");
 
-document.getElementById("game-screen").classList.remove("hidden");
+    document.getElementById("game-screen").classList.remove("hidden");
 
-update_player_list();
-update_werewolf_list("werewolf-team-list");
-
+    update_player_list();
+    update_werewolf_list("werewolf-team-list");
 }
