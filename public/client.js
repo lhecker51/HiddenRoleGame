@@ -60,17 +60,30 @@ socket.on("start_success", () => {
     console.log("Game start successful!");
 });
 
-socket.on("timer", (timeMilliseconds) => {
-    console.log(`Started timer for ${timeMilliseconds / 1000} seconds...`);
+socket.on("timer", ({name, time}) => {
+    console.log(`Started ${name} for ${time / 1000} seconds...`);
 
     if (countdownInterval) {
         clearInterval(countdownInterval);
     }
 
-    const timerDisplay = document.getElementById("timer-display");
-    const timerSeconds = document.getElementById("timer-seconds");
+    let timerDisplay;
+    let timerSeconds;
 
-    let secondsLeft = timeMilliseconds / 1000;
+    if (name == "role-timer") {
+        timerDisplay = document.getElementById("role-timer-display");
+        timerSeconds = document.getElementById("role-timer-seconds");
+    }
+    if (name == "night-timer") {
+        timerDisplay = document.getElementById("night-timer-display");
+        timerSeconds = document.getElementById("night-timer-seconds");
+    }
+    if (name == "day-timer") {
+        timerDisplay = document.getElementById("day-timer-display");
+        timerSeconds = document.getElementById("day-timer-seconds");
+    }
+
+    let secondsLeft = time / 1000;
 
     timerSeconds.textContent = secondsLeft.toString();
     timerDisplay.classList.remove("hidden");
