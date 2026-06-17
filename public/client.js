@@ -148,19 +148,36 @@ function start_werewolf_voting() {
         radioButton.value = value;
         radioButton.id = radioId;
 
+        const label = document.createElement('label');
+        label.htmlFor = radioId;
+        label.classList.add("vote-card");
+
+        const icon = document.createElement("span");
+        icon.classList.add("vote-icon");
+        icon.textContent = "☠";
+
+        const name = document.createElement("span");
+        name.classList.add("vote-name");
+        name.textContent = value;
+
         radioButton.addEventListener("change", (e) => {
             const current_selection = e.target.value;
             console.log("Selected victim:", current_selection);
 
+            document.querySelectorAll(".vote-card").forEach(card => {
+                card.classList.remove("selected");
+            });
+
+            label.classList.add("selected");
+
             socket.emit("select_werewolf", current_selection);
         });
 
-        const label = document.createElement('label');
-        label.htmlFor = radioId;
-        label.textContent = value;
+        label.appendChild(radioButton);
+        label.appendChild(icon);
+        label.appendChild(name);
 
-
-        victim_container.appendChild(radioButton);
+        //victim_container.appendChild(radioButton);
         victim_container.appendChild(label);
     });
 }

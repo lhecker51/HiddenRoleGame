@@ -1,43 +1,58 @@
+/* Padding und Border zählen zur Gesamtgröße des Elements.
+   Dadurch werden Buttons und Inputs nicht plötzlich breiter als erwartet. */
 * {
     box-sizing: border-box;
 }
 
+/* Allgemeiner Stil für die ganze Seite */
 body {
     margin: 0;
     overflow: hidden;
+
     background-color: #080812;
     color: white;
+
     font-family: 'Courier New', Courier, monospace;
     font-size: 32px;
-    text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000;
-    /*font-family: 'Pixelify Sans', cursive; !* или 'Press Start 2P' *!*/
-    /*font-size: 24px;*/
-    /*font-family: Arial, sans-serif;*/
+
+    /* Schwarzer Schatten um den Text, damit er auf dem Hintergrund besser lesbar ist */
+    text-shadow:
+            2px 0 0 #000,
+            -2px 0 0 #000,
+            0 2px 0 #000,
+            0 -2px 0 #000;
 }
 
-button, input, select, textarea {
+/* Buttons und Eingabefelder nehmen den gleichen Font wie body.
+   Ohne inherit benutzen Browser oft ihren eigenen Standard-Font. */
+button,
+input,
+select,
+textarea {
     font-family: inherit;
-    font-size: 20px;
-
-    -webkit-font-smoothing: none;
-    -moz-osx-font-smoothing: grayscale;
 }
 
+/* Jeder Screen nimmt die ganze Bildschirmgröße ein.
+   Mit flex wird der Inhalt in die Mitte gesetzt. */
 .screen {
     position: relative;
+
     width: 100vw;
     min-height: 100vh;
-    /*margin: 50px auto;*/
     padding: 22px;
+
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+
     background-color: #171728;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
 }
+
+/* Die Box enthält den sichtbaren Inhalt: Titel, Text, Buttons, Listen */
 .box {
     position: relative;
     z-index: 3;
@@ -48,38 +63,27 @@ button, input, select, textarea {
     flex-direction: column;
     align-items: center;
 }
-/*.lg-bg {*/
-/*    background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5)),*/
-/*    url("https://c4.wallpaperflare.com/wallpaper/852/618/332/the-witcher-the-witcher-3-wild-hunt-wallpaper-preview.jpg");*/
 
-/*    background-size: 105%;*/
-/*    background-position: 40% center;*/
+/* Damit kann ein Screen oder ein Element komplett versteckt werden */
+.hidden {
+    display: none;
+}
 
-/*    animation-name: moveBackground;*/
-/*    animation-duration: 10s;*/
-/*    animation-timing-function: ease-in-out;*/
-/*    animation-iteration-count: infinite;*/
-/*    animation-direction: alternate;*/
-/*}*/
+/* Video als Hintergrund auf dem Login-Screen */
 .bg-video {
     position: absolute;
     inset: 0;
+
     width: 100%;
     height: 100%;
+
     object-fit: cover;
     z-index: 0;
 }
-.game-bg, .day-bg {
-    background-image:
-            linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-            url("images/village.jpg");
 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    image-rendering: pixelated;;
-}
+/* Hintergrund für Lobby, Tag und Rollen-Screen */
+.game-bg,
+.day-bg,
 .role-bg {
     background-image:
             linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
@@ -88,63 +92,44 @@ button, input, select, textarea {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
+    image-rendering: pixelated;
 }
-.role-bg::before {
-    content: "";
-    position: absolute;
 
-    bottom: 4%;
-    left: 50%;
-
-    width: 170px;
-    height: 220px;
-    transform: translateX(-50%);
-    z-index: 1;
-    pointer-events: none;
-    animation: villageOrWerewolfMove 0.8s steps(2) infinite;
-}
-.role-bg.role-villager::before {
-    width: 260px;
-    height: 220px;
-
-    background-image:
-            url("images/villager_girl.png");
-
-    background-size:
-            120px auto,
-            120px auto;
-
-    background-position:
-            left bottom,
-            right bottom;
-
-    background-repeat: no-repeat, no-repeat;
-}
-.role-bg.role-werewolf::before {
-    width: 180px;
-    height: 240px;
-
-    background-image: url("images/werewolf.png");
-    background-size: contain;
-    background-position: center bottom;
-    background-repeat: no-repeat;
-}
+/* Hintergrund für Nacht-Screens */
 .night-villager-bg,
 .night-werewolf-bg {
     background-image:
-            linear-gradient(
-                    rgba(0, 0, 0, 0.45),
-                    rgba(0, 0, 0, 0.45)
-            ),
+            linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
             url("images/village_night.png");
 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
+    image-rendering: pixelated;
 }
+
+/* Hintergrund für Win-Screens */
+/* Brauche zu ändern un zu anpassen */
+.win-villager-bg,
+.win-werewolf-bg {
+    background-image:
+            linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+            url("images/village.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    image-rendering: pixelated;
+}
+
+/* Figuren auf dem Lobby-Screen */
 .character {
     position: absolute;
     bottom: 120px;
+
     width: 90px;
 
     z-index: 1;
@@ -156,26 +141,56 @@ button, input, select, textarea {
 .girl {
     left: 39%;
 }
+
 .wolf {
     left: 55%;
     width: 100px;
     animation-delay: 0.3s;
 }
 
-button:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
+.role-bg::before {
+    content: "";
+    position: absolute;
 
-    transform: none;
+    bottom: 4%;
+    left: 50%;
 
-    box-shadow:
-            inset 4px 4px 0 #44445c,
-            inset -4px -4px 0 #15151f,
-            0 6px 0 #070204;
+    width: 170px;
+    height: 220px;
+
+    transform: translateX(-50%);
+    z-index: 1;
+    pointer-events: none;
+
+    animation: villageOrWerewolfMove 0.8s steps(2) infinite;
 }
 
+/* Bild für Villager-Rolle */
+.role-bg.role-villager::before {
+    width: 260px;
+    height: 220px;
+
+    background-image: url("images/villager_girl.png");
+    background-size: 120px auto;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+}
+
+/* Bild für Werewolf-Rolle */
+.role-bg.role-werewolf::before {
+    width: 180px;
+    height: 240px;
+
+    background-image: url("images/werewolf.png");
+    background-size: contain;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+}
+
+/* Leichte Bewegung für Figuren */
 @keyframes villageWerewolfMove {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateY(0);
     }
 
@@ -184,20 +199,11 @@ button:disabled {
     }
 }
 
-/*@keyframes moveBackground {*/
-/*    from {*/
-/*        background-size: cover, 105%;*/
-/*        background-position: center, 40% center;*/
-/*    }*/
-
-/*    to {*/
-/*        background-size: cover, 125%;*/
-/*        background-position: center, 60% center;*/
-/*    }*/
-/*}*/
-
+/* Bewegung für das Rollenbild.
+   translateX(-50%) bleibt dabei erhalten, damit das Bild zentriert bleibt. */
 @keyframes villageOrWerewolfMove {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateX(-50%) translateY(0);
     }
 
@@ -205,6 +211,7 @@ button:disabled {
         transform: translateX(-50%) translateY(-8px);
     }
 }
+
 h1 {
     color: white;
 }
@@ -213,8 +220,11 @@ p {
     color: #ccccdd;
 }
 
-input {
+/* Nur Textfelder werden so gestylt.
+   Nicht einfach input schreiben, sonst werden auch radio buttons kaputt gestylt. */
+input[type="text"] {
     width: 100%;
+
     padding: 10px 12px;
     margin-top: 10px;
 
@@ -224,9 +234,7 @@ input {
     border: 4px solid #111;
     border-radius: 0;
 
-    font-family: 'Courier New', Courier, monospace;
     font-size: 20px;
-
     text-shadow: 2px 2px 0 #000;
 
     box-shadow:
@@ -236,7 +244,8 @@ input {
     outline: none;
 }
 
-input:focus {
+/* Wenn man in ein Eingabefeld klickt */
+input[type="text"]:focus {
     background-color: #34344a;
 
     box-shadow:
@@ -245,25 +254,26 @@ input:focus {
             0 0 0 3px rgb(90 23 48);
 }
 
+/* Ein einheitlicher Stil für alle normalen Buttons */
 button {
     width: 100%;
+    max-width: 700px;
+
     padding: 14px 18px;
     margin-top: 16px;
 
-    background-color: #5a1730; /* темнее старого #7a1f3d */
+    background-color: #5a1730;
     color: white;
 
     border: 4px solid #12040a;
     border-radius: 0;
 
-    font-family: 'Courier New', Courier, monospace;
     font-size: 22px;
     font-weight: bold;
     letter-spacing: 2px;
     text-transform: uppercase;
 
     cursor: pointer;
-
     text-shadow: 2px 2px 0 #000;
 
     box-shadow:
@@ -277,6 +287,7 @@ button {
             background-color 0.15s ease;
 }
 
+/* Wenn die Maus über dem Button ist */
 button:hover {
     background-color: #711d3c;
 
@@ -286,6 +297,7 @@ button:hover {
             0 6px 0 #070204;
 }
 
+/* Wenn der Button gerade gedrückt wird */
 button:active {
     transform: translateY(6px);
 
@@ -297,32 +309,61 @@ button:active {
             0 0 0 #070204;
 }
 
-.hidden {
-    display: none;
+/* Wenn ein Button deaktiviert ist */
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow:
+            inset 4px 4px 0 #44445c,
+            inset -4px -4px 0 #15151f,
+            0 6px 0 #070204;
 }
 
+/* Container für die Spielerliste in der Lobby */
 .container-player {
-    display: flex;
-    flex-direction: column;
     width: 100%;
     margin-top: 10px;
     padding: 0;
 }
 
+/* Einheitlicher Stil für normale Listen */
+.game-list,
 .list {
-    font-size: 20px;
+    width: 100%;
+    max-width: 700px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
     list-style: none;
     padding: 0;
     margin: 0;
+
+    font-size: 20px;
 }
 
+/* Einzelne Einträge in normalen Listen */
+.game-list li,
 .list li {
-    font-family: Georgia, serif;
-    padding: 10px;
-    margin-top: 8px;
-    background-color: #242438;
+    padding: 10px 14px;
+
+    background-color: rgba(36, 36, 56, 0.92);
+    color: white;
+
+    border: 4px solid #111;
+
+    text-shadow: 2px 2px 0 #000;
+
+    box-shadow:
+            inset 3px 3px 0 #44445c,
+            inset -3px -3px 0 #15151f;
 }
 
+/* Container für alle Vote-Karten */
 .vote-list {
     width: 100%;
     max-width: 700px;
@@ -335,7 +376,10 @@ button:active {
     margin-bottom: 24px;
 }
 
+/* Eine einzelne Karte im Voting */
 .vote-card {
+    position: relative;
+
     width: 100%;
     min-height: 72px;
 
@@ -352,7 +396,6 @@ button:active {
 
     cursor: pointer;
 
-    font-family: 'Courier New', Courier, monospace;
     font-size: 28px;
     font-weight: bold;
 
@@ -369,6 +412,7 @@ button:active {
             box-shadow 0.08s ease;
 }
 
+/* Wenn die Maus über einer Vote-Karte ist */
 .vote-card:hover {
     background-color: rgba(70, 20, 38, 0.96);
 
@@ -378,6 +422,15 @@ button:active {
             0 6px 0 #070204;
 }
 
+/* Der echte radio button bleibt technisch vorhanden,
+   aber man sieht ihn nicht. Klickbar ist die ganze Karte. */
+.vote-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Ausgewählte Vote-Karte */
 .vote-card.selected {
     background-color: rgba(100, 24, 52, 0.98);
 
@@ -388,6 +441,7 @@ button:active {
             0 6px 0 #070204;
 }
 
+/* Icon links in der Vote-Karte */
 .vote-icon {
     width: 48px;
     height: 48px;
@@ -397,6 +451,7 @@ button:active {
     justify-content: center;
 
     background-color: #2b2b3d;
+
     border: 3px solid #111;
 
     font-size: 26px;
@@ -406,25 +461,59 @@ button:active {
             inset -3px -3px 0 #15151f;
 }
 
+/* Name des Spielers in der Vote-Karte */
 .vote-name {
     font-size: 30px;
 }
 
-#werewolf-victim-btn {
-    max-width: 700px;
-}
-
+/* Anpassungen für mobile version */
 @media screen and (max-width: 768px) {
-    .container {
-        width: 100%;
-        padding: 10px;
+    body {
+        font-size: 24px;
     }
 
-    .header {
-        display: none;
+    .screen {
+        padding: 16px;
     }
 
-    .mobile-menu {
-        display: block;
+    .box {
+        width: 94vw;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 12px 14px;
+    }
+
+    input[type="text"] {
+        font-size: 18px;
+    }
+
+    .vote-card {
+        min-height: 60px;
+        padding: 12px 16px;
+
+        font-size: 22px;
+        gap: 14px;
+    }
+
+    .vote-icon {
+        width: 40px;
+        height: 40px;
+
+        font-size: 22px;
+    }
+
+    .vote-name {
+        font-size: 22px;
+    }
+
+    .character {
+        bottom: 90px;
+        width: 70px;
+    }
+
+    .wolf {
+        width: 80px;
     }
 }
