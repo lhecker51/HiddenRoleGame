@@ -314,17 +314,6 @@ function get_victims() {
 
 }
 
-socket.on("start_day_vote", () => {
-    console.log("Day vote started!");
-    const submitBtn = document.getElementById("day-vote-btn");
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Stimme abgeben";
-
-    start_day_voting();
-    setup_day_vote_submit();
-});
-
-
 // schickt mir info über alle selected victims von den wölfen
 socket.on("selected_werewolf", (victim) => {
     console.log(victim, "was selected for killing...");
@@ -378,7 +367,7 @@ socket.on("start_day_vote", () => {
     }
     const submitBtn = document.getElementById("day-vote-btn");
     submitBtn.disabled = false;
-    submitBtn.textContent = "Stimme abgeben";
+    submitBtn.textContent = "Cast your vote";
 
     start_day_voting();
     setup_day_vote_submit();
