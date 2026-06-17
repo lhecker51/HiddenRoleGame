@@ -333,13 +333,21 @@ socket.on("selected_werewolf", (victim) => {
     console.log(victim, "was selected for killing...");
 });
 
-socket.on("start_seeing", () => {
-    console.log("Starting seeing...");
+
+socket.on("death", (player_name) => {
+    console.log(player_name, "has died!");
+    document.getElementById("night-result").innerHTML += ` ${player_name}`;
+    const player_index = players.indexOf(player_name);
+    if (player_index > -1) {
+        players.splice(player_index, 1);
+    }
+    const werewolf_index = werewolves.indexOf(player_name);
+    if (werewolf_index > -1) {
+        werewolves.splice(werewolf_index, 1);
+        update_werewolf_list("werewolf-team-list");
+    }
 });
 
-socket.on("start_seeing", () => {
-    //TODO
-});
 
 socket.on("you_died", () => {
     console.log("You died...");
