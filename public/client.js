@@ -125,6 +125,10 @@ socket.on("role_update", (received_role) => {
         document.getElementById("role-screen").classList.add("role-werewolf");
     }
     document.getElementById("role-screen").classList.remove("hidden");
+
+    // Play among us role reveal sound
+    const amongUsRoleRevealSound = new Audio("./among-us-role-reveal.mp3");
+    amongUsRoleRevealSound.play();
 });
 
 socket.on("werewolf_list", (werewolf_list) => {
