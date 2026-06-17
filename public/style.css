@@ -50,7 +50,6 @@ textarea {
     background-size: cover;
     background-position: center;
 }
-
 /* Die Box enthält den sichtbaren Inhalt: Titel, Text, Buttons, Listen */
 .box {
     position: relative;
