@@ -26,6 +26,7 @@ class Player {
     role: Role = villagerRole;
     isAlive: boolean = true;
     votes: number = 0;
+    currentSelection: string | null = null;
 
     constructor(socket: Socket, name: string) {
         this.socket = socket;
@@ -119,10 +120,23 @@ io.on("connection", (socket: Socket) => {
         await handleNight(session);
     });
 
-    socket.on("select_werewolf", (victim) => {
+    socket.on("werewolf_vote_changed", ({ victim }) => {
+        if (!session) return;
+
+        const currentPlayer = session.players.find(p => p.socket.id === socket.id);
+        if (!currentPlayer || currentPlayer.role !== werewolfRole || !currentPlayer.isAlive) return;
+
+        currentPlayer.currentSelection = victim;
+        const votesMap: Record<string, string> = {};
+        for (const player of session.players) {
+            if (player.role === werewolfRole && player.isAlive && player.currentSelection) {
+                votesMap[player.name] = player.currentSelection;
+            }
+        }
+
         for (const player of session.players) {
             if (player.role === werewolfRole) {
-                player.socket.emit("selected_werewolf", victim);
+                player.socket.emit("werewolf_votes_update", { votes: votesMap });
             }
         }
     });
@@ -197,6 +211,9 @@ function sendRoleUpdates(players: Player[]) {
 }
 
 async function handleNight(session: Session) {
+    for (const player of session.players) {
+        player.currentSelection = null;
+    }
     for (const player of session.players) {
         player.socket.emit("start_night", session.round);
         await sleep(2000);
