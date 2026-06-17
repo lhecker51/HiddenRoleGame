@@ -9,6 +9,7 @@ const players = [];
 const werewolves = [];
 let role;
 let countdownInterval = null;
+let werewolfVotes = {};
 
 // lobby and join
 document.getElementById("join-btn").addEventListener("click", () => {
@@ -179,6 +180,7 @@ function start_werewolf_voting() {
         const label = document.createElement('label');
         label.htmlFor = radioId;
         label.classList.add("vote-card");
+        label.dataset.target = value;
 
         const icon = document.createElement("span");
         icon.classList.add("vote-icon");
@@ -187,6 +189,9 @@ function start_werewolf_voting() {
         const name = document.createElement("span");
         name.classList.add("vote-name");
         name.textContent = value;
+
+        const voters = document.createElement("span");
+        voters.classList.add("wolf-voters");
 
         radioButton.addEventListener("change", (e) => {
             const current_selection = e.target.value;
@@ -198,12 +203,16 @@ function start_werewolf_voting() {
 
             label.classList.add("selected");
 
-            socket.emit("select_werewolf", current_selection);
+            socket.emit("werewolf_vote_changed", {
+                session_code,
+                victim: current_selection
+            });
         });
 
         label.appendChild(radioButton);
         label.appendChild(icon);
         label.appendChild(name);
+        label.appendChild(voters);
 
         victim_container.appendChild(label);
     });
@@ -223,14 +232,22 @@ function setup_werewolf_submit() {
             return;
         }
 
-        console.log("Voted to kill victim:", selected_value);
+        console.log("Current vote confirmed:", selected_value);
 
-        socket.emit("vote_werewolf", selected_value);
+        socket.emit("werewolf_vote_changed", {
+            session_code,
+            victim: selected_value
+        });
 
-        clone.disabled = true;
-        clone.textContent = "Vote submitted...";
+        clone.textContent = "Current vote confirmed";
+        //console.log("Voted to kill victim:", selected_value);
 
-        document.querySelectorAll('input[name="werewolf-voting"]').forEach(radio => radio.disabled = true);
+        //socket.emit("vote_werewolf", selected_value);
+
+        //clone.disabled = true;
+        //clone.textContent = "Vote submitted...";
+
+        //document.querySelectorAll('input[name="werewolf-voting"]').forEach(radio => radio.disabled = true);
     });
 }
 
@@ -238,6 +255,46 @@ function get_werewolf_result() {
     return document.querySelector('input[name="werewolf-voting"]:checked')?.value;
 }
 
+function render_werewolf_votes(votes) {
+    werewolfVotes = votes;
+
+    document.querySelectorAll(".wolf-voters").forEach(element => {
+        element.textContent = "";
+    });
+
+    document.querySelectorAll(".vote-card").forEach(card => {
+        const target = card.dataset.target;
+        const votersContainer = card.querySelector(".wolf-voters");
+
+        const votersForThisTarget = Object.entries(votes)
+            .filter(([werewolfName, victimName]) => victimName === target)
+            .map(([werewolfName]) => werewolfName);
+
+        votersContainer.textContent = "🐺".repeat(votersForThisTarget.length);
+    });
+
+    const status = document.getElementById("werewolf-vote-status");
+    status.innerHTML = "";
+
+    werewolves.forEach(werewolf => {
+        const row = document.createElement("div");
+        row.classList.add("wolf-vote-row");
+
+        const victim = votes[werewolf];
+
+        if (victim) {
+            row.textContent = `🐺 ${werewolf} → ${victim}`;
+        } else {
+            row.textContent = `🐺 ${werewolf} → waiting...`;
+        }
+
+        status.appendChild(row);
+    });
+}
+
+socket.on("werewolf_votes_update", ({votes}) => {
+    render_werewolf_votes(votes);
+});
 
 function get_victims() {
     console.log("Calculating possible victims...");
@@ -247,10 +304,11 @@ function get_victims() {
 
 socket.on("start_werewolf_vote", () => {
     console.log("Werewolf vote started...");
-
+    werewolfVotes = {};
+    document.getElementById("werewolf-vote-status").innerHTML = "";
     const submitBtn = document.getElementById("werewolf-victim-btn");
     submitBtn.disabled = false;
-    submitBtn.textContent = "Submit Vote";
+    submitBtn.textContent = "Confirm current vote";
 
     start_werewolf_voting();
     setup_werewolf_submit();
@@ -303,6 +361,7 @@ socket.on("start_day_vote", () => {
 socket.on("village_won", () => {
     console.log("The villagers won the game!");
     document.getElementById('win-villager-screen').classList.remove("hidden");
+    const werewolf_list = document.getElementById("werewolf-list");
     if (werewolf_list) {
         werewolves.length = 0;
         for (const werewolf of werewolf_list) {
@@ -356,6 +415,7 @@ function resetClientState() {
 socket.on("werewolves_won", () => {
     console.log("The werewolves won the game!");
     document.getElementById('win-werewolf-screen').classList.remove("hidden");
+    const werewolf_list = document.getElementById("werewolf-list");
     if (werewolf_list) {
         werewolves.length = 0;
         for (const werewolf of werewolf_list) {
