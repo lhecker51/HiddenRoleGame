@@ -511,7 +511,7 @@ socket.on("werewolves_won", (werewolf_list) => {
         } else {
             fateDisplay.textContent = "You survived and decimated the village! The woods belong to you now...";
         }
-    } else if (role === "Villager" || role === "Seer") {
+    } else {
         if (amIDead) {
             fateDisplay.textContent = "You were killed by the werewolves... and your friends all suffered the same fate.";
         } else {
