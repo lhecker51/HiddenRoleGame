@@ -78,7 +78,7 @@ socket.on("timer", ({name, time}) => {
     }
     if (name == "night-timer") {
         if (role === "Villager") {
-            timerDisplay = document.getElementById("night--timer-villager-display");
+            timerDisplay = document.getElementById("night-timer-villager-display");
             timerSeconds = document.getElementById("night-timer-villager-seconds");
         } else if (role === "Werewolf") {
             timerDisplay = document.getElementById("night-timer-werewolf-display");
