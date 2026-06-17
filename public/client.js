@@ -721,7 +721,14 @@ function showDeadPlayerState() {
     hideAllGameScreens();
 
     document.getElementById("day-screen").classList.remove("hidden");
-
+    const day = document.getElementById("day");
+    if (day) {
+        day.classList.add("hidden");
+    }
+    const day_timer = document.getElementById("day-timer-display");
+    if (day_timer) {
+        day_timer.classList.add("hidden");
+    }
     const deathText = document.getElementById("own-death-bool");
     if (deathText) {
         deathText.classList.remove("hidden");
