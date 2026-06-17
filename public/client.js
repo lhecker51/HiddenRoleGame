@@ -347,13 +347,15 @@ socket.on("death", (player_name) => {
 
 socket.on("you_died", () => {
     console.log("You died...");
-    amIDead = true;
-    document.getElementById('night-result').classList.add("hidden");
-    document.getElementById('own-death-bool').classList.remove("hidden");
+    showDeadPlayerState();
 });
 
 socket.on("start_day", (number) => {
     console.log("It is day", number);
+    if (amIDead) {
+        showDeadPlayerState();
+        return;
+    }
     hideAllGameScreens();
     document.getElementById("day-count").innerHTML = number.toString();
 
@@ -367,6 +369,10 @@ socket.on("start_day", (number) => {
 
 socket.on("start_day_vote", () => {
     console.log("Day vote started!");
+    if (amIDead) {
+        showDeadPlayerState();
+        return;
+    }
     const submitBtn = document.getElementById("day-vote-btn");
     submitBtn.disabled = false;
     submitBtn.textContent = "Stimme abgeben";
@@ -583,4 +589,43 @@ function hideAllGameScreens() {
         const el = document.getElementById(id);
         if (el) el.classList.add("hidden");
     });
+}
+function showDeadPlayerState() {
+    amIDead = true;
+
+    hideAllGameScreens();
+
+    document.getElementById("day-screen").classList.remove("hidden");
+
+    const deathText = document.getElementById("own-death-bool");
+    if (deathText) {
+        deathText.classList.remove("hidden");
+    }
+
+    const nightResult = document.getElementById("night-result");
+    if (nightResult) {
+        nightResult.classList.add("hidden");
+    }
+
+    const dayVotingList = document.getElementById("day-voting-list");
+    if (dayVotingList) {
+        dayVotingList.innerHTML = "";
+        dayVotingList.classList.add("hidden");
+    }
+
+    const dayVoteButton = document.getElementById("day-vote-btn");
+    if (dayVoteButton) {
+        dayVoteButton.disabled = true;
+        dayVoteButton.classList.add("hidden");
+    }
+
+    const nightVotingList = document.getElementById("night-voting-list");
+    if (nightVotingList) {
+        nightVotingList.innerHTML = "";
+    }
+
+    const werewolfVoteButton = document.getElementById("werewolf-victim-btn");
+    if (werewolfVoteButton) {
+        werewolfVoteButton.disabled = true;
+    }
 }
