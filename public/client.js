@@ -60,15 +60,35 @@ socket.on("start_success", () => {
     console.log("Game start successful!");
 });
 
-socket.on("timer", (timeMilliseconds) => {
-    console.log(`Started timer for ${timeMilliseconds / 1000} seconds...`);
+socket.on("timer", ({name, time}) => {
+    console.log(`Started ${name} for ${time / 1000} seconds...`);
 
     if (countdownInterval) {
         clearInterval(countdownInterval);
     }
 
-    const timerDisplay = document.getElementById("timer-display");
-    const timerSeconds = document.getElementById("timer-seconds");
+    let timerDisplay;
+    let timerSeconds;
+
+    if (name == "role-timer") {
+        timerDisplay = document.getElementById("role-timer-display");
+        timerSeconds = document.getElementById("role-timer-seconds");
+    }
+    if (name == "night-timer") {
+        timerDisplay = document.getElementById("night-timer-display");
+        timerSeconds = document.getElementById("night-timer-seconds");
+    }
+    if (name == "day-timer") {
+        timerDisplay = document.getElementById("day-timer-display");
+        timerSeconds = document.getElementById("day-timer-seconds");
+    }
+
+    printTimer(timerDisplay, timerSeconds, time);
+
+});
+
+//parameter: html tags
+function printTimer(timerSeconds, timerDisplay, timeMilliseconds) {
 
     let secondsLeft = timeMilliseconds / 1000;
 
@@ -87,7 +107,7 @@ socket.on("timer", (timeMilliseconds) => {
             timerSeconds.textContent = secondsLeft.toString();
         }
     }, 1000);
-});
+}
 
 socket.on("role_update", (received_role) => {
     console.log("Role update received:", received_role);
