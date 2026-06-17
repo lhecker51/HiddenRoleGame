@@ -367,7 +367,12 @@ socket.on("start_day", (number) => {
 
 socket.on("start_day_vote", () => {
     console.log("Day vote started!");
+
+    const submitBtn = document.getElementById("day-vote-btn");
+    submitBtn.disabled = false;
+
     start_day_voting();
+    setup_day_vote_submit();
 });
 
 function start_day_voting() {
@@ -385,15 +390,15 @@ function start_day_voting() {
 
         const label = document.createElement('label');
         label.htmlFor = radioId;
-        label.classList.add("day-vote-card");
+        label.classList.add("vote-card");
         label.dataset.target = value;
 
         const icon = document.createElement("span");
-        icon.classList.add("day-vote-icon");
+        icon.classList.add("vote-icon");
         icon.textContent = "✘";
 
         const name = document.createElement("span");
-        name.classList.add("day-vote-name");
+        name.classList.add("vote-name");
         name.textContent = value;
 
         const voters = document.createElement("span");
@@ -403,7 +408,7 @@ function start_day_voting() {
             const current_selection = e.target.value;
             console.log("Selected to vote:", current_selection);
 
-            document.querySelectorAll(".day-vote-card").forEach(card => {
+            document.querySelectorAll(".vote-card").forEach(card => {
                 card.classList.remove("selected");
             });
 
@@ -416,6 +421,30 @@ function start_day_voting() {
         label.appendChild(voters);
 
         container.appendChild(label);
+    });
+}
+
+function setup_day_vote_submit() {
+    const submitBtn = document.getElementById("day-vote-btn");
+
+    const clone = submitBtn.cloneNode(true);
+    submitBtn.parentNode.replaceChild(clone, submitBtn);
+
+    clone.addEventListener("click", () => {
+        const selected_value = document.querySelector('input[name="day-voting"]:checked')?.value;
+
+        if (!selected_value) {
+            alert("You must choose a player before submitting!");
+            return;
+        }
+
+        console.log("Current vote confirmed:", selected_value);
+        socket.emit("vote", selected_value);
+
+        clone.disabled = true;
+        clone.textContent = "Vote submitted...";
+
+        document.querySelectorAll('input[name="day-voting"]').forEach(radio => radio.disabled = true);
     });
 }
 
