@@ -246,6 +246,9 @@ function setup_werewolf_submit() {
     const submitBtn = document.getElementById("werewolf-victim-btn");
 
     const clone = submitBtn.cloneNode(true);
+    clone.disabled = false;
+    clone.textContent = "Choose a victim"; 
+
     submitBtn.parentNode.replaceChild(clone, submitBtn);
 
     clone.addEventListener("click", () => {
@@ -277,7 +280,7 @@ function get_werewolf_result() {
 }
 
 function render_werewolf_votes(votes) {
-    werewolfVotes = votes;
+    werewolfVotes = votes || {};
 
     document.querySelectorAll(".wolf-voters").forEach(element => {
         element.textContent = "";
@@ -287,21 +290,24 @@ function render_werewolf_votes(votes) {
         const target = card.dataset.target;
         const votersContainer = card.querySelector(".wolf-voters");
 
-        const votersForThisTarget = Object.entries(votes)
+        const votersForThisTarget = Object.entries(werewolfVotes)
             .filter(([werewolfName, victimName]) => victimName === target)
             .map(([werewolfName]) => werewolfName);
 
-        votersContainer.textContent = "🐺".repeat(votersForThisTarget.length);
+        if (votersContainer) {
+            votersContainer.textContent = "🐺".repeat(votersForThisTarget.length);
+        }
     });
 
     const status = document.getElementById("werewolf-vote-status");
+    if (!status) return;
     status.innerHTML = "";
 
     werewolves.forEach(werewolf => {
         const row = document.createElement("div");
         row.classList.add("wolf-vote-row");
 
-        const victim = votes[werewolf];
+        const victim = werewolfVotes[werewolf];
 
         if (victim) {
             row.textContent = `🐺 ${werewolf} → ${victim}`;
@@ -674,6 +680,11 @@ socket.on("start_werewolf_vote", () => {
         showDeadPlayerState();
         return;
     }
+
+    werewolfVotes = {}; 
+    const status = document.getElementById("werewolf-vote-status");
+    if (status) status.innerHTML = ""; 
+
     const submitBtn = document.getElementById("werewolf-victim-btn");
     submitBtn.disabled = false;
     submitBtn.textContent = "Choose a victim";
