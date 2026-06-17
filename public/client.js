@@ -739,7 +739,10 @@ function showDeadPlayerState() {
     if (nightResult) {
         nightResult.classList.add("hidden");
     }
-
+    const voting_text = document.getElementById("voting-info-day");
+    if (voting_text) {
+        voting_text.classList.add("hidden");
+    }
     const dayVotingList = document.getElementById("day-voting-list");
     if (dayVotingList) {
         dayVotingList.innerHTML = "";
