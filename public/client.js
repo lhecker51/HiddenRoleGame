@@ -158,8 +158,11 @@ function update_werewolf_list(html_tag = "werewolf-team-list") {
 }
 
 socket.on("start_night", (number) => {
+    if (amIDead) {
+        showDeadPlayerState();
+        return;
+    }
     console.log("It is night", number);
-
     hideAllGameScreens();
 
     document.getElementById("villager-night-count").innerHTML = number.toString();
@@ -453,6 +456,10 @@ function setup_day_vote_submit() {
 }
 
 socket.on("start_seeing", () => {
+    if (amIDead) {
+        showDeadPlayerState();
+        return;
+    }
     console.log("Start seeing...");
     document.getElementById("seer-result").innerHTML = "";
     start_seer_voting();
