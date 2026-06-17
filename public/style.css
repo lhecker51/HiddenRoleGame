@@ -153,7 +153,6 @@ textarea {
     background-repeat: no-repeat;
 
     image-rendering: pixelated;
-    animation: villagerMove 0.8s steps(2) infinite;
 }
 
 /* Figuren auf dem Lobby-Screen */
@@ -186,25 +185,19 @@ textarea {
     bottom: 4%;
     left: 50%;
 
-    width: 170px;
+    width: 260px;
     height: 220px;
 
     transform: translateX(-50%);
     z-index: 1;
     pointer-events: none;
 
-    animation: villagerMove 0.8s steps(2) infinite;
-}
-
-/* Bild für Villager-Rolle */
-.win-villager-bg.role-villager::before {
-    width: 260px;
-    height: 220px;
-
     background-image: url("images/villager_girl.png");
     background-size: 120px auto;
     background-position: center bottom;
     background-repeat: no-repeat;
+
+    animation: girlMove 1.2s ease-in-out infinite;
 }
 
 /*!* Bild für Werewolf-Rolle *!*/
@@ -219,30 +212,39 @@ textarea {
 /*}*/
 
 /* Leichte Bewegung für Figuren */
-@keyframes villageWerewolfMove {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
+/*@keyframes villageWerewolfMove {*/
+/*    0%,*/
+/*    100% {*/
+/*        transform: translateY(0);*/
+/*    }*/
 
-    50% {
-        transform: translateY(-8px);
-    }
-}
+/*    50% {*/
+/*        transform: translateY(-8px);*/
+/*    }*/
+/*}*/
 
 /* Bewegung für das Rollenbild.
    translateX(-50%) bleibt dabei erhalten, damit das Bild zentriert bleibt. */
-@keyframes villagerMove {
+/*@keyframes villagerMove {*/
+/*    0%,*/
+/*    100% {*/
+/*        transform: translateX(-50%) translateY(0);*/
+/*    }*/
+
+/*    50% {*/
+/*        transform: translateX(-50%) translateY(-8px);*/
+/*    }*/
+/*}*/
+@keyframes girlMove {
     0%,
     100% {
         transform: translateX(-50%) translateY(0);
     }
 
     50% {
-        transform: translateX(-50%) translateY(-8px);
+        transform: translateX(-50%) translateY(-10px);
     }
 }
-
 h1 {
     color: white;
 }
