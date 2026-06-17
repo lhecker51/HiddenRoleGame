@@ -279,7 +279,10 @@ function concludeVoting(session: Session) {
         player.votes = 0;
     }
 
-    if (!mostVotedPlayer || tie) return;
+    if (!mostVotedPlayer || tie) {
+        session.broadcast("no_death");
+        return;
+    }
 
     mostVotedPlayer.isAlive = false;
     mostVotedPlayer.socket.emit("you_died");

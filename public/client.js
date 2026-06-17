@@ -171,6 +171,7 @@ socket.on("start_night", (number) => {
 
     document.getElementById("villager-night-count").innerHTML = number.toString();
     document.getElementById("werewolf-night-count").innerHTML = number.toString();
+    document.getElementById("seer-night-count").innerHTML = number.toString();
 
     document.getElementById("role-screen").classList.add("hidden");
     if (role == "Villager") {
@@ -343,6 +344,10 @@ socket.on("death", (player_name) => {
     update_player_list();
 });
 
+socket.on("no_death", () => {
+    console.log("No-one died.");
+    someoneDiedThisNight = false;
+});
 
 socket.on("you_died", () => {
     console.log("You died...");
@@ -546,6 +551,9 @@ function setup_seer_vote_submit() {
 }
 
 socket.on("seer_role_reveal", (role) => {
+    if (amIDead) {
+        return;
+    }
     console.log("Revealing role:", role);
     document.getElementById("seer-result").innerHTML = role;
 });
@@ -718,7 +726,14 @@ function showDeadPlayerState() {
     hideAllGameScreens();
 
     document.getElementById("day-screen").classList.remove("hidden");
-
+    const day = document.getElementById("day");
+    if (day) {
+        day.classList.add("hidden");
+    }
+    const day_timer = document.getElementById("day-timer-display");
+    if (day_timer) {
+        day_timer.classList.add("hidden");
+    }
     const deathText = document.getElementById("own-death-bool");
     if (deathText) {
         deathText.classList.remove("hidden");
