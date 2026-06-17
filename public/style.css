@@ -7,7 +7,6 @@
 /* Allgemeiner Stil für die ganze Seite */
 body {
     margin: 0;
-    overflow: hidden;
 
     background-color: #080812;
     color: white;
@@ -83,7 +82,8 @@ textarea {
     display: none;
 }
 
-.lg-bg {
+.lg-bg,
+.win-werewolf-bg {
     background-image:
             linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
             url("images/village.gif");
@@ -100,7 +100,7 @@ textarea {
 .role-bg {
     background-image:
             linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
-            url("images/village.jpg");
+            url("images/village_with_character.png");
 
     background-size: cover;
     background-position: center;
@@ -109,7 +109,7 @@ textarea {
     image-rendering: pixelated;
 }
 
-/* Werewolf bekommt Video statt normalem Hintergrund */
+/* Werewolf bekommt gif statt normalem Hintergrund */
 #role-screen.role-werewolf {
     background-image:
             linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50)),
@@ -144,17 +144,17 @@ textarea {
 
 /* Hintergrund für Win-Screens */
 /* Brauche zu ändern un zu anpassen */
-.win-villager-bg,
-.win-werewolf-bg {
+.win-villager-bg {
     background-image:
             linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
-            url("images/village.jpg");
+            url("images/village_with_character.png");
 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 
     image-rendering: pixelated;
+    animation: villagerMove 0.8s steps(2) infinite;
 }
 
 /* Figuren auf dem Lobby-Screen */
@@ -452,6 +452,12 @@ button:disabled {
             inset 4px 4px 0 #8a2b4d,
             inset -4px -4px 0 #2a0815,
             0 6px 0 #070204;
+}
+
+.vote-card.disabled {
+    opacity: 0.45;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 /* Der echte radio button bleibt technisch vorhanden,
