@@ -565,10 +565,14 @@ socket.on("village_won", (werewolf_list) => {
 
     document.getElementById('win-villager-screen').classList.remove("hidden");
 
-    if (role === 'Werewolf') {
-        document.querySelector(".game-end-info").classList.remove("hidden");
-    } else {
-        document.querySelector(".game-end-info").innerHTML = "Victory!";
+    const endInfo = document.querySelector("#win-villager-screen .game-end-info");
+    if (endInfo) {
+        if (role === 'Werewolf') {
+            endInfo.classList.remove("hidden");
+        } else {
+            endInfo.textContent = "Victory!";
+            endInfo.classList.remove("hidden");
+        }
     }
 
     const fateDisplay = document.getElementById("villager-win-fate");
@@ -589,10 +593,13 @@ socket.on("village_won", (werewolf_list) => {
         fateDisplay.textContent = "You were discovered and hanged by the villagers... Your killing spree has ended!";
     }
 
-    werewolves.length = 0;
-    for (const werewolf of werewolf_list) {
-        werewolves.push(werewolf);
+    if (werewolf_list && Array.isArray(werewolf_list)) {
+        werewolves.length = 0;
+        for (const werewolf of werewolf_list) {
+            werewolves.push(werewolf);
+        }
     }
+    
     update_werewolf_list("werewolf-villager-list");
 
     const restart_button = document.getElementById('restart-villager-btn');
@@ -610,10 +617,14 @@ socket.on("werewolves_won", (werewolf_list) => {
 
     document.getElementById('win-werewolf-screen').classList.remove("hidden");
 
-    if (role === 'Werewolf') {
-        document.querySelector(".game-end-info").innerHTML = 'Victory!';
-    } else {
-        document.querySelector(".game-end-info").classList.remove("hidden");
+    const endInfo = document.querySelector("#win-werewolf-screen .game-end-info");
+    if (endInfo) {
+        if (role === 'Werewolf') {
+            endInfo.textContent = 'Victory!';
+            endInfo.classList.remove("hidden");
+        } else {
+            endInfo.classList.remove("hidden");
+        }
     }
 
     const fateDisplay = document.getElementById("werewolf-win-fate");
@@ -632,10 +643,13 @@ socket.on("werewolves_won", (werewolf_list) => {
         }
     }
 
-    werewolves.length = 0;
-    for (const werewolf of werewolf_list) {
-        werewolves.push(werewolf);
+    if (werewolf_list && Array.isArray(werewolf_list)) {
+        werewolves.length = 0;
+        for (const werewolf of werewolf_list) {
+            werewolves.push(werewolf);
+        }
     }
+    
     update_werewolf_list("werewolf-win-list");
 
     const restart_button = document.getElementById('restart-werewolf-btn');
